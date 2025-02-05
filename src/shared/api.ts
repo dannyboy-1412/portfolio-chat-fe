@@ -22,7 +22,6 @@ export const getCompletions = async (data: Message) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                origin: config.APP_URL,
                 Accept: 'text/event-stream',
             },
             body: JSON.stringify(data),
@@ -61,7 +60,6 @@ export const sendTelegramMessage = async (data: TelegramMessage) => {
     try {
         const headers = {
             'Content-Type': 'application/json',
-            origin: config.APP_URL,
         }
         const response = await customAxios.post(TELEGRAM_MESSAGE, data, { headers });
         return response.data;
