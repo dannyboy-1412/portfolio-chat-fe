@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from './button'
 import { Input } from './input'
 import { Loader2, Bot} from 'lucide-react'

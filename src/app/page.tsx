@@ -22,9 +22,9 @@ export default function Home() {
               👋 Hi there!
             </h1>
             <p className="text-xl text-zinc-300 leading-relaxed">
-              Welcome to my interactive portfolio! I'm your personal AI assistant, ready to share insights about my creator's professional journey! 💼 <br/>
-              Feel free to explore my experience in software development, dive into my projects, or learn about my technical skills. 🚀 <br/>
-              Let's have a conversation and discover how I can contribute to your team! ✨
+              Welcome to my interactive portfolio! I&apos;m Daniel, and I&apos;ve created this AI assistant to help you explore my professional journey! 💼 <br/>
+              Feel free to ask about my experience in software development, my projects, or my technical skills. 🚀 <br/>
+              I&apos;m excited to share my work with you and discuss how I could be a great addition to your team! ✨
             </p>
           </div>
           <div className="relative z-10">
