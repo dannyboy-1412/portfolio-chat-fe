@@ -13,8 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio Daniel",
-  description: "Portfolio Daniel",
+  title: "Fun Chat App",
+  description: "Fun Chat with me",
+  icons: {
+    icon: [
+      { url: '/icon.svg', sizes: 'any' },
+    ],
+  },
 };
 
 export default function RootLayout({

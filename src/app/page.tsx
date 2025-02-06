@@ -8,7 +8,7 @@ import { Chatbot } from "@/app/components/ui/chatbot";
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gradient-to-b from-zinc-900 to-black text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-zinc-900 text-white">
       <div className={`fixed inset-0 transition-all duration-300 ${!isOpen ? 'backdrop-blur-sm bg-black/50' : ''}`} />
       {isOpen ? (
         <div className="fixed inset-0 z-20 bg-zinc-900/95 backdrop-blur-sm">

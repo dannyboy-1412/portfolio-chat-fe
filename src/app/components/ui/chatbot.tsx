@@ -8,6 +8,7 @@ import { ScrollArea } from './scroll'
 import { getCompletions, Message, sendTelegramMessage } from '@/shared/api'
 import Markdown from 'react-markdown'
 import { useRefreshChatKeyHandler } from '@/hooks/refreshChatKeyHandler'
+import remarkGfm from 'remark-gfm'
 
 export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -161,8 +162,17 @@ export function Chatbot() {
                     }`}
                   >
                     <Markdown
+                      remarkPlugins={[remarkGfm]}
                       components={{
                         p: ({ children }) => <p className="mb-1">{children}</p>,
+                        h1: ({ children }) => <h1 className="text-2xl font-bold mb-2">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-xl font-bold mb-2">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-lg font-bold mb-2">{children}</h3>,
+                        ul: ({ children }) => <ul className="list-disc ml-6 mb-2">{children}</ul>,
+                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                        blockquote: ({ children }) => (
+                          <blockquote className="border-l-4 border-gray-200 pl-4 mb-2">{children}</blockquote>
+                        ),
                       }}
                     >
                       {message.content}
@@ -187,7 +197,7 @@ export function Chatbot() {
           </ScrollArea>
 
           {/* Fixed Input Area when messages exist */}
-          <div className="fixed bottom-0 left-0 right-0 bg-zinc-800/95 border-t border-zinc-700/50">
+          <div className="fixed bottom-0 left-0 right-0 bg-zinc-800/95 border-t border-zinc-700/50 rounded-2xl">
             <div className="max-w-2xl mx-auto px-4 py-3">
               <div className="flex items-center gap-2">
                 <Input
@@ -205,7 +215,7 @@ export function Chatbot() {
                     transition-all duration-200 
                     text-zinc-100 placeholder:text-zinc-400
                     hover:bg-zinc-700/70 focus:bg-zinc-700/90
-                    rounded-lg px-4 py-2"
+                    rounded-2xl px-4 py-2"
                 />
               </div>
             </div>
@@ -267,12 +277,11 @@ export function Chatbot() {
                   handleSendMessage()
                 }
               }}
-
               className="w-full bg-zinc-700/50 border-zinc-600 focus:border-zinc-500 
                 transition-all duration-200 
                 text-zinc-100 placeholder:text-zinc-400
                 hover:bg-zinc-700/70 focus:bg-zinc-700/90
-                rounded-lg px-4 py-2"
+                rounded-2xl px-4 py-2"
             />
           </div>
         </div>
