@@ -196,8 +196,8 @@ export function Chatbot() {
             <div ref={scrollRef}></div>
           </ScrollArea>
 
-          {/* Fixed Input Area when messages exist */}
-          <div className="fixed bottom-0 left-0 right-0 bg-zinc-800/95 border-t border-zinc-700/50 rounded-2xl">
+          {/* Updated Input Area when messages exist */}
+          <div className="sticky bottom-0 w-full bg-zinc-800/95 border-t border-zinc-700/50 rounded-2xl">
             <div className="max-w-2xl mx-auto px-4 py-3">
               <div className="flex items-center gap-2">
                 <Input
