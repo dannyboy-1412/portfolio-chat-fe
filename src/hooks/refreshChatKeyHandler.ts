@@ -5,33 +5,31 @@ export const useRefreshChatKeyHandler = (
   key: string,
 ) => {
   useEffect(() => {
-    if (window) {
-      const handleKeyDown = (event: KeyboardEvent) => {
-        // Detect operating system using user agent
-        const userAgent = window?.navigator?.userAgent?.toLowerCase();
-        const isMac = userAgent?.includes("mac");
-        const isWindows = userAgent?.includes("win");
-        const isLinux = userAgent?.includes("linux");
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Detect operating system using user agent
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMac = userAgent.includes("mac");
+      const isWindows = userAgent.includes("win");
+      const isLinux = userAgent.includes("linux");
 
-        // Detailed key combination checks
-        const isMacPress = isMac && event.metaKey && event.key === key;
-        const isWindowsPress = isWindows && event.ctrlKey && event.key === key;
-        const isLinuxPress = isLinux && event.ctrlKey && event.key === key;
+      // Detailed key combination checks
+      const isMacPress = isMac && event.metaKey && event.key === key;
+      const isWindowsPress = isWindows && event.ctrlKey && event.key === key;
+      const isLinuxPress = isLinux && event.ctrlKey && event.key === key;
 
-        if (isMacPress || isWindowsPress || isLinuxPress) {
-          event.preventDefault();
-          event.stopPropagation();
-          functionToCall();
-        }
-      };
+      if (isMacPress || isWindowsPress || isLinuxPress) {
+        event.preventDefault();
+        event.stopPropagation();
+        functionToCall();
+      }
+    };
 
-      // Add event listener
-      window?.addEventListener("keydown", handleKeyDown);
+    // Add event listener
+    window.addEventListener("keydown", handleKeyDown);
 
-      // Cleanup event listener on component unmount
-      return () => {
-        window?.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, [functionToCall, window, key]);
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [functionToCall, key]);
 };

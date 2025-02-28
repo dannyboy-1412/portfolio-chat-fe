@@ -82,7 +82,7 @@ export function Chatbot() {
         for (const line of lines) {
           if (line.trim() === '') continue
           if (line.includes('data:')) {
-            let data: any;
+            let data: Record<string, string>;
             try {
               data = JSON.parse(JSON.parse(`"${line.split('data: ')[1]}"`))
             } catch (error) {
