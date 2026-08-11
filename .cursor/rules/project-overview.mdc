@@ -1,0 +1,34 @@
+---
+description: Core product context and stack for the portfolio chatbot
+alwaysApply: true
+---
+
+# Portfolio chatbot (v1)
+
+Interactive portfolio for Daniel A Rodrigues. Users chat to learn about professional experience and some personal background. Current features: streaming chat, Telegram notify after replies, resume download.
+
+## Stack
+
+- Next.js 15 App Router, React 19, TypeScript (strict)
+- Tailwind + shadcn/ui (`new-york`, zinc CSS variables)
+- Backend: Route Handlers under `src/app/api/v1` + `src/server/` (MongoDB, OpenRouter)
+- HTTP (client): native `fetch` + ReadableStream for chat SSE
+- Path alias: `@/` → `src/`
+
+## Layout
+
+- UI: `@src/app/components/ui/` (shadcn primitives + chatbot/header)
+- App shell: `@src/app/page.tsx`, `@src/app/layout.tsx`
+- API routes: `@src/app/api/v1/`
+- Server logic: `@src/server/` (`db/`, `chat/`, `ai/`)
+- Client API helpers: `@src/shared/` (`api.ts`, `endpoints.ts`, `config.ts`)
+- Hooks: `@src/hooks/`
+- Utils: `@src/lib/utils.ts` (`cn`)
+
+## Guardrails
+
+- Extend `@src/shared/` for browser→API calls; do not invent parallel fetch wrappers
+- Put server-only backend logic under `@src/server/` and Route Handlers under `@src/app/api/`
+- Preserve the dark zinc chat UX unless explicitly redesigning
+- LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
+
