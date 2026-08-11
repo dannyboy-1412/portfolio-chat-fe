@@ -11,6 +11,7 @@ alwaysApply: false
 - App Router only (`src/app`). No Pages Router.
 - Use `'use client'` when the file needs state, effects, or browser APIs (see `@src/app/page.tsx`, `@src/app/components/ui/chatbot.tsx`, `@src/app/components/ui/header.tsx`).
 - Put new UI under `src/app/components/ui/` unless introducing a clearer feature folder by request.
+- Backend Route Handlers live under `src/app/api/v1/` (not in the UI tree); keep secrets and LLM/DB work out of client components.
 
 ## Styling
 
@@ -33,3 +34,8 @@ Canonical consumer: `@src/app/components/ui/chatbot.tsx`.
 - Thread with `parent_id` / server `assistant_message_id`
 - Ctrl/Cmd+K clears the thread via `@src/hooks/refreshChatKeyHandler.ts`
 - Autoscroll when new messages arrive
+- Do not call Telegram (or other side-effect notify APIs) after stream completion
+
+## Resume
+
+- Resume is a static asset at `/resume.pdf` (see header download link). Do not add a custom resume API route unless requested.

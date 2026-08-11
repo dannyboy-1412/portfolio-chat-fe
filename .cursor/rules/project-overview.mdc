@@ -3,9 +3,9 @@ description: Core product context and stack for the portfolio chatbot
 alwaysApply: true
 ---
 
-# Portfolio chatbot (v1)
+# Portfolio chatbot
 
-Interactive portfolio for Daniel A Rodrigues. Users chat to learn about professional experience and some personal background. Current features: streaming chat, Telegram notify after replies, resume download.
+Interactive portfolio for Daniel A Rodrigues. Users chat to learn about professional experience and some personal background. Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download.
 
 ## Stack
 
@@ -31,4 +31,4 @@ Interactive portfolio for Daniel A Rodrigues. Users chat to learn about professi
 - Put server-only backend logic under `@src/server/` and Route Handlers under `@src/app/api/`
 - Preserve the dark zinc chat UX unless explicitly redesigning
 - LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
-
+- Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
