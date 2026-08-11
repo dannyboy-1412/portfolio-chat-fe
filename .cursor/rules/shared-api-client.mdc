@@ -8,11 +8,20 @@ alwaysApply: false
 
 Canonical files: `@src/shared/api.ts`, `@src/shared/endpoints.ts`, `@src/shared/config.ts`.
 
+There is no `customAxios.ts` — axios was removed after the backend moved in-process.
+
 ## Adding calls
 
 1. Add the path constant in `endpoints.ts`
-2. Base URL is same-origin `/api/v1` from `config.ts`
+2. Base URL is same-origin `/api/v1` from `config.ts` (no `NEXT_PUBLIC_LAMBDA_URL` / localhost:8000 split)
 3. Implement the helper in `api.ts` (or a focused sibling if the file grows)
+
+## Current endpoints
+
+- `COMPLETIONS` → `/chat/conversations/danny/completions` (streaming `fetch`)
+- `CREATE_CONVERSATION` → `/chat/conversations`
+
+Do not re-add Telegram or resume download helpers here; resume is static `/resume.pdf`.
 
 ## Transport
 
