@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Placeholder: add `npm test` (Vitest) here once the suite exists
+      # - name: Unit tests
+      #   run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          # Build does not call OpenRouter/Mongo; placeholders keep env reads safe if needed
+          OPENROUTER_API_KEY: ci-placeholder
+          OPENROUTER_MODEL: openai/gpt-4o-mini
+          MONGO_CONNECTION_STRING: mongodb://127.0.0.1:27017
+          MONGO_DATABASE: portfolio_ci
