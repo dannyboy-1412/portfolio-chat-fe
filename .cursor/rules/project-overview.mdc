@@ -32,4 +32,4 @@ Interactive portfolio for Daniel A Rodrigues. Users chat to learn about professi
 - Preserve the dark zinc chat UX unless explicitly redesigning
 - LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
 - Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
-- CI runs lint, typecheck, and build on PRs and `main` (see `.github/workflows/ci.yml`); use the PR template for release-oriented descriptions
+- CI runs lint, typecheck, unit tests, and build on PRs and `main` (see `.github/workflows/ci.yml`); use the PR template for release-oriented descriptions
