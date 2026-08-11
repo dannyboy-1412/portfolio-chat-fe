@@ -9,6 +9,7 @@ import { getCompletions, Message } from '@/shared/api'
 import Markdown from 'react-markdown'
 import { useRefreshChatKeyHandler } from '@/hooks/refreshChatKeyHandler'
 import remarkGfm from 'remark-gfm'
+import { consumeCompletionStreamChunk } from '@/lib/parseCompletionStream'
 
 export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -60,8 +61,8 @@ export function Chatbot() {
 
     try {
       const reader = await getCompletions(newMessage)
-      let assistantMessageId: string | null = null
       const decoder = new TextDecoder()
+      let buffer = ''
 
       const initialAssistantMessage: Message = {
         id: '',
@@ -70,50 +71,49 @@ export function Chatbot() {
       }
       setMessages(prev => [...prev, initialAssistantMessage])
 
+      const applyStreamPayload = (data: {
+        content?: string
+        assistant_message_id?: string
+      }) => {
+        if (data.content) {
+          setIsStreaming(false)
+          setIsLoading(false)
+          setMessages(prev => {
+            const lastMessage = prev[prev.length - 1]
+            if (lastMessage.role === 'assistant') {
+              return [
+                ...prev.slice(0, -1),
+                { ...lastMessage, content: lastMessage.content + data.content },
+              ]
+            }
+            return prev
+          })
+          return
+        }
+
+        if (data.assistant_message_id) {
+          const assistantMessageId = data.assistant_message_id
+          setParentId(assistantMessageId)
+          setMessages(prev =>
+            prev.map(msg =>
+              msg.id === '' ? { ...msg, id: assistantMessageId } : msg
+            )
+          )
+        }
+      }
+
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        const chunk = decoder.decode(value, { stream: true })
-        const lines = chunk.split('/&')
-        if (lines.length < 2) continue
 
-        for (const line of lines) {
-          if (line.trim() === '') continue
-          if (line.includes('data:')) {
-            let data: Record<string, string>;
-            try {
-              data = JSON.parse(JSON.parse(`"${line.split('data: ')[1]}"`))
-            } catch (error) {
-              data = JSON.parse(`"${line.split('data: ')[1]}"`)
-              console.error(error)
-            }
-            
-            if (data?.content) {
-              setIsStreaming(false)
-              setIsLoading(false)
-              const { content } = data
-              if (content) {
-                setMessages(prev => {
-                  const lastMessage = prev[prev.length - 1];
-                  if (lastMessage.role === 'assistant') {
-                    return [
-                      ...prev.slice(0, -1),
-                      { ...lastMessage, content: lastMessage.content + content }
-                    ];
-                  }
-                  return prev;
-                });
-              }
-            } else if (data?.assistant_message_id) {
-              assistantMessageId = data?.assistant_message_id
-              if (assistantMessageId) {
-                setParentId(assistantMessageId)
-                setMessages(prev => prev.map(msg => 
-                  msg.id === '' ? { ...msg, id: assistantMessageId! } : msg
-                ))
-              }
-            }
-          }
+        const { buffer: nextBuffer, payloads } = consumeCompletionStreamChunk(
+          buffer,
+          decoder.decode(value, { stream: true })
+        )
+        buffer = nextBuffer
+
+        for (const payload of payloads) {
+          applyStreamPayload(payload)
         }
       }
 

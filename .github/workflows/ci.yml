@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   quality:
-    name: Lint, typecheck, build
+    name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
 
     steps:
@@ -34,9 +34,8 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      # Placeholder: add `npm test` (Vitest) here once the suite exists
-      # - name: Unit tests
-      #   run: npm test
+      - name: Unit tests
+        run: npm test
 
       - name: Build
         run: npm run build

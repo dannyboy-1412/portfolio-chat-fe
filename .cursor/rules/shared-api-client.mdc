@@ -26,7 +26,7 @@ Do not re-add Telegram or resume download helpers here; resume is static `/resum
 ## Transport
 
 - Streaming completions: native `fetch` with `Accept: text/event-stream`, return a `ReadableStreamDefaultReader`
-- Keep stream delimiter/parse behavior compatible with `@src/app/components/ui/chatbot.tsx` (chunk split on `/&`, `data:` lines)
+- Parse frames with `@/lib/parseCompletionStream` (`/&` delimiter, `data:` JSON) — keep chatbot and tests on that helper
 
 ## Types and payloads
 
