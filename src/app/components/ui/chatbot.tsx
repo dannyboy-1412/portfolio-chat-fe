@@ -5,7 +5,7 @@ import { Button } from './button'
 import { Input } from './input'
 import { Loader2, Bot} from 'lucide-react'
 import { ScrollArea } from './scroll'
-import { getCompletions, Message, sendTelegramMessage } from '@/shared/api'
+import { getCompletions, Message } from '@/shared/api'
 import Markdown from 'react-markdown'
 import { useRefreshChatKeyHandler } from '@/hooks/refreshChatKeyHandler'
 import remarkGfm from 'remark-gfm'
@@ -53,8 +53,6 @@ export function Chatbot() {
       newMessage.parent_id = parentId;
     };
 
-    let completeAssistantMessage = '';
-    const input = inputMessage;
     setMessages(prev => [...prev, newMessage]);
     setInputMessage('');
     setIsLoading(true);
@@ -95,7 +93,6 @@ export function Chatbot() {
               setIsLoading(false)
               const { content } = data
               if (content) {
-                completeAssistantMessage += content
                 setMessages(prev => {
                   const lastMessage = prev[prev.length - 1];
                   if (lastMessage.role === 'assistant') {
@@ -121,16 +118,6 @@ export function Chatbot() {
       }
 
       decoder.decode()
-
-      try {
-        await sendTelegramMessage({
-          user_message: input,
-          assistant_message: completeAssistantMessage
-        })
-      } catch (error) {
-        console.error('Error sending Telegram message:', error)
-      }
-
 
       setIsStreaming(false)
       setIsLoading(false)

@@ -1,0 +1,35 @@
+---
+description: Next.js App Router, React, and UI conventions for portfolio-fe
+globs: src/app/**/*.{ts,tsx},src/hooks/**/*.ts
+alwaysApply: false
+---
+
+# Next.js / React UI
+
+## App structure
+
+- App Router only (`src/app`). No Pages Router.
+- Use `'use client'` when the file needs state, effects, or browser APIs (see `@src/app/page.tsx`, `@src/app/components/ui/chatbot.tsx`, `@src/app/components/ui/header.tsx`).
+- Put new UI under `src/app/components/ui/` unless introducing a clearer feature folder by request.
+
+## Styling
+
+- Tailwind + existing shadcn primitives (`Button`, `Input`, `Card`, `ScrollArea`).
+- Merge classes with `cn()` from `@/lib/utils` (`@src/lib/utils.ts`).
+- Match the dark zinc aesthetic (`bg-zinc-900`, gradients, rounded chat surfaces).
+- `components.json` may alias utils to `@/app/lib/utils`; the real file is `@/lib/utils`. Do not duplicate `utils.ts` to “fix” the alias.
+
+## State and exports
+
+- Prefer local `useState` / `useRef` / `useEffect`. Do not add a global store unless justified.
+- Match surrounding export style (named for `Chatbot`, hooks, primitives; default where the file already defaults).
+
+## Chat UX invariants
+
+Canonical consumer: `@src/app/components/ui/chatbot.tsx`.
+
+- Render assistant markdown with `react-markdown` + `remark-gfm`
+- Stream by appending content chunks to the assistant bubble
+- Thread with `parent_id` / server `assistant_message_id`
+- Ctrl/Cmd+K clears the thread via `@src/hooks/refreshChatKeyHandler.ts`
+- Autoscroll when new messages arrive

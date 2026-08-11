@@ -1,0 +1,31 @@
+---
+description: Shared API client, endpoints, and config conventions
+globs: src/shared/**/*.ts
+alwaysApply: false
+---
+
+# Shared API client
+
+Canonical files: `@src/shared/api.ts`, `@src/shared/endpoints.ts`, `@src/shared/config.ts`.
+
+## Adding calls
+
+1. Add the path constant in `endpoints.ts`
+2. Base URL is same-origin `/api/v1` from `config.ts`
+3. Implement the helper in `api.ts` (or a focused sibling if the file grows)
+
+## Transport
+
+- Streaming completions: native `fetch` with `Accept: text/event-stream`, return a `ReadableStreamDefaultReader`
+- Keep stream delimiter/parse behavior compatible with `@src/app/components/ui/chatbot.tsx` (chunk split on `/&`, `data:` lines)
+
+## Types and payloads
+
+- Keep request/response types next to API helpers (`Message`)
+- Use snake_case field names that match the backend (`parent_id`, etc.)
+
+## Config and secrets
+
+- Browser-exposed values only via `NEXT_PUBLIC_*` when truly needed
+- LLM and Mongo credentials stay server-only (Route Handlers / `src/server`)
+- Never commit secrets into the repo

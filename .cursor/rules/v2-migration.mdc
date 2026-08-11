@@ -1,0 +1,28 @@
+---
+description: Guidance for the v2 Next.js Route Handler backend (migrated from FastAPI)
+alwaysApply: false
+---
+
+# v2 migration (resolved)
+
+Backend lives in this Next.js app as **App Router Route Handlers** under `src/app/api/v1/`. The Python FastAPI app (`mira_project`) is no longer required for local/prod serving.
+
+## Layout
+
+- Routes: `src/app/api/v1/chat/...`
+- Server modules: `src/server/` (`db/`, `chat/`, `ai/`)
+- Client API helpers remain in `src/shared/` and call same-origin `/api/v1`
+
+## Contract
+
+- Completions stream SSE with the existing `/&` framing (`metadata`, `message`, `[DONE]`)
+- Threading uses `parent_id` / `assistant_message_id`
+- Messages stored in MongoDB `danny_messages` with a TTL index on `ttl` (30 min expiry)
+- LLM via OpenRouter (`openai` SDK + `baseURL: https://openrouter.ai/api/v1`)
+- Resume is a static file at `/resume.pdf` (not an API route)
+- Telegram notify and title generation are intentionally not ported
+
+## Env (server-only)
+
+- `OPENROUTER_API_KEY`, `OPENROUTER_MODEL`
+- `MONGO_CONNECTION_STRING`, `MONGO_DATABASE`
