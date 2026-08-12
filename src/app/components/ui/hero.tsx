@@ -12,13 +12,13 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 ambient-glow" aria-hidden />
 
       <div className="relative mx-auto max-w-3xl text-center">
-        <p className="fade-up text-sm font-medium tracking-wide text-zinc-400">
+        <p className="fade-up text-sm font-medium tracking-wide text-surface-400">
           {PROFILE.role} · {PROFILE.tagline}
         </p>
-        <h1 className="fade-up-delay-1 mt-3 text-4xl font-semibold tracking-tight text-zinc-50 sm:text-5xl">
+        <h1 className="fade-up-delay-1 mt-3 text-4xl font-semibold tracking-tight text-surface-50 sm:text-5xl">
           {PROFILE.name}
         </h1>
-        <p className="fade-up-delay-2 mx-auto mt-4 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+        <p className="fade-up-delay-2 mx-auto mt-4 max-w-xl text-base leading-relaxed text-surface-400 sm:text-lg">
           {PROFILE.pitch}
         </p>
 
@@ -27,7 +27,7 @@ export function Hero() {
             (badge) => (
               <span
                 key={badge}
-                className="rounded-full border border-zinc-800 bg-zinc-900/60 px-3 py-1 text-xs text-zinc-400"
+                className="rounded-full border border-surface-800 bg-surface-900/60 px-3 py-1 text-xs text-surface-400"
               >
                 {badge}
               </span>

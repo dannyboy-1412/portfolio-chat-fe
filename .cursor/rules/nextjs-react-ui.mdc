@@ -11,14 +11,15 @@ alwaysApply: false
 - App Router only (`src/app`). No Pages Router.
 - Use `'use client'` when the file needs state, effects, or browser APIs (see `@src/app/page.tsx`, `@src/app/components/ui/navbar.tsx`, `@src/app/components/ui/chatbot.tsx`).
 - Put new UI under `src/app/components/ui/` unless introducing a clearer feature folder by request.
-- Page composition: sticky `Navbar` → `Hero` (intro + `Chatbot`) → `ExperienceTimeline` → `SkillsGrid` → `AboutSection` → `SiteFooter`, all wrapped in `ChatProvider`.
+- Page composition: sticky `Navbar` → `Hero` (intro + `Chatbot`) → `ExperienceTimeline` → `SkillsGrid` → `AboutSection` (includes `ThemePicker`) → `SiteFooter`, wrapped in `ThemeProvider` then `ChatProvider`.
 - Backend Route Handlers live under `src/app/api/v1/` (not in the UI tree); keep secrets and LLM/DB work out of client components.
 
 ## Styling
 
 - Tailwind + existing shadcn primitives (`Button`, `Input`, `Card`, `ScrollArea`).
 - Merge classes with `cn()` from `@/lib/utils` (`@src/lib/utils.ts`).
-- Match the refined dark zinc aesthetic (`bg-zinc-950` page, `zinc-900/60` cards, glow accent, rounded chat surfaces).
+- Use themeable `surface-*` / `glow` tokens (`bg-surface-950`, `bg-surface-900/60` cards, glow accent). Never hardcode `zinc-*`.
+- Themes: `html[data-theme]` from `@src/shared/themes.ts` via `ThemeProvider`; backgrounds in `@src/app/components/ui/backgrounds/`. Default theme is `default` (original look); album picks toggle off to revert.
 - Use `ScrollArea` for dark-themed scroll regions; keep `color-scheme: dark` on `html`.
 - Skill logos come from `@src/shared/skillIcons.ts` (`simple-icons`); do not reintroduce per-skill local SVGs for the skills grid unless requested.
 - `components.json` may alias utils to `@/app/lib/utils`; the real file is `@/lib/utils`. Do not duplicate `utils.ts` to “fix” the alias.
@@ -27,6 +28,7 @@ alwaysApply: false
 
 - Prefer local `useState` / `useRef` / `useEffect`. Do not add a global store unless justified.
 - Chat thread state lives in `@src/hooks/useChatThread.ts` and is shared via `@src/app/components/ui/chat-provider.tsx` (`useChat`) so sibling sections (e.g. experience) can call `sendMessage`.
+- Theme selection lives in `@src/app/components/ui/theme-provider.tsx` (`useTheme` / `toggleAlbumTheme`) and persists album picks to `localStorage` (cleared on default).
 - Match surrounding export style (named for `Chatbot`, hooks, primitives; default where the file already defaults).
 
 ## Chat UX invariants
