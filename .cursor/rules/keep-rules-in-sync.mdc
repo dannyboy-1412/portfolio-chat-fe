@@ -1,0 +1,30 @@
+---
+description: Require Cursor rules updates when shipping large feature or architecture changes
+alwaysApply: true
+---
+
+# Keep Cursor rules in sync
+
+When finishing a **large feature**, **UI/architecture redesign**, **API contract change**, or **layout/convention shift**, update `.cursor/rules/` in the **same PR** before calling the work done.
+
+## Triggers (do this)
+
+- New top-level page sections, providers, or app shell composition
+- Renamed/removed canonical files referenced by rules (e.g. deleted `header.tsx`)
+- New shared modules agents must use (`profile.ts`, hooks, API helpers)
+- Stack upgrades that change defaults (Next major, auth, data layer)
+- Chat/streaming or backend contract changes
+
+## Skip (do not churn rules)
+
+- Typos, copy tweaks, one-off bug fixes
+- Pure styling polish that does not change structure
+- Dep bumps with no behavior/convention change
+
+## Required actions
+
+1. Read existing `.cursor/rules/*.mdc` and fix stale paths, layout, and guardrails
+2. Prefer editing the matching rule (`project-overview`, `nextjs-react-ui`, `shared-api-client`, `v2-migration`) over adding overlapping files
+3. Keep rules concise and actionable; one concern per file
+4. Include the rules diff in the feature PR; check the PR template Cursor-rules item
+5. For the full checklist and file map, follow the project skill `.cursor/skills/sync-cursor-rules/SKILL.md`

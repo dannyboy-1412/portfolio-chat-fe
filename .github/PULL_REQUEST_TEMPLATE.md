@@ -30,5 +30,5 @@ None
 ## Checklist
 - [ ] CI is green (lint, typecheck, build)
 - [ ] No secrets committed (`.env` stays local)
-- [ ] Cursor rules updated if architecture/API conventions changed
+- [ ] Cursor rules updated for large feature/architecture changes (see `.cursor/rules/keep-rules-in-sync.mdc` and skill `sync-cursor-rules`) — or N/A for small fixes
 - [ ] Follow-up issues filed if anything was deferred
