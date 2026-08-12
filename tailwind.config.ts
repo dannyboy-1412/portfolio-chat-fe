@@ -52,6 +52,24 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			},
   			glow: 'hsl(var(--glow))',
+  			surface: {
+  				'50': 'hsl(var(--surface-50))',
+  				'100': 'hsl(var(--surface-100))',
+  				'200': 'hsl(var(--surface-200))',
+  				'300': 'hsl(var(--surface-300))',
+  				'400': 'hsl(var(--surface-400))',
+  				'500': 'hsl(var(--surface-500))',
+  				'600': 'hsl(var(--surface-600))',
+  				'700': 'hsl(var(--surface-700))',
+  				'800': 'hsl(var(--surface-800))',
+  				'900': 'hsl(var(--surface-900))',
+  				'950': 'hsl(var(--surface-950))',
+  			},
+  		},
+  		fontFamily: {
+  			sans: ['var(--font-body)'],
+  			display: ['var(--font-display)'],
+  			mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

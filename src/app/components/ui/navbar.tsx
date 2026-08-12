@@ -48,16 +48,16 @@ export function Navbar() {
       className={cn(
         'sticky top-0 z-50 w-full border-b transition-colors',
         scrolled
-          ? 'border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md'
+          ? 'border-surface-800/80 bg-surface-950/80 backdrop-blur-md'
           : 'border-transparent bg-transparent'
       )}
     >
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a href="#chat" className="flex items-center gap-2" onClick={closeMobile}>
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-xs font-semibold text-zinc-100">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-800 text-xs font-semibold text-surface-100">
             DR
           </span>
-          <span className="hidden text-sm font-medium text-zinc-100 sm:inline">
+          <span className="hidden text-sm font-medium text-surface-100 sm:inline">
             {PROFILE.name}
           </span>
         </a>
@@ -70,8 +70,8 @@ export function Navbar() {
                 className={cn(
                   'rounded-md px-3 py-1.5 text-sm transition-colors',
                   activeId === link.id
-                    ? 'text-zinc-100 underline decoration-glow decoration-2 underline-offset-8'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                    ? 'text-surface-100 underline decoration-glow decoration-2 underline-offset-8'
+                    : 'text-surface-400 hover:text-surface-200'
                 )}
               >
                 {link.label}
@@ -85,7 +85,7 @@ export function Navbar() {
             href={PROFILE.socials.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden text-zinc-400 transition-colors hover:text-white sm:inline-flex"
+            className="hidden text-surface-400 transition-colors hover:text-surface-50 sm:inline-flex"
             aria-label="GitHub"
           >
             <Github className="h-4 w-4" />
@@ -94,7 +94,7 @@ export function Navbar() {
             href={PROFILE.socials.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden text-zinc-400 transition-colors hover:text-white sm:inline-flex"
+            className="hidden text-surface-400 transition-colors hover:text-surface-50 sm:inline-flex"
             aria-label="LinkedIn"
           >
             <Linkedin className="h-4 w-4" />
@@ -102,7 +102,7 @@ export function Navbar() {
           <Button
             asChild
             size="sm"
-            className="hidden h-8 gap-1.5 rounded-lg bg-zinc-800 px-3 text-xs text-zinc-100 hover:bg-zinc-700 sm:inline-flex"
+            className="hidden h-8 gap-1.5 rounded-lg bg-surface-800 px-3 text-xs text-surface-100 hover:bg-surface-700 sm:inline-flex"
           >
             <a
               href={PROFILE.socials.resume}
@@ -115,7 +115,7 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex rounded-md p-2 text-zinc-300 hover:bg-zinc-800 md:hidden"
+            className="inline-flex rounded-md p-2 text-surface-300 hover:bg-surface-800 md:hidden"
             onClick={() => setMobileOpen((open) => !open)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
@@ -125,7 +125,7 @@ export function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur-md md:hidden">
+        <div className="border-t border-surface-800 bg-surface-950/95 px-4 py-4 backdrop-blur-md md:hidden">
           <ul className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
               <li key={link.id}>
@@ -135,8 +135,8 @@ export function Navbar() {
                   className={cn(
                     'block rounded-md px-3 py-2 text-sm',
                     activeId === link.id
-                      ? 'bg-zinc-800 text-zinc-100'
-                      : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
+                      ? 'bg-surface-800 text-surface-100'
+                      : 'text-surface-400 hover:bg-surface-900 hover:text-surface-200'
                   )}
                 >
                   {link.label}
@@ -144,12 +144,12 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex items-center gap-4 border-t border-zinc-800 pt-4">
+          <div className="mt-4 flex items-center gap-4 border-t border-surface-800 pt-4">
             <a
               href={PROFILE.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-400 hover:text-white"
+              className="text-surface-400 hover:text-surface-50"
               aria-label="GitHub"
             >
               <Github className="h-5 w-5" />
@@ -158,7 +158,7 @@ export function Navbar() {
               href={PROFILE.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-400 hover:text-white"
+              className="text-surface-400 hover:text-surface-50"
               aria-label="LinkedIn"
             >
               <Linkedin className="h-5 w-5" />
@@ -166,7 +166,7 @@ export function Navbar() {
             <Button
               asChild
               size="sm"
-              className="ml-auto h-8 gap-1.5 rounded-lg bg-zinc-800 px-3 text-xs text-zinc-100 hover:bg-zinc-700"
+              className="ml-auto h-8 gap-1.5 rounded-lg bg-surface-800 px-3 text-xs text-surface-100 hover:bg-surface-700"
             >
               <a
                 href={PROFILE.socials.resume}

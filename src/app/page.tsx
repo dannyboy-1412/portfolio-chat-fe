@@ -1,6 +1,8 @@
 'use client'
 
 import { ChatProvider } from '@/app/components/ui/chat-provider'
+import { ThemeProvider } from '@/app/components/ui/theme-provider'
+import { ThemeBackground } from '@/app/components/ui/theme-background'
 import { Navbar } from '@/app/components/ui/navbar'
 import { Hero } from '@/app/components/ui/hero'
 import { ExperienceTimeline } from '@/app/components/ui/experience-timeline'
@@ -10,17 +12,22 @@ import { SiteFooter } from '@/app/components/ui/site-footer'
 
 export default function Home() {
   return (
-    <ChatProvider>
-      <div className="min-h-screen bg-zinc-950 text-zinc-100">
-        <Navbar />
-        <main>
-          <Hero />
-          <ExperienceTimeline />
-          <SkillsGrid />
-          <AboutSection />
-        </main>
-        <SiteFooter />
-      </div>
-    </ChatProvider>
+    <ThemeProvider>
+      <ChatProvider>
+        <div className="relative min-h-screen bg-transparent text-surface-100">
+          <ThemeBackground />
+          <div className="relative z-10">
+            <Navbar />
+            <main>
+              <Hero />
+              <ExperienceTimeline />
+              <SkillsGrid />
+              <AboutSection />
+            </main>
+            <SiteFooter />
+          </div>
+        </div>
+      </ChatProvider>
+    </ThemeProvider>
   )
 }

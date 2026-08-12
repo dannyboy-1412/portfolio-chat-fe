@@ -31,7 +31,7 @@ const markdownComponents = {
     <li className="mb-1">{children}</li>
   ),
   blockquote: ({ children }: { children?: React.ReactNode }) => (
-    <blockquote className="mb-2 border-l-4 border-zinc-600 pl-4">
+    <blockquote className="mb-2 border-l-4 border-surface-600 pl-4">
       {children}
     </blockquote>
   ),
@@ -65,7 +65,7 @@ export function Chatbot() {
   return (
     <div
       className={cn(
-        'flex w-full flex-col overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/60 shadow-2xl shadow-black/40 backdrop-blur-sm',
+        'flex w-full flex-col overflow-hidden rounded-2xl border border-surface-800/80 bg-surface-900/60 shadow-2xl shadow-surface-950/40 backdrop-blur-sm',
         hasMessages ? 'h-[560px]' : 'min-h-[220px]'
       )}
     >
@@ -84,7 +84,7 @@ export function Chatbot() {
                 )}
               >
                 {message.role === 'assistant' && (
-                  <div className="mr-2 mt-3 shrink-0 text-zinc-500">
+                  <div className="mr-2 mt-3 shrink-0 text-surface-500">
                     <Bot size={18} />
                   </div>
                 )}
@@ -92,8 +92,8 @@ export function Chatbot() {
                   className={cn(
                     'inline-block max-w-[92%] rounded-2xl px-3.5 py-2.5 text-sm shadow-lg backdrop-blur-sm',
                     message.role === 'user'
-                      ? 'bg-zinc-800 text-zinc-100'
-                      : 'bg-zinc-950/80 text-zinc-300'
+                      ? 'bg-surface-800 text-surface-100'
+                      : 'bg-surface-950/80 text-surface-300'
                   )}
                 >
                   <Markdown
@@ -107,17 +107,17 @@ export function Chatbot() {
             ))}
             {isLoading && isStreaming && (
               <div className="flex justify-start">
-                <div className="mr-2 mt-3 shrink-0 text-zinc-500">
+                <div className="mr-2 mt-3 shrink-0 text-surface-500">
                   <Bot size={18} />
                 </div>
-                <div className="rounded-2xl bg-zinc-950/80 px-3.5 py-2.5 shadow-lg">
-                  <Loader2 className="h-4 w-4 animate-spin text-zinc-400" />
+                <div className="rounded-2xl bg-surface-950/80 px-3.5 py-2.5 shadow-lg">
+                  <Loader2 className="h-4 w-4 animate-spin text-surface-400" />
                 </div>
               </div>
             )}
           </ScrollArea>
 
-          <div className="border-t border-zinc-800/80 bg-zinc-900/80 p-3">
+          <div className="border-t border-surface-800/80 bg-surface-900/80 p-3">
             <ChatInput
               inputRef={inputRef}
               value={inputMessage}
@@ -138,7 +138,7 @@ export function Chatbot() {
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-auto max-w-full whitespace-normal rounded-full border-zinc-700 bg-zinc-900/50 px-3 py-1.5 text-left text-xs text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+                className="h-auto max-w-full whitespace-normal rounded-full border-surface-700 bg-surface-900/50 px-3 py-1.5 text-left text-xs text-surface-300 hover:bg-surface-800 hover:text-surface-100"
                 onClick={() => void sendMessage(suggestion)}
               >
                 {suggestion}
@@ -185,7 +185,7 @@ function ChatInput({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 border border-zinc-700/80 bg-zinc-800/60 transition-colors focus-within:border-glow/50',
+        'flex items-center gap-2 border border-surface-700/80 bg-surface-800/60 transition-colors focus-within:border-glow/50',
         pill ? 'rounded-full px-2 py-1.5 shadow-lg shadow-glow/5' : 'rounded-2xl px-2 py-1.5'
       )}
     >
@@ -196,14 +196,14 @@ function ChatInput({
         onKeyDown={onKeyDown}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 border-0 bg-transparent text-sm text-zinc-100 shadow-none placeholder:text-zinc-500 focus-visible:ring-0"
+        className="flex-1 border-0 bg-transparent text-sm text-surface-100 shadow-none placeholder:text-surface-500 focus-visible:ring-0"
       />
       <button
         type="button"
         onClick={onSend}
         disabled={disabled || !value.trim()}
         aria-label="Send message"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-glow text-white transition-opacity disabled:opacity-40"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-glow text-surface-50 transition-opacity disabled:opacity-40"
       >
         <ArrowUp className="h-4 w-4" />
       </button>
