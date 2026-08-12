@@ -1,285 +1,212 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { Button } from './button'
-import { Input } from './input'
-import { Loader2, Bot} from 'lucide-react'
-import { ScrollArea } from './scroll'
-import { getCompletions, Message } from '@/shared/api'
+import { useEffect } from 'react'
+import { ArrowUp, Bot, Loader2 } from 'lucide-react'
 import Markdown from 'react-markdown'
-import { useRefreshChatKeyHandler } from '@/hooks/refreshChatKeyHandler'
 import remarkGfm from 'remark-gfm'
-import { consumeCompletionStreamChunk } from '@/lib/parseCompletionStream'
+import { Button } from '@/app/components/ui/button'
+import { Input } from '@/app/components/ui/input'
+import { ScrollArea } from '@/app/components/ui/scroll'
+import { useChat } from '@/app/components/ui/chat-provider'
+import { CHAT_SUGGESTIONS } from '@/shared/profile'
+import { cn } from '@/lib/utils'
+
+const markdownComponents = {
+  p: ({ children }: { children?: React.ReactNode }) => (
+    <p className="mb-1 last:mb-0">{children}</p>
+  ),
+  h1: ({ children }: { children?: React.ReactNode }) => (
+    <h1 className="mb-2 text-2xl font-bold">{children}</h1>
+  ),
+  h2: ({ children }: { children?: React.ReactNode }) => (
+    <h2 className="mb-2 text-xl font-bold">{children}</h2>
+  ),
+  h3: ({ children }: { children?: React.ReactNode }) => (
+    <h3 className="mb-2 text-lg font-bold">{children}</h3>
+  ),
+  ul: ({ children }: { children?: React.ReactNode }) => (
+    <ul className="mb-2 ml-6 list-disc">{children}</ul>
+  ),
+  li: ({ children }: { children?: React.ReactNode }) => (
+    <li className="mb-1">{children}</li>
+  ),
+  blockquote: ({ children }: { children?: React.ReactNode }) => (
+    <blockquote className="mb-2 border-l-4 border-zinc-600 pl-4">
+      {children}
+    </blockquote>
+  ),
+}
 
 export function Chatbot() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [inputMessage, setInputMessage] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isStreaming, setIsStreaming] = useState(false)
-  const [parentId, setParentId] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const {
+    messages,
+    inputMessage,
+    setInputMessage,
+    isLoading,
+    isStreaming,
+    sendMessage,
+    inputRef,
+    scrollContainerRef,
+  } = useChat()
 
   useEffect(() => {
     inputRef.current?.focus()
-  }, [])
+  }, [inputRef])
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [messages])
+  const hasMessages = messages.length > 0
 
-  const handleRefreshChat = () => {
-    setMessages([]);
-    setInputMessage('');
-    setParentId(null);
-  }
-
-
-  useRefreshChatKeyHandler(handleRefreshChat, 'k');
-
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim() || isLoading) {
-      return ;
-    }
-    const userMessageId = crypto.randomUUID();
-    const newMessage: Message = {
-      id: userMessageId,
-      content: inputMessage,
-      role: 'user',
-    };
-
-    if (parentId) {
-      newMessage.parent_id = parentId;
-    };
-
-    setMessages(prev => [...prev, newMessage]);
-    setInputMessage('');
-    setIsLoading(true);
-    setIsStreaming(true);
-
-    try {
-      const reader = await getCompletions(newMessage)
-      const decoder = new TextDecoder()
-      let buffer = ''
-
-      const initialAssistantMessage: Message = {
-        id: '',
-        role: 'assistant',
-        content: '',
-      }
-      setMessages(prev => [...prev, initialAssistantMessage])
-
-      const applyStreamPayload = (data: {
-        content?: string
-        assistant_message_id?: string
-      }) => {
-        if (data.content) {
-          setIsStreaming(false)
-          setIsLoading(false)
-          setMessages(prev => {
-            const lastMessage = prev[prev.length - 1]
-            if (lastMessage.role === 'assistant') {
-              return [
-                ...prev.slice(0, -1),
-                { ...lastMessage, content: lastMessage.content + data.content },
-              ]
-            }
-            return prev
-          })
-          return
-        }
-
-        if (data.assistant_message_id) {
-          const assistantMessageId = data.assistant_message_id
-          setParentId(assistantMessageId)
-          setMessages(prev =>
-            prev.map(msg =>
-              msg.id === '' ? { ...msg, id: assistantMessageId } : msg
-            )
-          )
-        }
-      }
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        const { buffer: nextBuffer, payloads } = consumeCompletionStreamChunk(
-          buffer,
-          decoder.decode(value, { stream: true })
-        )
-        buffer = nextBuffer
-
-        for (const payload of payloads) {
-          applyStreamPayload(payload)
-        }
-      }
-
-      decoder.decode()
-
-      setIsStreaming(false)
-      setIsLoading(false)
-      
-      inputRef.current?.focus()
-
-    } catch (error) {
-      console.error('Error during streaming:', error)
-      setIsLoading(false)
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      void sendMessage()
     }
   }
 
   return (
-    <div className="flex flex-col h-[85vh] w-full max-w-2xl mx-auto bg-zinc-900 backdrop-blur-sm">
-      {messages.length > 0 ? (
+    <div
+      className={cn(
+        'flex w-full flex-col overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/60 shadow-2xl shadow-black/40 backdrop-blur-sm',
+        hasMessages ? 'h-[560px]' : 'min-h-[220px]'
+      )}
+    >
+      {hasMessages ? (
         <>
-          <ScrollArea className="flex-1 p-4 pb-24 space-y-4">
-            <div className="space-y-4 flex flex-col">
-              {messages.map((message) => (
+          <ScrollArea
+            ref={scrollContainerRef}
+            className="flex-1 space-y-4 p-4"
+          >
+            {messages.map((message, index) => (
+              <div
+                key={message.id || `msg-${index}`}
+                className={cn(
+                  'flex',
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                )}
+              >
+                {message.role === 'assistant' && (
+                  <div className="mr-2 mt-3 shrink-0 text-zinc-500">
+                    <Bot size={18} />
+                  </div>
+                )}
                 <div
-                  key={message.id}
-                  className={`flex ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
+                  className={cn(
+                    'inline-block max-w-[92%] rounded-2xl px-3.5 py-2.5 text-sm shadow-lg backdrop-blur-sm',
+                    message.role === 'user'
+                      ? 'bg-zinc-800 text-zinc-100'
+                      : 'bg-zinc-950/80 text-zinc-300'
+                  )}
                 >
-                  {message.role === 'assistant' && (
-                    <div className="mt-3 mr-2">
-                      <Bot size={20}/>
-                    </div>
-                  )}
-                  <div
-                    className={`inline-block max-w-[95%] rounded-2xl p-3 shadow-lg backdrop-blur-sm ${
-                      message.role === 'user'
-                        ? 'bg-gradient-to-br from-zinc-800/90 to-zinc-800/70 text-zinc-100'
-                        : 'bg-gradient-to-br from-zinc-900/90 to-zinc-900/70 text-zinc-300'
-                    }`}
+                  <Markdown
+                    remarkPlugins={[remarkGfm]}
+                    components={markdownComponents}
                   >
-                    <Markdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        p: ({ children }) => <p className="mb-1">{children}</p>,
-                        h1: ({ children }) => <h1 className="text-2xl font-bold mb-2">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-xl font-bold mb-2">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-lg font-bold mb-2">{children}</h3>,
-                        ul: ({ children }) => <ul className="list-disc ml-6 mb-2">{children}</ul>,
-                        li: ({ children }) => <li className="mb-1">{children}</li>,
-                        blockquote: ({ children }) => (
-                          <blockquote className="border-l-4 border-gray-200 pl-4 mb-2">{children}</blockquote>
-                        ),
-                      }}
-                    >
-                      {message.content}
-                    </Markdown>
-                  </div>
+                    {message.content}
+                  </Markdown>
                 </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  {isStreaming && (
-                    <div className="mt-3 mr-2">
-                      <Bot size={20}/>
-                    </div>
-                  )}
-                  <div className="bg-gradient-to-br from-zinc-900/90 to-zinc-900/70 rounded-2xl p-3 shadow-lg backdrop-blur-sm">
-                    <Loader2 className="h-5 w-5 animate-spin text-zinc-400" />
-                  </div>
+              </div>
+            ))}
+            {isLoading && isStreaming && (
+              <div className="flex justify-start">
+                <div className="mr-2 mt-3 shrink-0 text-zinc-500">
+                  <Bot size={18} />
                 </div>
-              )}
-            </div>
-            <div ref={scrollRef}></div>
+                <div className="rounded-2xl bg-zinc-950/80 px-3.5 py-2.5 shadow-lg">
+                  <Loader2 className="h-4 w-4 animate-spin text-zinc-400" />
+                </div>
+              </div>
+            )}
           </ScrollArea>
 
-          {/* Updated Input Area when messages exist */}
-          <div className="sticky bottom-0 w-full bg-zinc-800/95 border-t border-zinc-700/50 rounded-2xl">
-            <div className="max-w-2xl mx-auto px-4 py-3">
-              <div className="flex items-center gap-2">
-                <Input
-                  ref={inputRef}
-                  placeholder="Press Ctrl/Cmd + K to refresh chat"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSendMessage()
-                    }
-                  }}
-                  className="flex-1 bg-zinc-700/50 border-zinc-600 focus:border-zinc-500 
-                    transition-all duration-200 
-                    text-zinc-100 placeholder:text-zinc-400
-                    hover:bg-zinc-700/70 focus:bg-zinc-700/90
-                    rounded-2xl px-4 py-2"
-                />
-              </div>
-            </div>
+          <div className="border-t border-zinc-800/80 bg-zinc-900/80 p-3">
+            <ChatInput
+              inputRef={inputRef}
+              value={inputMessage}
+              onChange={setInputMessage}
+              onKeyDown={onKeyDown}
+              onSend={() => void sendMessage()}
+              disabled={isLoading}
+              placeholder="Ask a follow-up… (Ctrl/Cmd+K to clear)"
+            />
           </div>
         </>
       ) : (
-        // Centered Input Area when no messages
-        <div className="flex-1 flex items-center justify-center px-4">
-          <div className="w-full max-w-xl space-y-6">
-            <div className="text-center space-y-4">
-
-              <h2 className="text-xl font-semibold text-zinc-100">How can I help you today?</h2>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <Button
-                  variant="outline"
-                  className="bg-zinc-800/50 hover:bg-zinc-700/50 text-zinc-300"
-                  onClick={() => {
-                    setInputMessage("How many years of experience do you have?")
-                    inputRef.current?.focus()
-                  }}
-                >
-                  How many years of experience do you have?
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="bg-zinc-800/50 hover:bg-zinc-700/50 text-zinc-300"
-                  onClick={() => {
-                    setInputMessage("What companies have you worked for?")
-                    inputRef.current?.focus()
-                  }}
-                >
-                  What companies have you worked for?
-                </Button>
-
-
-                <Button
-                  variant="outline"
-                  className="bg-zinc-800/50 hover:bg-zinc-700/50 text-zinc-300"
-                  onClick={() => {
-                    setInputMessage("What is your education background?")
-                    inputRef.current?.focus()
-                  }}
-                >
-                  What is your education background?
-                </Button>
-
-
-              </div>
-            </div>
-            <Input
-              ref={inputRef}
-              placeholder="Type a message..."
+        <div className="flex flex-1 flex-col items-center justify-center gap-5 px-4 py-8">
+          <div className="flex flex-wrap justify-center gap-2">
+            {CHAT_SUGGESTIONS.map((suggestion) => (
+              <Button
+                key={suggestion}
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-auto max-w-full whitespace-normal rounded-full border-zinc-700 bg-zinc-900/50 px-3 py-1.5 text-left text-xs text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+                onClick={() => void sendMessage(suggestion)}
+              >
+                {suggestion}
+              </Button>
+            ))}
+          </div>
+          <div className="w-full max-w-xl">
+            <ChatInput
+              inputRef={inputRef}
               value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault()
-                  handleSendMessage()
-                }
-              }}
-              className="w-full bg-zinc-700/50 border-zinc-600 focus:border-zinc-500 
-                transition-all duration-200 
-                text-zinc-100 placeholder:text-zinc-400
-                hover:bg-zinc-700/70 focus:bg-zinc-700/90
-                rounded-2xl px-4 py-2"
+              onChange={setInputMessage}
+              onKeyDown={onKeyDown}
+              onSend={() => void sendMessage()}
+              disabled={isLoading}
+              placeholder="Ask me anything about my experience…"
+              pill
             />
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ChatInput({
+  inputRef,
+  value,
+  onChange,
+  onKeyDown,
+  onSend,
+  disabled,
+  placeholder,
+  pill = false,
+}: {
+  inputRef: React.RefObject<HTMLInputElement | null>
+  value: string
+  onChange: (value: string) => void
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onSend: () => void
+  disabled: boolean
+  placeholder: string
+  pill?: boolean
+}) {
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-2 border border-zinc-700/80 bg-zinc-800/60 transition-colors focus-within:border-glow/50',
+        pill ? 'rounded-full px-2 py-1.5 shadow-lg shadow-glow/5' : 'rounded-2xl px-2 py-1.5'
+      )}
+    >
+      <Input
+        ref={inputRef}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
+        placeholder={placeholder}
+        disabled={disabled}
+        className="flex-1 border-0 bg-transparent text-sm text-zinc-100 shadow-none placeholder:text-zinc-500 focus-visible:ring-0"
+      />
+      <button
+        type="button"
+        onClick={onSend}
+        disabled={disabled || !value.trim()}
+        aria-label="Send message"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-glow text-white transition-opacity disabled:opacity-40"
+      >
+        <ArrowUp className="h-4 w-4" />
+      </button>
     </div>
   )
 }
