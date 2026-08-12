@@ -1,35 +1,38 @@
 ---
-description: Core product context and stack for the portfolio chatbot
+description: Core product context and stack for the portfolio site
 alwaysApply: true
 ---
 
-# Portfolio chatbot
+# Portfolio site
 
-Interactive portfolio for Daniel A Rodrigues. Users chat to learn about professional experience and some personal background. Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download.
+Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a chatbot centerpiece so visitors can explore professional experience and some personal background. Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download, experience timeline, skills, and about.
 
 ## Stack
 
-- Next.js 15 App Router, React 19, TypeScript (strict)
-- Tailwind + shadcn/ui (`new-york`, zinc CSS variables)
+- Next.js 16 App Router, React 19, TypeScript (strict)
+- Tailwind + shadcn/ui (`new-york`, zinc CSS variables, dark `color-scheme`)
 - Backend: Route Handlers under `src/app/api/v1` + `src/server/` (MongoDB, OpenRouter)
 - HTTP (client): native `fetch` + ReadableStream for chat SSE
 - Path alias: `@/` → `src/`
+- Skill logos: `simple-icons` via `@src/shared/skillIcons.ts`
 
 ## Layout
 
-- UI: `@src/app/components/ui/` (shadcn primitives + chatbot/header)
-- App shell: `@src/app/page.tsx`, `@src/app/layout.tsx`
+- App shell: `@src/app/page.tsx` (ChatProvider + navbar + sections), `@src/app/layout.tsx`
+- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `chatbot`, `chat-provider`, `experience-timeline`, `skills-grid`, `about-section`, `site-footer`, `scroll`
+- Profile content (client-safe): `@src/shared/profile.ts`
 - API routes: `@src/app/api/v1/`
-- Server logic: `@src/server/` (`db/`, `chat/`, `ai/`)
+- Server logic: `@src/server/` (`db/`, `chat/`, `ai/` including `systemPrompt.ts`)
 - Client API helpers: `@src/shared/` (`api.ts`, `endpoints.ts`, `config.ts`)
-- Hooks: `@src/hooks/`
+- Chat state: `@src/hooks/useChatThread.ts` exposed through `ChatProvider`
 - Utils: `@src/lib/utils.ts` (`cn`)
 
 ## Guardrails
 
 - Extend `@src/shared/` for browser→API calls; do not invent parallel fetch wrappers
 - Put server-only backend logic under `@src/server/` and Route Handlers under `@src/app/api/`
-- Preserve the dark zinc chat UX unless explicitly redesigning
+- Keep portfolio content in `@src/shared/profile.ts` in sync with facts in `@src/server/ai/systemPrompt.ts` when bio/experience changes
+- Preserve the dark zinc portfolio UX unless explicitly redesigning
 - LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
 - Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
 - CI runs lint, typecheck, unit tests, and build on PRs and `main` (see `.github/workflows/ci.yml`); use the PR template for release-oriented descriptions
