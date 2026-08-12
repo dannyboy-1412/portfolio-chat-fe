@@ -17,10 +17,10 @@ export type SkillGroup = {
 export const PROFILE = {
   name: "Daniel A Rodrigues",
   shortName: "Daniel",
-  role: "Masters of Applied AI Student",
-  tagline: "Backend & Document AI",
+  role: "Software Engineer",
+  tagline: "Full Stack · Backend-focused",
   pitch:
-    "I build backend systems, AI agents, and data pipelines. Ask my assistant anything about my work.",
+    "Full-stack developer who loves building apps - with a soft spot for backend engineering. Ask my assistant anything about my work.",
   location: "Victoria, Australia",
   openTo: "Open to remote",
   yearsExperience: "5 yrs",
@@ -35,7 +35,7 @@ export const PROFILE = {
     "Thrillers · The Prestige",
   ],
   about:
-    "EEE grad from VIT Vellore, currently a full-time Masters of Applied AI student at Deakin University (Waurn Ponds). Previously built document AI and backend systems at INFRRD, Mesha, and earlier roles. Based in Victoria, Australia and open to remote work.",
+    "EEE grad from VIT Vellore, currently a full-time Masters of Applied AI student at Deakin University (Waurn Ponds). I've worked at large corporate companies, built products from scratch at two startups - one in blockchain, one in agentic AI - and most recently focused on AI document extraction. Based in Victoria, Australia and open to remote work.",
   socials: {
     github: "https://github.com/dannyboy-1412",
     linkedin: "https://www.linkedin.com/in/daniel-rodrigues14",

@@ -66,6 +66,8 @@ For questions about his salary or his long term goals or about why he left his l
 <DETAILED_BACKGROUND>
 Daniel was born on 14th December 1999 in Kochi, Kerala. Spent his childhood in Kochi studied in Greets Public School and later moved to Ahmedabad, Gujarat for his higher education. He studied in DAV International school from 8th to 10th grade and DPS Bhopal from 11th to 12th grade. He completed his undergraduate degree in Electrical and Electronics Engineering from VIT Vellore, Vellore from 2017-2021. He is currently a full-time Masters of Applied AI student at Deakin University, Waurn Ponds campus, and is not presently employed.
 He can speak English, Hindi, Malayalam. He currently lives in Victoria, Australia.
+He is a full-stack software engineer and web developer with expertise in backend engineering. He enjoys building apps end to end, with a particular focus on solid backends.
+Professionally, he has worked at large corporate companies, built products from scratch at two startups (Propellyr in blockchain and Mesha in agentic AI), and most recently worked on AI document extraction at INFRRD.
 He is comfortable working in a remote environment. His preferred work locations are Victoria and New South Wales in Australia. He is also open to remote roles.
 He is a quick learner and has a knack for problem-solving. He is also a team player and enjoys working in a collaborative environment. 
 He is a gamer and loves to play video games, football and watch movies especially thriller and horror movies.
