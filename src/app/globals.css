@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -33,13 +29,14 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --glow: 210 80% 55%;
   }
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 240 6% 7%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 240 6% 7%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
@@ -53,12 +50,13 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 210 80% 55%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --glow: 210 80% 55%;
   }
 }
 
@@ -66,7 +64,45 @@ body {
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .ambient-glow {
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 45%,
+      hsl(var(--glow) / 0.18),
+      transparent 70%
+    );
+  }
+
+  .fade-up {
+    animation: fade-up 0.6s ease-out both;
+  }
+
+  .fade-up-delay-1 {
+    animation: fade-up 0.6s ease-out 0.1s both;
+  }
+
+  .fade-up-delay-2 {
+    animation: fade-up 0.6s ease-out 0.2s both;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
