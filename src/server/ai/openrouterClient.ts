@@ -5,8 +5,4 @@ const openrouterClient = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
 });
 
-export function getOpenRouterModel(): string {
-  return process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini";
-}
-
 export default openrouterClient;

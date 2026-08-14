@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { getOpenRouterModel } from "@/server/ai/openrouterClient";
+import { primaryModel } from "@/server/ai/modelRotation";
 import { getDb } from "@/server/db/mongoClient";
 import type { Conversation, Message, OpenAIMessage } from "@/server/chat/schemas";
 
@@ -17,7 +17,7 @@ export async function createConversation(): Promise<Conversation> {
     id: randomUUID(),
     messages: [],
     created_at: new Date(),
-    model: getOpenRouterModel(),
+    model: primaryModel(),
     title: "",
   };
 

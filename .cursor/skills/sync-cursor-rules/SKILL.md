@@ -47,6 +47,7 @@ Rules sync:
 | Browser API helpers, endpoints, streaming parse | `.cursor/rules/shared-api-client.mdc` |
 | Route Handlers, OpenRouter, Mongo, env | `.cursor/rules/v2-migration.mdc` |
 | Meta policy for shipping + rules | `.cursor/rules/keep-rules-in-sync.mdc` |
+| Vitest layout and test conventions | `.cursor/rules/vitest-tests.mdc` |
 
 ## Edit standards
 
