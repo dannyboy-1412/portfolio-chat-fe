@@ -24,7 +24,7 @@ When finishing a **large feature**, **UI/architecture redesign**, **API contract
 ## Required actions
 
 1. Read existing `.cursor/rules/*.mdc` and fix stale paths, layout, and guardrails
-2. Prefer editing the matching rule (`project-overview`, `nextjs-react-ui`, `shared-api-client`, `v2-migration`) over adding overlapping files
+2. Prefer editing the matching rule (`project-overview`, `nextjs-react-ui`, `shared-api-client`, `v2-migration`, `vitest-tests`) over adding overlapping files
 3. Keep rules concise and actionable; one concern per file
 4. Include the rules diff in the feature PR; check the PR template Cursor-rules item
 5. For the full checklist and file map, follow the project skill `.cursor/skills/sync-cursor-rules/SKILL.md`

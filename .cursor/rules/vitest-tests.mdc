@@ -1,0 +1,36 @@
+---
+description: Conventions for Vitest specs in the dedicated tests/ folder
+globs: tests/**/*.ts
+alwaysApply: false
+---
+
+# Vitest tests (`tests/`)
+
+New unit tests live under `tests/`, not colocated next to source. Mirror the module path under `src/` (`src/server/ai/foo.ts` → `tests/server/ai/foo.test.ts`).
+
+## Stack
+
+- Vitest (`npm test` / `npm run test:watch`); config is `vitest.config.mts`
+- Import app code via `@/` (`@/server/ai/...`)
+- Node environment; do not boot Next.js or hit live OpenRouter/Mongo
+
+## Style
+
+- Name files `*.test.ts`
+- One `describe` per unit under test; `it` names state the behavior
+- Reset module state in `afterEach` (e.g. `resetModelCooldowns()`)
+- Mock I/O at the module boundary (`vi.mock("@/server/ai/openrouterClient")`); never call real APIs
+- Prefer `rejects.toBeInstanceOf` / `toMatchObject` over catching by hand
+- Fake time with `vi.useFakeTimers()` and restore in `afterEach`
+
+```ts
+// ❌ BAD — colocated, hits the network
+// src/server/ai/completionService.test.ts
+await fetch("https://openrouter.ai/api/v1/models");
+
+// ✅ GOOD — dedicated folder, mocked client
+// tests/server/ai/completionService.test.ts
+vi.mock("@/server/ai/openrouterClient", () => ({ default: { chat: { completions: { create: createMock } } } }));
+```
+
+Existing `src/**/*.test.ts` files may stay until moved; do not add new colocated specs.

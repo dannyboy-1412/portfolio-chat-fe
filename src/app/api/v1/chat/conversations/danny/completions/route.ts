@@ -5,7 +5,10 @@ import {
   reconstructConversation,
 } from "@/server/chat/chatService";
 import { messageSchema } from "@/server/chat/schemas";
-import { generateCompletion } from "@/server/ai/completionService";
+import {
+  AllModelsRateLimitedError,
+  generateCompletion,
+} from "@/server/ai/completionService";
 
 export const runtime = "nodejs";
 
@@ -25,7 +28,23 @@ export async function POST(request: NextRequest) {
     await insertPersonalMessage(message);
 
     const messages = await reconstructConversation(message);
-    const stream = await generateCompletion(messages);
+
+    let primed;
+    try {
+      primed = await generateCompletion(messages);
+    } catch (error) {
+      if (error instanceof AllModelsRateLimitedError) {
+        return NextResponse.json(
+          {
+            detail:
+              "Chat is busy right now. Please try again in a few minutes.",
+          },
+          { status: 429 }
+        );
+      }
+      throw error;
+    }
+
     const assistantMessageId = randomUUID();
     const encoder = new TextEncoder();
 
@@ -40,7 +59,7 @@ export async function POST(request: NextRequest) {
             )
           );
 
-          for await (const chunk of stream) {
+          for await (const chunk of primed.stream) {
             const content = chunk.choices[0]?.delta?.content;
             if (content) {
               fullResponse += content;

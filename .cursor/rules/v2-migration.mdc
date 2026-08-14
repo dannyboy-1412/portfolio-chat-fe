@@ -33,5 +33,6 @@ Backend lives in this Next.js app as **App Router Route Handlers** under `src/ap
 
 ## Env (server-only)
 
-- `OPENROUTER_API_KEY`, `OPENROUTER_MODEL`
+- `OPENROUTER_API_KEY`
 - `MONGO_CONNECTION_STRING`, `MONGO_DATABASE`
+- Chat model list lives in `src/server/ai/modelRotation.ts` (not env); 429/402/5xx triggers in-memory cooldown fallback across the registry
