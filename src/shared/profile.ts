@@ -18,14 +18,14 @@ export const PROFILE = {
   name: "Daniel A Rodrigues",
   shortName: "Daniel",
   role: "Software Engineer",
-  tagline: "Full Stack · Backend-focused",
+  tagline: "Backend · AI",
   pitch:
-    "I build backend-heavy systems — document AI, accounting agents, and on-chain data. Ask my assistant anything about the work.",
-  location: "Victoria, Australia",
+    "I build backend-heavy systems — document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
+  location: "Victoria, Australia · Melbourne / Geelong",
   status: "Studying · Master of Applied AI @ Deakin",
   yearsExperience: "5+ years experience",
   education: [
-    "Master of Applied AI, Deakin University (2026–present)",
+    "Master of Applied AI, Deakin University (2026–2028)",
     "B.Tech Electrical & Electronics Engineering, VIT Vellore (2017–2021)",
   ],
   languages: ["English (native)", "Hindi", "Malayalam"],
@@ -35,7 +35,7 @@ export const PROFILE = {
     "Favourite film · The Prestige",
   ],
   about:
-    "Electrical and Electronics Engineering graduate from VIT Vellore, now a full-time Master of Applied AI student at Deakin University. I've built products from scratch at two startups — blockchain data at one, agentic AI at the other — and most recently worked on AI document extraction at INFRRD. The Masters is a chance to go deeper on the applied AI work I've already been shipping in production.",
+    "Electrical and Electronics Engineering graduate from VIT Vellore, now a full-time Master of Applied AI student at Deakin University (expected 2028). I've built products from scratch at two startups — blockchain data at one, agentic AI at the other — and most recently worked on AI document extraction at INFRRD. After shipping LLM work in production I left to go deeper on applied AI through the Masters. I'm looking for backend + AI roles, open to full-stack, and can work hybrid or remote (Melbourne or Geelong if on-site). Side projects live on GitHub, including this portfolio and a crypto app that streams salary over the month instead of a lump sum.",
   socials: {
     github: "https://github.com/dannyboy-1412",
     linkedin: "https://www.linkedin.com/in/daniel-rodrigues14",
@@ -57,6 +57,7 @@ export const EXPERIENCES: Experience[] = [
       "Reworked core table extraction from full-document LLM calls to an OCR-coordinate pipeline that crops each table and feeds page-level context",
       "Added post-processing validation and correction, lifting no-touch processing and true-positive accuracy to ~98% on critical closing-disclosure tables",
       "Engineered the Python product wrapper that consumes and publishes extraction tasks over RabbitMQ",
+      "As SDE-2, managed intern and trainee engineers and interviewed candidates",
     ],
     tech: ["Python", "FastAPI", "RabbitMQ", "Docker", "AWS", "TypeScript"],
     suggestedQuestion:

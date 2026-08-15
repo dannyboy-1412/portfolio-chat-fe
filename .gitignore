@@ -13,6 +13,10 @@
 # testing
 /coverage
 
+# LLM evals (manual, paid runs — see evals/)
+/evals/.cache
+/evals/reports
+
 # next.js
 /.next/
 /out/

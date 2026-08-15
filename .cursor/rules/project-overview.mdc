@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Portfolio site
 
-Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a chatbot centerpiece so visitors can explore professional experience and some personal background. Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download, experience timeline, skills, about, and album-driven visual themes.
+Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a chatbot centerpiece so visitors can explore professional experience and some personal background. The chat bot is Daniel's assistant (it speaks about him, not as him). Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download, experience timeline, skills, about, and album-driven visual themes.
 
 ## Stack
 
@@ -44,4 +44,5 @@ Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a c
 - LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
 - Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
 - New unit tests go under `tests/` (mirror `src/` paths; see `vitest-tests.mdc`); CI runs lint, typecheck, unit tests, and build on PRs and `main` (see `.github/workflows/ci.yml`); use the PR template for release-oriented descriptions
+- LLM answer quality evals live under `evals/` and run with `npm run eval` (manual, paid OpenRouter calls — never CI). See `vitest-tests.mdc`.
 - After large features/redesigns, update `.cursor/rules/` in the same PR (`keep-rules-in-sync.mdc`; workflow skill `.cursor/skills/sync-cursor-rules/`)
