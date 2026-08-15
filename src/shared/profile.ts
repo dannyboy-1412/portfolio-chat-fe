@@ -20,25 +20,26 @@ export const PROFILE = {
   role: "Software Engineer",
   tagline: "Full Stack · Backend-focused",
   pitch:
-    "Full-stack developer who loves building apps - with a soft spot for backend engineering. Ask my assistant anything about my work.",
+    "I build backend-heavy systems — document AI, accounting agents, and on-chain data. Ask my assistant anything about the work.",
   location: "Victoria, Australia",
-  openTo: "Open to remote",
-  yearsExperience: "5 yrs",
+  status: "Studying · Master of Applied AI @ Deakin",
+  yearsExperience: "5+ years experience",
   education: [
-    "Masters of Applied AI, Deakin University Waurn Ponds (current)",
+    "Master of Applied AI, Deakin University (2026–present)",
     "B.Tech Electrical & Electronics Engineering, VIT Vellore (2017–2021)",
   ],
-  languages: ["English", "Hindi", "Malayalam"],
+  languages: ["English (native)", "Hindi", "Malayalam"],
   interests: [
     "Gaming · Valorant",
     "Football · Liverpool FC",
-    "Thrillers · The Prestige",
+    "Favourite film · The Prestige",
   ],
   about:
-    "EEE grad from VIT Vellore, currently a full-time Masters of Applied AI student at Deakin University (Waurn Ponds). I've worked at large corporate companies, built products from scratch at two startups - one in blockchain, one in agentic AI - and most recently focused on AI document extraction. Based in Victoria, Australia.",
+    "Electrical and Electronics Engineering graduate from VIT Vellore, now a full-time Master of Applied AI student at Deakin University. I've built products from scratch at two startups — blockchain data at one, agentic AI at the other — and most recently worked on AI document extraction at INFRRD. The Masters is a chance to go deeper on the applied AI work I've already been shipping in production.",
   socials: {
     github: "https://github.com/dannyboy-1412",
     linkedin: "https://www.linkedin.com/in/daniel-rodrigues14",
+    email: "danielantorodri@gmail.com",
     resume: "/resume.pdf",
     resumeDownloadName: "daniel_resume.pdf",
   },
@@ -53,22 +54,11 @@ export const EXPERIENCES: Experience[] = [
     summary:
       "Built document AI for an in-house extraction product — OCR-coordinate-driven table pipelines, post-processing validation, and a RabbitMQ-backed Python service wrapper.",
     highlights: [
-      "Reworked core table extraction from full-document LLM calls to an OCR-coordinate pipeline that crops each table and feeds page-level context for cleaner extraction",
+      "Reworked core table extraction from full-document LLM calls to an OCR-coordinate pipeline that crops each table and feeds page-level context",
       "Added post-processing validation and correction, lifting no-touch processing and true-positive accuracy to ~98% on critical closing-disclosure tables",
       "Engineered the Python product wrapper that consumes and publishes extraction tasks over RabbitMQ",
     ],
-    tech: [
-      "Python",
-      "FastAPI",
-      "Flask",
-      "RabbitMQ",
-      "Docker",
-      "AWS",
-      "TypeScript",
-      "React",
-      "Jenkins",
-      "Grafana",
-    ],
+    tech: ["Python", "FastAPI", "RabbitMQ", "Docker", "AWS", "TypeScript"],
     suggestedQuestion:
       "Tell me about your work at INFRRD on document extraction and table OCR.",
   },
@@ -78,13 +68,11 @@ export const EXPERIENCES: Experience[] = [
     role: "Software Engineer",
     period: "Aug 2024 — Feb 2025",
     summary:
-      "Building AI agents for accounting — Closing, Clarification, and Invoice Recon agents end to end, plus an AI agent builder with human-in-the-loop review.",
+      "Built AI agents for accounting — Closing, Clarification, and Invoice Recon end to end, plus an AI agent builder with human-in-the-loop review.",
     highlights: [
-      "Closing agent: Xero P/L and Balance Sheet summaries emailed to clients",
-      "Clarification agent: unclear transaction emails with webhook replies",
-      "Invoice Recon agent: match bank transactions to unpaid invoices via LLMs",
-      "AI Agent Builder with human-in-the-loop workflow steps",
-      "Chrome extension to extract bank transactions and upload into Xero",
+      "Shipped a Closing agent that pulled Xero P/L and Balance Sheet data and emailed executive summaries to clients",
+      "Built an Invoice Recon agent that matched bank transactions to unpaid invoices with LLMs",
+      "Designed an AI Agent Builder with human-in-the-loop review at each workflow step",
     ],
     tech: [
       "TypeScript",
@@ -92,7 +80,6 @@ export const EXPERIENCES: Experience[] = [
       "Next.js",
       "PostgreSQL",
       "MongoDB",
-      "Redis",
       "AWS",
     ],
     suggestedQuestion: "Tell me about your work at Mesha and the AI agents you built.",
@@ -105,21 +92,11 @@ export const EXPERIENCES: Experience[] = [
     summary:
       "Blockchain data platform that later pivoted into generative AI. Built real-time on-chain price pipelines, a crypto tax engine, and RAG / NL-to-SQL analysis tools.",
     highlights: [
-      "High-throughput Node.js pipeline for real-time OHLCV prices from liquidity pools",
-      "Crypto tax calculation engine tracking staking and lending earnings",
-      "AI-powered data analysis app (CSV → DuckDB → NL queries → insights)",
-      "RAG extraction pipeline over unstructured documents",
+      "Architected a high-throughput Node.js pipeline for real-time OHLCV prices from on-chain liquidity pools",
+      "Built a crypto tax engine tracking staking and lending earnings",
+      "Shipped an AI data analysis app (CSV → DuckDB → NL queries → insights)",
     ],
-    tech: [
-      "Python",
-      "FastAPI",
-      "Node.js",
-      "Next.js",
-      "DuckDB",
-      "ClickHouse",
-      "AWS",
-      "RabbitMQ",
-    ],
+    tech: ["Python", "FastAPI", "Node.js", "DuckDB", "ClickHouse", "AWS"],
     suggestedQuestion:
       "What did you build at Propellyr, including the blockchain and AI work?",
   },
@@ -129,10 +106,9 @@ export const EXPERIENCES: Experience[] = [
     role: "Project Engineer",
     period: "Jun 2021 — Jul 2022",
     summary:
-      "Post-grad role on a big-data project after C++ training — data analysis with Python and pandas.",
+      "First role after graduation — data analysis on a large-scale big-data project using Python and pandas.",
     highlights: [
-      "Completed Wipro C++ training program",
-      "Data analysis on a large-scale big-data project",
+      "Ran data analysis on a large-scale big-data project using Python and pandas",
     ],
     tech: ["Python", "Pandas", "C++"],
     suggestedQuestion: "What was your role at Wipro after graduating?",
@@ -146,7 +122,11 @@ export const SKILL_GROUPS: SkillGroup[] = [
   },
   {
     title: "Backend",
-    skills: ["Express", "FastAPI", "Flask", "Node.js", "Next.js", "React"],
+    skills: ["Express", "FastAPI", "Flask", "Node.js"],
+  },
+  {
+    title: "Frontend",
+    skills: ["React", "Next.js"],
   },
   {
     title: "Data",

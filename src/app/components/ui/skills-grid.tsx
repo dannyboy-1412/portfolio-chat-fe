@@ -31,10 +31,10 @@ export function SkillsGrid() {
           Skills
         </h2>
         <p className="mt-2 text-sm text-surface-400">
-          Tools and languages I use day to day across backend, data, and cloud.
+          Tools and languages I use across backend, frontend, data, and cloud.
         </p>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {SKILL_GROUPS.map((group) => (
             <div
               key={group.title}

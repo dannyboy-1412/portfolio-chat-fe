@@ -23,7 +23,7 @@ export function Hero() {
         </p>
 
         <div className="fade-up-delay-2 mt-6 flex flex-wrap items-center justify-center gap-2">
-          {[PROFILE.location, PROFILE.yearsExperience, PROFILE.openTo].map(
+          {[PROFILE.location, PROFILE.yearsExperience, PROFILE.status].map(
             (badge) => (
               <span
                 key={badge}

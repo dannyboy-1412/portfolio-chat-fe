@@ -26,14 +26,32 @@ const fredoka = Fredoka({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Daniel A Rodrigues - Software Engineer",
   description:
-    "Interactive portfolio of Daniel A Rodrigues. Full-stack developer with a backend focus - chat about the apps and systems I've built.",
+    "Interactive portfolio of Daniel A Rodrigues. Backend-focused engineer — document AI, accounting agents, and on-chain data. Chat about the systems I've built.",
   icons: {
     icon: [
       { url: '/icon.svg', sizes: 'any' },
     ],
+  },
+  openGraph: {
+    title: "Daniel A Rodrigues - Software Engineer",
+    description:
+      "Backend-focused engineer — document AI, accounting agents, and on-chain data.",
+    type: "website",
+    locale: "en_AU",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Daniel A Rodrigues - Software Engineer",
+    description:
+      "Backend-focused engineer — document AI, accounting agents, and on-chain data.",
   },
 };
 
