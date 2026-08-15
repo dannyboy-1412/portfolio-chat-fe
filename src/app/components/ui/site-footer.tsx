@@ -1,4 +1,4 @@
-import { Download, Github, Linkedin } from 'lucide-react'
+import { Download, Github, Linkedin, Mail } from 'lucide-react'
 import { PROFILE } from '@/shared/profile'
 
 export function SiteFooter() {
@@ -12,6 +12,13 @@ export function SiteFooter() {
           </p>
         </div>
         <div className="flex items-center gap-4">
+          <a
+            href={`mailto:${PROFILE.socials.email}`}
+            className="text-surface-400 transition-colors hover:text-surface-50"
+            aria-label="Email"
+          >
+            <Mail className="h-4 w-4" />
+          </a>
           <a
             href={PROFILE.socials.github}
             target="_blank"

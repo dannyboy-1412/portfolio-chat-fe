@@ -23,7 +23,7 @@ export function ExperienceTimeline() {
           Experience
         </h2>
         <p className="mt-2 text-sm text-surface-400">
-          Roles I&apos;ve held — click Ask about this to chat about any of them.
+          Selected roles — ask the assistant about any of them.
         </p>
 
         <ol className="relative mt-12 space-y-10 border-l border-surface-800 pl-8">
@@ -44,6 +44,11 @@ export function ExperienceTimeline() {
                 <p className="mt-3 text-sm leading-relaxed text-surface-400">
                   {job.summary}
                 </p>
+                <ul className="mt-4 list-disc space-y-1.5 pl-4 text-sm leading-relaxed text-surface-400">
+                  {job.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {job.tech.map((tech) => (
                     <span
