@@ -45,7 +45,7 @@ Canonical UI: `@src/app/components/ui/chatbot.tsx`. State/streaming: `@src/hooks
 ## Profile content
 
 - Client-facing copy, experience, skills, and nav links: `@src/shared/profile.ts`
-- LLM background facts: `@src/server/ai/systemPrompt.ts`
+- LLM background facts: `@src/server/ai/systemPrompt.ts` (the bot is Daniel's assistant; speak about him in the third person)
 - When updating jobs/education/location, update both files so UI and chat stay consistent
 
 ## Resume

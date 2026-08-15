@@ -34,3 +34,7 @@ vi.mock("@/server/ai/openrouterClient", () => ({ default: { chat: { completions:
 ```
 
 Existing `src/**/*.test.ts` files may stay until moved; do not add new colocated specs.
+
+## `tests/` vs `evals/`
+
+`tests/` is CI-run, mocked, and free — it verifies code behavior (fallback logic, schemas, etc.). `evals/` is a separate, manual-only harness that makes real OpenRouter calls to grade the assistant's actual answers (factual accuracy, hallucination, tone, etc.) against the system prompt via an LLM judge. Run it with `npm run eval` (never in CI, never on save). See `evals/index.ts` for CLI flags and `evals/report.ts` for the generated report shape.
