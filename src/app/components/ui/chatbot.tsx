@@ -185,7 +185,7 @@ function ChatMessage({ role, content }: { role: string; content: string }) {
 
 function ChatContactCta({ spaced }: { spaced: boolean }) {
   const mailto = `mailto:${PROFILE.socials.email}?subject=${encodeURIComponent(
-    'Enquiry from your portfolio'
+    'Enquiry from your website'
   )}`
 
   return (
