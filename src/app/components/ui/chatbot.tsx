@@ -1,14 +1,15 @@
 'use client'
 
 import { useEffect } from 'react'
-import { ArrowUp, Bot, Loader2 } from 'lucide-react'
+import { ArrowUp, Bot, Loader2, Mail } from 'lucide-react'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Button } from '@/app/components/ui/button'
 import { Input } from '@/app/components/ui/input'
 import { ScrollArea } from '@/app/components/ui/scroll'
 import { useChat } from '@/app/components/ui/chat-provider'
-import { CHAT_SUGGESTIONS } from '@/shared/profile'
+import { CHAT_SUGGESTIONS, PROFILE } from '@/shared/profile'
+import { extractContactCta } from '@/lib/contactCta'
 import { cn } from '@/lib/utils'
 
 const markdownComponents = {
@@ -76,34 +77,11 @@ export function Chatbot() {
             className="flex-1 space-y-4 p-4"
           >
             {messages.map((message, index) => (
-              <div
+              <ChatMessage
                 key={message.id || `msg-${index}`}
-                className={cn(
-                  'flex',
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                )}
-              >
-                {message.role === 'assistant' && (
-                  <div className="mr-2 mt-3 shrink-0 text-surface-500">
-                    <Bot size={18} />
-                  </div>
-                )}
-                <div
-                  className={cn(
-                    'inline-block max-w-[92%] rounded-2xl px-3.5 py-2.5 text-sm shadow-lg backdrop-blur-sm',
-                    message.role === 'user'
-                      ? 'bg-surface-800 text-surface-100'
-                      : 'bg-surface-950/80 text-surface-300'
-                  )}
-                >
-                  <Markdown
-                    remarkPlugins={[remarkGfm]}
-                    components={markdownComponents}
-                  >
-                    {message.content}
-                  </Markdown>
-                </div>
-              </div>
+                role={message.role}
+                content={message.content}
+              />
             ))}
             {isLoading && isStreaming && (
               <div className="flex justify-start">
@@ -159,6 +137,75 @@ export function Chatbot() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ChatMessage({ role, content }: { role: string; content: string }) {
+  const isUser = role === 'user'
+  const { text, showCta } = isUser
+    ? { text: content, showCta: false }
+    : extractContactCta(content)
+
+  return (
+    <div className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
+      {!isUser && (
+        <div className="mr-2 mt-3 shrink-0 text-surface-500">
+          <Bot size={18} />
+        </div>
+      )}
+      <div
+        className={cn(
+          'flex max-w-[92%] flex-col',
+          isUser ? 'items-end' : 'items-start'
+        )}
+      >
+        {text ? (
+          <div
+            className={cn(
+              'inline-block rounded-2xl px-3.5 py-2.5 text-sm shadow-lg backdrop-blur-sm',
+              isUser
+                ? 'bg-surface-800 text-surface-100'
+                : 'bg-surface-950/80 text-surface-300'
+            )}
+          >
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              components={markdownComponents}
+            >
+              {text}
+            </Markdown>
+          </div>
+        ) : null}
+        {showCta ? <ChatContactCta spaced={Boolean(text)} /> : null}
+      </div>
+    </div>
+  )
+}
+
+function ChatContactCta({ spaced }: { spaced: boolean }) {
+  const mailto = `mailto:${PROFILE.socials.email}?subject=${encodeURIComponent(
+    'Enquiry from your portfolio'
+  )}`
+
+  return (
+    <div
+      className={cn(
+        'rounded-2xl border border-surface-800/80 bg-surface-950/80 px-3.5 py-2.5 shadow-lg backdrop-blur-sm',
+        spaced && 'mt-2'
+      )}
+    >
+      <p className="mb-2 text-xs text-surface-400">Want to reach Daniel?</p>
+      <Button
+        asChild
+        size="sm"
+        className="h-8 rounded-full bg-glow text-surface-50 hover:bg-glow/90"
+      >
+        <a href={mailto}>
+          <Mail className="h-3.5 w-3.5" />
+          Email him
+        </a>
+      </Button>
     </div>
   )
 }

@@ -35,7 +35,6 @@ Rules sync:
 - [ ] Edit stale paths, layout, guardrails, invariants
 - [ ] Avoid duplicate alwaysApply rules that restate the same facts
 - [ ] Commit rules with the feature (same PR)
-- [ ] Check PR template "Cursor rules updated" item
 ```
 
 ## File map (portfolio-fe)
