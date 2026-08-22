@@ -1,4 +1,9 @@
+import { PROFILE } from "@/shared/profile";
+
 export const CONTACT_CTA_MARKER = "[[CONTACT_CTA]]";
+
+const CONTACT_INTENT =
+  /\b(e-?mail|contact|reach(?:\s+out)?|get in touch|hire|hiring|enquir(?:y|ies)|inquir(?:y|ies)|collaborate|collaboration|work with (?:you|him|daniel))\b/i;
 
 /**
  * Strips the contact CTA marker from streamed assistant text.
@@ -8,10 +13,16 @@ export function extractContactCta(content: string): {
   text: string;
   showCta: boolean;
 } {
-  const showCta = content.includes(CONTACT_CTA_MARKER);
   const withoutMarker = content.replaceAll(CONTACT_CTA_MARKER, "");
   const text = stripPartialMarkerSuffix(withoutMarker).trimEnd();
+  const showCta =
+    content.includes(CONTACT_CTA_MARKER) ||
+    content.toLowerCase().includes(PROFILE.socials.email.toLowerCase());
   return { text, showCta };
+}
+
+export function isContactIntent(content: string): boolean {
+  return CONTACT_INTENT.test(content);
 }
 
 function stripPartialMarkerSuffix(text: string): string {
