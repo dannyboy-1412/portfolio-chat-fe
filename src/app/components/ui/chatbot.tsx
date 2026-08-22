@@ -1,14 +1,15 @@
 'use client'
 
 import { useEffect } from 'react'
-import { ArrowUp, Bot, Loader2 } from 'lucide-react'
+import { ArrowUp, Bot, Loader2, Mail } from 'lucide-react'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Button } from '@/app/components/ui/button'
 import { Input } from '@/app/components/ui/input'
 import { ScrollArea } from '@/app/components/ui/scroll'
 import { useChat } from '@/app/components/ui/chat-provider'
-import { CHAT_SUGGESTIONS } from '@/shared/profile'
+import { CHAT_SUGGESTIONS, PROFILE } from '@/shared/profile'
+import { extractContactCta, isContactIntent } from '@/lib/contactCta'
 import { cn } from '@/lib/utils'
 
 const markdownComponents = {
@@ -75,36 +76,22 @@ export function Chatbot() {
             ref={scrollContainerRef}
             className="flex-1 space-y-4 p-4"
           >
-            {messages.map((message, index) => (
-              <div
-                key={message.id || `msg-${index}`}
-                className={cn(
-                  'flex',
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                )}
-              >
-                {message.role === 'assistant' && (
-                  <div className="mr-2 mt-3 shrink-0 text-surface-500">
-                    <Bot size={18} />
-                  </div>
-                )}
-                <div
-                  className={cn(
-                    'inline-block max-w-[92%] rounded-2xl px-3.5 py-2.5 text-sm shadow-lg backdrop-blur-sm',
-                    message.role === 'user'
-                      ? 'bg-surface-800 text-surface-100'
-                      : 'bg-surface-950/80 text-surface-300'
-                  )}
-                >
-                  <Markdown
-                    remarkPlugins={[remarkGfm]}
-                    components={markdownComponents}
-                  >
-                    {message.content}
-                  </Markdown>
-                </div>
-              </div>
-            ))}
+            {messages.map((message, index) => {
+              const previous = messages[index - 1]
+              const forceCta =
+                message.role === 'assistant' &&
+                previous?.role === 'user' &&
+                isContactIntent(previous.content)
+
+              return (
+                <ChatMessage
+                  key={message.id || `msg-${index}`}
+                  role={message.role}
+                  content={message.content}
+                  forceCta={forceCta}
+                />
+              )
+            })}
             {isLoading && isStreaming && (
               <div className="flex justify-start">
                 <div className="mr-2 mt-3 shrink-0 text-surface-500">
@@ -159,6 +146,88 @@ export function Chatbot() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ChatMessage({
+  role,
+  content,
+  forceCta = false,
+}: {
+  role: string
+  content: string
+  forceCta?: boolean
+}) {
+  const isUser = role === 'user'
+  const extracted = isUser ? null : extractContactCta(content)
+  const text = isUser ? content : extracted?.text ?? ''
+  const showCta = Boolean(extracted && (extracted.showCta || forceCta))
+
+  return (
+    <div className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
+      {!isUser && (
+        <div className="mr-2 mt-3 shrink-0 text-surface-500">
+          <Bot size={18} />
+        </div>
+      )}
+      <div
+        className={cn(
+          'flex max-w-[92%] flex-col',
+          isUser ? 'items-end' : 'items-start'
+        )}
+      >
+        {text ? (
+          <div
+            className={cn(
+              'inline-block rounded-2xl px-3.5 py-2.5 text-sm shadow-lg backdrop-blur-sm',
+              isUser
+                ? 'bg-surface-800 text-surface-100'
+                : 'bg-surface-950/80 text-surface-300'
+            )}
+          >
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              components={markdownComponents}
+            >
+              {text}
+            </Markdown>
+          </div>
+        ) : null}
+        {showCta ? <ChatContactCta spaced={Boolean(text)} /> : null}
+      </div>
+    </div>
+  )
+}
+
+function ChatContactCta({ spaced }: { spaced: boolean }) {
+  const email = PROFILE.socials.email
+  const subject = encodeURIComponent('Enquiry from your website')
+  const mailto = `mailto:${email}?subject=${subject}`
+  const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`
+
+  return (
+    <div
+      className={cn(
+        'rounded-2xl border border-surface-800/80 bg-surface-950/80 px-3.5 py-2.5 shadow-lg backdrop-blur-sm',
+        spaced && 'mt-2'
+      )}
+    >
+      <p className="mb-2 text-xs text-surface-400">Want to reach Daniel?</p>
+      <a
+        href={mailto}
+        onClick={(event) => {
+          event.preventDefault()
+          const popup = window.open(gmailCompose, '_blank', 'noopener,noreferrer')
+          if (!popup) {
+            window.location.href = mailto
+          }
+        }}
+        className="inline-flex h-8 items-center justify-center gap-2 rounded-full bg-glow px-3 text-xs font-medium text-surface-50 transition-colors hover:bg-glow/90"
+      >
+        <Mail className="h-3.5 w-3.5" />
+        Email him
+      </a>
     </div>
   )
 }
