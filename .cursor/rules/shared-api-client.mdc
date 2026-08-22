@@ -31,7 +31,8 @@ Do not re-add Telegram or resume download helpers here; resume is static `/resum
 ## Types and payloads
 
 - Keep request/response types next to API helpers (`Message`)
-- Use snake_case field names that match the backend (`parent_id`, etc.)
+- Use snake_case field names that match the backend (`parent_id`, `context_type`, `context_id`, etc.)
+- `context_type` (`"project" | "experience"`) + `context_id` (slug/id from `@src/shared/projects.ts` / `@src/shared/profile.ts`) are optional — set them via `useChat().openChat({ context })`, never construct a prompt client-side for contextual answers
 
 ## Config and secrets
 

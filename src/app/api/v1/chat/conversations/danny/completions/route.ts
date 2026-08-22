@@ -31,7 +31,10 @@ export async function POST(request: NextRequest) {
 
     let primed;
     try {
-      primed = await generateCompletion(messages);
+      primed = await generateCompletion(messages, {
+        type: message.context_type,
+        id: message.context_id,
+      });
     } catch (error) {
       if (error instanceof AllModelsRateLimitedError) {
         return NextResponse.json(

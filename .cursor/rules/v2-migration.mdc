@@ -26,6 +26,13 @@ Backend lives in this Next.js app as **App Router Route Handlers** under `src/ap
 - Resume is a static file at `/resume.pdf` (not an API route)
 - Telegram notify and title generation are intentionally not ported
 
+## Contextual AI
+
+- The request body may include optional `context_type` (`"project" | "experience"`) and `context_id`; the completions route passes them to `generateCompletion(messages, { type, id })`
+- `@src/server/ai/context.ts` (`resolveContextBlock`, `validSourceSlugs`) resolves an id to a fact block from `@src/shared/projects.ts` / `@src/shared/profile.ts` — returns `null` on an unknown id so the assistant falls back to a general answer instead of erroring
+- `getSystemPrompt(context?)` in `@src/server/ai/systemPrompt.ts` appends the resolved `<CURRENT_CONTEXT>` block and instructs the model to end relevant replies with `[[LINK:project:<slug>]]` / `[[LINK:experience:<id>]]` markers (parsed client-side by `@src/lib/sourceLinks.ts`); only slugs/ids from `validSourceSlugs()` are valid — never let the model invent one
+- Context is per-request only; it is not required to persist beyond the stored message's optional `context_type`/`context_id` fields
+
 ## Validation and deps
 
 - Validate request bodies with zod schemas in `src/server/chat/schemas.ts`

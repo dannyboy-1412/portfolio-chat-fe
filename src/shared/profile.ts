@@ -7,6 +7,14 @@ export type Experience = {
   highlights: string[]
   tech: string[]
   suggestedQuestion: string
+  /** Short badge metric shown on the collapsed timeline entry. */
+  keyMetric: string
+  problem: string
+  built: string
+  architecture: string
+  impact: string[]
+  /** Slug of the matching entry in `PROJECTS`, if this role has one. */
+  projectSlug?: string
 }
 
 export type SkillGroup = {
@@ -14,28 +22,31 @@ export type SkillGroup = {
   skills: string[]
 }
 
+export type InterestCategory = {
+  id: string
+  label: string
+  items: string[]
+}
+
 export const PROFILE = {
   name: "Daniel A Rodrigues",
   shortName: "Daniel",
   role: "Software Engineer",
-  tagline: "Backend · AI",
+  tagline: "Backend · AI · Systems",
   pitch:
-    "I build backend-heavy systems — document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
+    "I build software that turns complex problems into reliable systems — document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
   location: "Victoria, Australia · Melbourne / Geelong",
   status: "Studying · Master of Applied AI @ Deakin",
+  /** Configurable hero status indicator, e.g. "OPEN TO OPPORTUNITIES" or "CURRENTLY BUILDING". */
+  statusIndicator: "OPEN TO OPPORTUNITIES",
   yearsExperience: "5+ years experience",
   education: [
     "Master of Applied AI, Deakin University (2026–2028)",
     "B.Tech Electrical & Electronics Engineering, VIT Vellore (2017–2021)",
   ],
   languages: ["English (native)", "Hindi", "Malayalam"],
-  interests: [
-    "Gaming · Valorant",
-    "Football · Liverpool FC",
-    "Favourite film · The Prestige",
-  ],
   about:
-    "Electrical and Electronics Engineering graduate from VIT Vellore, now a full-time Master of Applied AI student at Deakin University (expected 2028). I've built products from scratch at two startups — blockchain data at one, agentic AI at the other — and most recently worked on AI document extraction at INFRRD. After shipping LLM work in production I left to go deeper on applied AI through the Masters. I'm looking for backend + AI roles, open to full-stack, and can work hybrid or remote (Melbourne or Geelong if on-site). Side projects live on GitHub, including this portfolio and a crypto app that streams salary over the month instead of a lump sum.",
+    "I'm a software engineer interested in building systems that combine strong engineering foundations with AI. My work has taken me across backend systems, AI applications and full-stack products — from blockchain data pipelines to agentic AI for accounting to document extraction at scale. I've built products from scratch at two startups and most recently worked on AI document extraction at INFRRD. Currently studying a Master of Applied AI at Deakin, and looking for backend + AI roles.",
   socials: {
     github: "https://github.com/dannyboy-1412",
     linkedin: "https://www.linkedin.com/in/daniel-rodrigues14",
@@ -62,6 +73,18 @@ export const EXPERIENCES: Experience[] = [
     tech: ["Python", "FastAPI", "RabbitMQ", "Docker", "AWS", "TypeScript"],
     suggestedQuestion:
       "Tell me about your work at INFRRD on document extraction and table OCR.",
+    keyMetric: "86% → 97% field extraction accuracy",
+    problem:
+      "Full-document LLM calls for table extraction were prone to cell shifting and misalignment on dense, multi-page closing-disclosure tables.",
+    built:
+      "An OCR-coordinate-driven pipeline that crops each table individually and feeds page-level context to the model, plus a post-processing validation and correction layer.",
+    architecture:
+      "A Python product wrapper consumes and publishes extraction tasks over RabbitMQ, coordinating OCR coordinate detection, per-table LLM extraction, and validation before results return to the extraction product.",
+    impact: [
+      "86% → 97% field extraction accuracy",
+      "~98% true-positive accuracy on critical closing-disclosure tables",
+    ],
+    projectSlug: "document-ai",
   },
   {
     id: "mesha",
@@ -84,6 +107,18 @@ export const EXPERIENCES: Experience[] = [
       "AWS",
     ],
     suggestedQuestion: "Tell me about your work at Mesha and the AI agents you built.",
+    keyMetric: "80% reduction in reconciliation time",
+    problem:
+      "Accountants spent hours each month on manual closing summaries, unclear-transaction follow-ups, and invoice reconciliation.",
+    built:
+      "Three production agents — Closing, Clarification, and Invoice Recon — plus an AI Agent Builder for assembling new workflows with human review at each step.",
+    architecture:
+      "TypeScript/Express backend with a Next.js frontend, PostgreSQL and MongoDB for storage, and AWS for hosting; agents used structured LLM outputs and human-in-the-loop review before any client-facing action.",
+    impact: [
+      "80% reduction in reconciliation time",
+      "95% match success rate on invoice recon",
+    ],
+    projectSlug: "mesha",
   },
   {
     id: "propellyr",
@@ -100,6 +135,18 @@ export const EXPERIENCES: Experience[] = [
     tech: ["Python", "FastAPI", "Node.js", "DuckDB", "ClickHouse", "AWS"],
     suggestedQuestion:
       "What did you build at Propellyr, including the blockchain and AI work?",
+    keyMetric: "40% reduction in pricing infra costs",
+    problem:
+      "Propellyr needed reliable, real-time token pricing without paying for expensive third-party feeds, and staking/lending earnings didn't show up as simple transfers for tax purposes.",
+    built:
+      "A Node.js pipeline computing OHLCV prices from on-chain liquidity pool data, a tax engine tracking staking/lending earnings, and later an AI data-analysis app plus a RAG pipeline for unstructured data extraction.",
+    architecture:
+      "Node.js ingestion via Infura/web3.js into ClickHouse for pricing; a Java/Spring Boot tax engine over the same store; a Python/FastAPI + Next.js app loading CSVs into DuckDB for natural-language queries.",
+    impact: [
+      "40% reduction in operational costs vs. external pricing services",
+      "Multiple partnership offers from blockchain companies including Chainalysis",
+    ],
+    projectSlug: "propellyr",
   },
   {
     id: "wipro",
@@ -113,30 +160,49 @@ export const EXPERIENCES: Experience[] = [
     ],
     tech: ["Python", "Pandas", "C++"],
     suggestedQuestion: "What was your role at Wipro after graduating?",
+    keyMetric: "First role · large-scale data analysis",
+    problem:
+      "Needed to ramp up quickly on a large enterprise codebase and a big-data project straight out of university.",
+    built:
+      "Data analysis workflows using Python and pandas as part of a large-scale big-data project, after completing Wipro's C++ training program.",
+    architecture:
+      "Analysis scripts and reporting built in Python/pandas against the project's existing big-data infrastructure.",
+    impact: ["Ramped from a C++ training program into a live big-data project"],
   },
 ]
 
 export const SKILL_GROUPS: SkillGroup[] = [
   {
-    title: "Languages",
-    skills: ["TypeScript", "Python", "Go", "JavaScript", "C++"],
+    title: "Backend",
+    skills: ["Python", "Node.js", "FastAPI", "Express", "Go"],
   },
   {
-    title: "Backend",
-    skills: ["Express", "FastAPI", "Flask", "Node.js"],
+    title: "AI",
+    skills: ["LLMs", "RAG", "LangChain", "AI Agents", "Document AI"],
   },
   {
     title: "Frontend",
-    skills: ["React", "Next.js"],
+    skills: ["React", "Next.js", "TypeScript"],
   },
   {
     title: "Data",
-    skills: ["PostgreSQL", "MongoDB", "ClickHouse", "DuckDB", "Redis"],
+    skills: ["PostgreSQL", "MongoDB", "Redis", "DuckDB", "ClickHouse"],
   },
   {
-    title: "Cloud & Infra",
-    skills: ["AWS", "RabbitMQ", "Docker", "Jenkins", "Grafana"],
+    title: "Infrastructure",
+    skills: ["AWS", "Docker", "RabbitMQ", "Jenkins", "Grafana"],
   },
+]
+
+export const INTERESTS: InterestCategory[] = [
+  { id: "football", label: "Football", items: ["Liverpool FC"] },
+  { id: "gaming", label: "Gaming", items: ["Valorant", "CS:GO", "FIFA"] },
+  {
+    id: "music",
+    label: "Music",
+    items: ["Radiohead", "Twenty One Pilots", "Guitar"],
+  },
+  { id: "films", label: "Films", items: ["The Prestige", "Crime / Horror"] },
 ]
 
 export const CHAT_SUGGESTIONS = [
@@ -146,8 +212,25 @@ export const CHAT_SUGGESTIONS = [
 ] as const
 
 export const NAV_LINKS = [
-  { id: "chat", label: "Chat", href: "#chat" },
+  { id: "work", label: "Work", href: "#work" },
   { id: "experience", label: "Experience", href: "#experience" },
-  { id: "skills", label: "Skills", href: "#skills" },
   { id: "about", label: "About", href: "#about" },
 ] as const
+
+export const CONTACT_NAV_LINK = {
+  id: "contact",
+  label: "Contact",
+  href: "#contact",
+} as const
+
+export function getExperienceById(id: string): Experience | undefined {
+  return EXPERIENCES.find((experience) => experience.id === id)
+}
+
+export function getExperienceSuggestions(experience: Experience): string[] {
+  return [
+    experience.suggestedQuestion,
+    `What was the biggest challenge Daniel faced at ${experience.company}?`,
+    `Why did Daniel leave ${experience.company}?`,
+  ]
+}

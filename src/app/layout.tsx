@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import { Analytics } from '@vercel/analytics/next';
+import { AppShell } from "./components/app-shell";
+import { getSiteUrl } from "@/lib/siteUrl";
+import { PROFILE } from "@/shared/profile";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -8,38 +11,51 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
-const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Daniel A Rodrigues - Software Engineer",
+  title: "Daniel Rodrigues | Software Engineer & AI Engineer",
   description:
-    "Interactive portfolio of Daniel A Rodrigues. Backend-focused engineer — document AI, accounting agents, and on-chain data. Chat about the systems I've built.",
+    "Software engineer specialising in backend systems, AI applications and modern web development. Explore an interactive portfolio with a terminal and AI assistant.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: '/icon.svg', sizes: 'any' },
     ],
   },
   openGraph: {
-    title: "Daniel A Rodrigues - Software Engineer",
+    title: "Daniel Rodrigues | Software Engineer & AI Engineer",
     description:
-      "Backend-focused engineer — document AI, accounting agents, and on-chain data.",
+      "Software engineer specialising in backend systems, AI applications and modern web development.",
     type: "website",
     locale: "en_AU",
+    url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel A Rodrigues - Software Engineer",
+    title: "Daniel Rodrigues | Software Engineer & AI Engineer",
     description:
-      "Backend-focused engineer — document AI, accounting agents, and on-chain data.",
+      "Software engineer specialising in backend systems, AI applications and modern web development.",
   },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: PROFILE.name,
+  jobTitle: PROFILE.role,
+  url: siteUrl,
+  email: `mailto:${PROFILE.socials.email}`,
+  sameAs: [PROFILE.socials.github, PROFILE.socials.linkedin],
 };
 
 export default function RootLayout({
@@ -48,11 +64,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" data-scroll-behavior="smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <AppShell>{children}</AppShell>
         <Analytics />
       </body>
     </html>

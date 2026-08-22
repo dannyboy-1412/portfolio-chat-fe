@@ -10,6 +10,8 @@ export const messageSchema = openAIMessageSchema.extend({
   created_at: z.coerce.date().optional(),
   ttl: z.coerce.date().optional().nullable(),
   parent_id: z.string().optional().nullable(),
+  context_type: z.enum(["project", "experience"]).optional().nullable(),
+  context_id: z.string().optional().nullable(),
 });
 
 export const conversationSchema = z.object({

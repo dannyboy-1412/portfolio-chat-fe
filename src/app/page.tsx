@@ -1,30 +1,23 @@
-'use client'
-
-import { ChatProvider } from '@/app/components/ui/chat-provider'
-import { ThemeBackground } from '@/app/components/ui/theme-background'
-import { Navbar } from '@/app/components/ui/navbar'
 import { Hero } from '@/app/components/ui/hero'
+import { SelectedWork } from '@/app/components/ui/selected-work'
 import { ExperienceTimeline } from '@/app/components/ui/experience-timeline'
 import { SkillsGrid } from '@/app/components/ui/skills-grid'
 import { AboutSection } from '@/app/components/ui/about-section'
-import { SiteFooter } from '@/app/components/ui/site-footer'
+import { OutsideWork } from '@/app/components/ui/outside-work'
+import { ContactSection } from '@/app/components/ui/contact-section'
+import { AnalyticsTracker } from '@/app/components/ui/analytics-tracker'
 
 export default function Home() {
   return (
-    <ChatProvider>
-      <div className="relative min-h-screen bg-transparent text-surface-100">
-        <ThemeBackground />
-        <div className="relative z-10">
-          <Navbar />
-          <main>
-            <Hero />
-            <ExperienceTimeline />
-            <SkillsGrid />
-            <AboutSection />
-          </main>
-          <SiteFooter />
-        </div>
-      </div>
-    </ChatProvider>
+    <main>
+      <AnalyticsTracker event="portfolio_view" />
+      <Hero />
+      <SelectedWork />
+      <ExperienceTimeline />
+      <SkillsGrid />
+      <AboutSection />
+      <OutsideWork />
+      <ContactSection />
+    </main>
   )
 }
