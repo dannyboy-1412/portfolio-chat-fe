@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Portfolio site
 
-Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a chatbot centerpiece so visitors can explore professional experience and some personal background. The chat bot is Daniel's assistant (it speaks about him, not as him). Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download, experience timeline, skills, about, and album-driven visual themes.
+Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a chatbot centerpiece so visitors can explore professional experience and some personal background. The chat bot is Daniel's assistant (it speaks about him, not as him). Current features: streaming chat (OpenRouter via Route Handlers), MongoDB-backed threaded messages with TTL, resume download, experience timeline, skills, and about.
 
 ## Stack
 
@@ -18,10 +18,9 @@ Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a c
 
 ## Layout
 
-- App shell: `@src/app/page.tsx` (ThemeProvider + ChatProvider + navbar + sections), `@src/app/layout.tsx`
-- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `chatbot`, `chat-provider`, `theme-provider`, `theme-picker`, `theme-background`, `backgrounds/`, `experience-timeline`, `skills-grid`, `about-section`, `site-footer`, `scroll`
+- App shell: `@src/app/page.tsx` (ChatProvider + navbar + sections), `@src/app/layout.tsx`
+- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `chatbot`, `chat-provider`, `theme-background`, `experience-timeline`, `skills-grid`, `about-section`, `site-footer`, `scroll`
 - Profile content (client-safe): `@src/shared/profile.ts`
-- Theme registry: `@src/shared/themes.ts` (`ThemeId`, `THEMES`, default `blurryface`)
 - API routes: `@src/app/api/v1/`
 - Server logic: `@src/server/` (`db/`, `chat/`, `ai/` including `systemPrompt.ts`)
 - Client API helpers: `@src/shared/` (`api.ts`, `endpoints.ts`, `config.ts`)
@@ -30,17 +29,17 @@ Interactive portfolio for Daniel A Rodrigues. Single-page scroll layout with a c
 
 ## Theming
 
-- Themes switch via `html[data-theme]` (`default` | `blurryface` | `ok-computer` | `blue-album`); picker lives in About (`theme-picker`)
-- Default is the original zinc look (`default`); album themes are optional overlays — click again to deselect and revert
+- Single dark zinc look via `html.dark` and tokens in `@src/app/globals.css`
 - Colors: use `surface-*` and `glow` / semantic tokens — never hardcode `zinc-*`
-- New themes: add an entry in `@src/shared/themes.ts`, a `[data-theme]` block in `@src/app/globals.css`, and a background under `@src/app/components/ui/backgrounds/`
+- Ambient page background: `@src/app/components/ui/theme-background.tsx`
+- Do not reintroduce album/music theme switching unless explicitly requested
 
 ## Guardrails
 
 - Extend `@src/shared/` for browser→API calls; do not invent parallel fetch wrappers
 - Put server-only backend logic under `@src/server/` and Route Handlers under `@src/app/api/`
 - Keep portfolio content in `@src/shared/profile.ts` in sync with facts in `@src/server/ai/systemPrompt.ts` when bio/experience changes
-- Preserve themed dark portfolio UX; extend via `data-theme` rather than one-off color classes
+- Preserve the dark portfolio UX; style with `surface-*` / `glow` tokens rather than one-off color classes
 - LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
 - Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
 - New unit tests go under `tests/` (mirror `src/` paths; see `vitest-tests.mdc`); CI runs lint, typecheck, unit tests, and build on PRs and `main` (see `.github/workflows/ci.yml`); keep PR descriptions short using `.github/PULL_REQUEST_TEMPLATE.md`
