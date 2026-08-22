@@ -1,5 +1,4 @@
 import { PROFILE } from '@/shared/profile'
-import { ThemePicker } from '@/app/components/ui/theme-picker'
 
 export function AboutSection() {
   return (
@@ -36,8 +35,6 @@ export function AboutSection() {
             </ul>
           </div>
         </div>
-
-        <ThemePicker />
       </div>
     </section>
   )
