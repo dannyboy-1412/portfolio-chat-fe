@@ -4,87 +4,93 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --glow: 210 80% 55%;
-    --surface-50: 0 0% 98%;
-    --surface-100: 240 5% 96%;
-    --surface-200: 240 6% 90%;
-    --surface-300: 240 5% 84%;
-    --surface-400: 240 5% 65%;
-    --surface-500: 240 4% 46%;
-    --surface-600: 240 5% 34%;
-    --surface-700: 240 5% 26%;
-    --surface-800: 240 4% 16%;
-    --surface-900: 240 6% 10%;
-    --surface-950: 240 10% 3.9%;
-    --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-    --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 6% 7%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 6% 7%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 200 10% 6%;
+    --foreground: 217 12% 92%;
+    --card: 206 13% 11%;
+    --card-foreground: 217 12% 92%;
+    --popover: 206 13% 11%;
+    --popover-foreground: 217 12% 92%;
+    --primary: 217 12% 92%;
+    --primary-foreground: 200 10% 6%;
+    --secondary: 206 13% 11%;
+    --secondary-foreground: 217 12% 92%;
+    --muted: 206 13% 11%;
+    --muted-foreground: 210 6% 57%;
+    --accent: 206 13% 11%;
+    --accent-foreground: 217 12% 92%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 210 80% 55%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
+    --border: 207 11% 16%;
+    --input: 207 11% 16%;
+    --ring: 157 74% 64%;
+    --chart-1: 157 74% 64%;
+    --chart-2: 200 60% 55%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --glow: 210 80% 55%;
     --radius: 0.5rem;
-    --surface-50: 0 0% 98%;
-    --surface-100: 240 5% 96%;
-    --surface-200: 240 6% 90%;
-    --surface-300: 240 5% 84%;
-    --surface-400: 240 5% 65%;
-    --surface-500: 240 4% 46%;
-    --surface-600: 240 5% 34%;
-    --surface-700: 240 5% 26%;
-    --surface-800: 240 4% 16%;
-    --surface-900: 240 6% 10%;
-    --surface-950: 240 10% 3.9%;
+    /* PRD mint accent (#5EE7B2) — use sparingly for prompts, links, cursor, status, metrics */
+    --glow: 157 74% 64%;
+    /* PRD dark surface scale: 50/100 map to primary text (#E8EAED), 400/500 map to
+       secondary/muted text (#8B9299 / #5F666D), 700/800/900/950 map to border/surface/
+       secondary-bg/bg (#252A2E / #181C1F / #131619 / #0D0F10). */
+    --surface-50: 217 20% 96%;
+    --surface-100: 217 12% 92%;
+    --surface-200: 215 10% 85%;
+    --surface-300: 213 8% 74%;
+    --surface-400: 210 6% 57%;
+    --surface-500: 210 7% 40%;
+    --surface-600: 207 10% 26%;
+    --surface-700: 207 11% 16%;
+    --surface-800: 206 13% 11%;
+    --surface-900: 210 14% 9%;
+    --surface-950: 200 10% 6%;
     --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  }
+
+  .dark {
+    --background: 200 10% 6%;
+    --foreground: 217 12% 92%;
+    --card: 206 13% 11%;
+    --card-foreground: 217 12% 92%;
+    --popover: 206 13% 11%;
+    --popover-foreground: 217 12% 92%;
+    --primary: 217 12% 92%;
+    --primary-foreground: 200 10% 6%;
+    --secondary: 206 13% 11%;
+    --secondary-foreground: 217 12% 92%;
+    --muted: 206 13% 11%;
+    --muted-foreground: 210 6% 57%;
+    --accent: 206 13% 11%;
+    --accent-foreground: 217 12% 92%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 207 11% 16%;
+    --input: 207 11% 16%;
+    --ring: 157 74% 64%;
+    --chart-1: 157 74% 64%;
+    --chart-2: 200 60% 55%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --glow: 157 74% 64%;
+    --radius: 0.5rem;
+    --surface-50: 217 20% 96%;
+    --surface-100: 217 12% 92%;
+    --surface-200: 215 10% 85%;
+    --surface-300: 213 8% 74%;
+    --surface-400: 210 6% 57%;
+    --surface-500: 210 7% 40%;
+    --surface-600: 207 10% 26%;
+    --surface-700: 207 11% 16%;
+    --surface-800: 206 13% 11%;
+    --surface-900: 210 14% 9%;
+    --surface-950: 200 10% 6%;
+    --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   }
 }
 
@@ -106,13 +112,23 @@
   .font-display {
     font-family: var(--font-display);
   }
+  :focus-visible {
+    outline: 2px solid hsl(var(--glow));
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 @layer utilities {
   .ambient-glow {
     background: radial-gradient(
       ellipse 60% 50% at 50% 45%,
-      hsl(var(--glow) / 0.18),
+      hsl(var(--glow) / 0.14),
       transparent 70%
     );
   }
@@ -128,6 +144,18 @@
   .fade-up-delay-2 {
     animation: fade-up 0.6s ease-out 0.2s both;
   }
+
+  .terminal-cursor {
+    animation: terminal-blink 1s step-end infinite;
+  }
+
+  .terminal-noise {
+    background-image: radial-gradient(
+      hsl(var(--surface-500) / 0.35) 0.5px,
+      transparent 0.5px
+    );
+    background-size: 3px 3px;
+  }
 }
 
 @keyframes fade-up {
@@ -141,10 +169,22 @@
   }
 }
 
+@keyframes terminal-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fade-up,
   .fade-up-delay-1,
-  .fade-up-delay-2 {
+  .fade-up-delay-2,
+  .terminal-cursor {
     animation: none !important;
   }
 }

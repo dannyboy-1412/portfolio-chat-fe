@@ -5,6 +5,7 @@ import {
   markRateLimited,
 } from "@/server/ai/modelRotation";
 import { getSystemPrompt } from "@/server/ai/systemPrompt";
+import type { ChatContextInput } from "@/server/ai/context";
 import type { OpenAIMessage } from "@/server/chat/schemas";
 
 export class AllModelsRateLimitedError extends Error {
@@ -47,12 +48,13 @@ async function* replayThenContinue(
 
 async function createPrimedStream(
   model: string,
-  conversation: OpenAIMessage[]
+  conversation: OpenAIMessage[],
+  systemPrompt: string
 ): Promise<PrimedCompletionStream> {
   const stream = await openrouterClient.chat.completions.create({
     model,
     messages: [
-      { role: "system", content: getSystemPrompt() },
+      { role: "system", content: systemPrompt },
       ...conversation.map((msg) => ({
         role: msg.role as "user" | "assistant" | "system",
         content: msg.content,
@@ -83,19 +85,21 @@ async function createPrimedStream(
 }
 
 export async function generateCompletion(
-  conversation: OpenAIMessage[]
+  conversation: OpenAIMessage[],
+  context?: ChatContextInput
 ): Promise<PrimedCompletionStream> {
   if (!process.env.OPENROUTER_API_KEY) {
     throw new Error("OPENROUTER_API_KEY is not set");
   }
 
+  const systemPrompt = getSystemPrompt(context);
   const models = availableModels();
   const tried: string[] = [];
 
   for (const model of models) {
     tried.push(model);
     try {
-      return await createPrimedStream(model, conversation);
+      return await createPrimedStream(model, conversation, systemPrompt);
     } catch (error) {
       if (!isFallbackWorthy(error)) {
         throw error;

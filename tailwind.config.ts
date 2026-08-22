@@ -69,7 +69,7 @@ export default {
   		fontFamily: {
   			sans: ['var(--font-body)'],
   			display: ['var(--font-display)'],
-  			mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
+  			mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

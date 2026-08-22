@@ -6,6 +6,8 @@ export interface Message {
   content: string;
   role: string;
   parent_id?: string | null;
+  context_type?: "project" | "experience" | null;
+  context_id?: string | null;
 }
 
 export const getCompletions = async (data: Message) => {

@@ -1,9 +1,22 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { track } from '@vercel/analytics'
 import { getCompletions, Message } from '@/shared/api'
 import { consumeCompletionStreamChunk } from '@/lib/parseCompletionStream'
 import { useRefreshChatKeyHandler } from '@/hooks/refreshChatKeyHandler'
+
+export type ChatContextType = 'project' | 'experience'
+
+export type ChatContext = {
+  type: ChatContextType
+  id: string
+}
+
+export type OpenChatOptions = {
+  context?: ChatContext | null
+  prompt?: string
+}
 
 export type UseChatThreadResult = {
   messages: Message[]
@@ -11,10 +24,16 @@ export type UseChatThreadResult = {
   setInputMessage: (value: string) => void
   isLoading: boolean
   isStreaming: boolean
+  error: string | null
   sendMessage: (content?: string) => Promise<void>
+  retry: () => Promise<void>
   clearChat: () => void
-  inputRef: React.RefObject<HTMLInputElement | null>
+  inputRef: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
   scrollContainerRef: React.RefObject<HTMLDivElement | null>
+  isOpen: boolean
+  openChat: (options?: OpenChatOptions) => void
+  closeChat: () => void
+  context: ChatContext | null
 }
 
 export function useChatThread(): UseChatThreadResult {
@@ -22,11 +41,16 @@ export function useChatThread(): UseChatThreadResult {
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [parentId, setParentId] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [context, setContext] = useState<ChatContext | null>(null)
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const parentIdRef = useRef<string | null>(null)
   const isLoadingRef = useRef(false)
+  const contextRef = useRef<ChatContext | null>(null)
+  const lastUserContentRef = useRef<string | null>(null)
 
   useEffect(() => {
     parentIdRef.current = parentId
@@ -35,6 +59,10 @@ export function useChatThread(): UseChatThreadResult {
   useEffect(() => {
     isLoadingRef.current = isLoading
   }, [isLoading])
+
+  useEffect(() => {
+    contextRef.current = context
+  }, [context])
 
   const scrollToBottom = useCallback(() => {
     const el = scrollContainerRef.current
@@ -47,18 +75,14 @@ export function useChatThread(): UseChatThreadResult {
     setMessages([])
     setInputMessage('')
     setParentId(null)
+    setError(null)
+    setContext(null)
   }, [])
 
   useRefreshChatKeyHandler(clearChat, 'k')
 
-  const sendMessage = useCallback(
-    async (content?: string) => {
-      const text = (content ?? inputMessage).trim()
-      if (!text || isLoadingRef.current) {
-        return
-      }
-
-      const userMessageId = crypto.randomUUID()
+  const runSend = useCallback(
+    async (text: string, userMessageId: string) => {
       const newMessage: Message = {
         id: userMessageId,
         content: text,
@@ -68,11 +92,14 @@ export function useChatThread(): UseChatThreadResult {
       if (parentIdRef.current) {
         newMessage.parent_id = parentIdRef.current
       }
+      if (contextRef.current) {
+        newMessage.context_type = contextRef.current.type
+        newMessage.context_id = contextRef.current.id
+      }
 
-      setMessages((prev) => [...prev, newMessage])
-      setInputMessage('')
       setIsLoading(true)
       setIsStreaming(true)
+      setError(null)
 
       requestAnimationFrame(scrollToBottom)
 
@@ -139,14 +166,87 @@ export function useChatThread(): UseChatThreadResult {
         setIsStreaming(false)
         setIsLoading(false)
         inputRef.current?.focus()
-      } catch (error) {
-        console.error('Error during streaming:', error)
+      } catch (err) {
+        console.error('Error during streaming:', err)
         setIsLoading(false)
         setIsStreaming(false)
+        setError(
+          'Something went wrong while generating the response.'
+        )
+        setMessages((prev) => {
+          const lastMessage = prev[prev.length - 1]
+          if (lastMessage && lastMessage.role === 'assistant' && !lastMessage.content) {
+            return prev.slice(0, -1)
+          }
+          return prev
+        })
       }
     },
-    [inputMessage, scrollToBottom]
+    [scrollToBottom]
   )
+
+  const sendMessage = useCallback(
+    async (content?: string) => {
+      const text = (content ?? inputMessage).trim()
+      if (!text || isLoadingRef.current) {
+        return
+      }
+
+      const userMessageId = crypto.randomUUID()
+      lastUserContentRef.current = text
+      track('chat_message', contextRef.current ?? undefined)
+
+      const newMessage: Message = {
+        id: userMessageId,
+        content: text,
+        role: 'user',
+      }
+      if (parentIdRef.current) {
+        newMessage.parent_id = parentIdRef.current
+      }
+
+      setMessages((prev) => [...prev, newMessage])
+      setInputMessage('')
+
+      await runSend(text, userMessageId)
+    },
+    [inputMessage, runSend]
+  )
+
+  const retry = useCallback(async () => {
+    const text = lastUserContentRef.current
+    if (!text || isLoadingRef.current) {
+      return
+    }
+    setMessages((prev) => {
+      const last = prev[prev.length - 1]
+      if (last && last.role === 'assistant' && !last.content) {
+        return prev.slice(0, -1)
+      }
+      return prev
+    })
+    const userMessageId = crypto.randomUUID()
+    await runSend(text, userMessageId)
+  }, [runSend])
+
+  const openChat = useCallback(
+    (options?: OpenChatOptions) => {
+      setIsOpen(true)
+      if (options?.context !== undefined) {
+        setContext(options.context)
+      }
+      if (options?.prompt) {
+        void sendMessage(options.prompt)
+      } else {
+        requestAnimationFrame(() => inputRef.current?.focus())
+      }
+    },
+    [sendMessage]
+  )
+
+  const closeChat = useCallback(() => {
+    setIsOpen(false)
+  }, [])
 
   return {
     messages,
@@ -154,9 +254,15 @@ export function useChatThread(): UseChatThreadResult {
     setInputMessage,
     isLoading,
     isStreaming,
+    error,
     sendMessage,
+    retry,
     clearChat,
     inputRef,
     scrollContainerRef,
+    isOpen,
+    openChat,
+    closeChat,
+    context,
   }
 }
