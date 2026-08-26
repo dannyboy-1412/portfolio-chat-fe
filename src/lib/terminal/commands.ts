@@ -52,13 +52,14 @@ registerCommand({
       ['resume', 'View resume'],
       ['contact', 'Get in touch'],
       ['clear', 'Clear terminal'],
+      ['exit', 'Close the terminal'],
       ['whoami', 'About Daniel'],
       ['status', 'System status'],
     ]
 
     const segments: TerminalSegment[] = [line('Available commands:'), blank()]
     for (const [name, description] of rows) {
-      segments.push(link(`${name.padEnd(12)} ${description}`, { type: 'run', command: name }))
+      segments.push({ kind: 'command', name, description })
     }
     segments.push(blank())
     segments.push(
@@ -237,6 +238,16 @@ registerCommand({
   name: 'clear',
   summary: 'Clear terminal',
   handler: () => ({ kind: 'clear' }),
+})
+
+registerCommand({
+  name: 'exit',
+  summary: 'Close the terminal',
+  handler: () => ({
+    kind: 'action',
+    action: { type: 'exit' },
+    segments: [line('Closing terminal…', 'muted')],
+  }),
 })
 
 function startChat(ctx: CommandContext): CommandResult {

@@ -73,10 +73,8 @@ export function ChatPanel() {
       if (event.key === 'Escape') closeChat()
     }
     document.addEventListener('keydown', onKeyDown)
-    document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = ''
     }
   }, [isOpen, closeChat])
 

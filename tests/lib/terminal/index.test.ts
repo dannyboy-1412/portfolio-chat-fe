@@ -19,17 +19,24 @@ describe("executeCommand", () => {
     expect(executeCommand("clear")).toEqual({ kind: "clear" });
   });
 
-  it("help lists every visible command as a clickable run action", () => {
+  it("exit requests the terminal exit action", () => {
+    expect(executeCommand("exit")).toMatchObject({
+      kind: "action",
+      action: { type: "exit" },
+    });
+  });
+
+  it("help lists visible commands with descriptions as runnable command rows", () => {
     const result = executeCommand("help");
     expect(result?.kind).toBe("output");
     if (result?.kind !== "output") throw new Error("expected output");
 
-    const runCommands = result.segments
-      .filter((segment) => segment.kind === "link")
-      .map((segment) => (segment.kind === "link" ? segment.action : null));
-
-    for (const action of runCommands) {
-      expect(action).toMatchObject({ type: "run" });
+    const rows = result.segments.filter((segment) => segment.kind === "command");
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      if (row.kind !== "command") throw new Error("expected command row");
+      expect(commandNames()).toContain(row.name);
+      expect(row.description.length).toBeGreaterThan(0);
     }
     expect(commandNames()).toContain("help");
     expect(commandNames()).not.toContain("chat"); // hidden alias

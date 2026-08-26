@@ -55,6 +55,14 @@ export function Navbar() {
 
   const closeMobile = () => setMobileOpen(false)
 
+  const scrollToSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (window.location.pathname !== '/') return
+    event.preventDefault()
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    window.history.replaceState(null, '', `/#${id}`)
+    setActiveId(id)
+  }
+
   const handleOpenTerminal = () => {
     closeMobile()
     openTerminal()
@@ -81,7 +89,7 @@ export function Navbar() {
           className="font-mono text-sm font-semibold tracking-tight text-surface-100"
           onClick={closeMobile}
         >
-          DANIEL<span className="text-glow">.</span>R
+          DANIEL A<span className="text-glow">.</span>R
         </Link>
 
         <ul className="hidden items-center gap-1 md:flex">
@@ -89,6 +97,7 @@ export function Navbar() {
             <li key={link.id}>
               <Link
                 href={sectionHref(link.href)}
+                onClick={(event) => scrollToSection(event, link.id)}
                 className={cn(
                   'rounded-md px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors',
                   activeId === link.id
@@ -141,7 +150,10 @@ export function Navbar() {
               <li key={link.id}>
                 <Link
                   href={sectionHref(link.href)}
-                  onClick={closeMobile}
+                  onClick={(event) => {
+                    scrollToSection(event, link.id)
+                    closeMobile()
+                  }}
                   className={cn(
                     'flex min-h-11 items-center rounded-md px-3 font-mono text-sm',
                     activeId === link.id
