@@ -44,7 +44,7 @@ export function ExperienceTimeline() {
           Experience
         </h2>
         <p className="mt-2 text-sm text-surface-400">
-          Selected roles — inspect one for the full story, or ask the assistant.
+          Selected roles - inspect one for the full story, or ask the assistant.
         </p>
 
         <ol className="relative mt-12 space-y-6 border-l border-surface-800 pl-8">

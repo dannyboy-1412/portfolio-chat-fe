@@ -73,7 +73,7 @@ registerCommand({
   summary: 'About Daniel',
   handler: () =>
     output([
-      line(`${PROFILE.shortName} — ${PROFILE.role}`),
+      line(`${PROFILE.shortName} - ${PROFILE.role}`),
       line(PROFILE.tagline, 'accent'),
       line(PROFILE.location, 'muted'),
     ]),
@@ -118,7 +118,7 @@ registerCommand({
       line('Selected work:'),
       blank(),
       ...PROJECTS.flatMap((project) => [
-        link(`~/projects/${project.slug}  — ${project.tagline}`, {
+        link(`~/projects/${project.slug}  - ${project.tagline}`, {
           type: 'navigate',
           href: `/projects/${project.slug}`,
         }),
@@ -153,7 +153,7 @@ registerCommand({
       kind: 'action',
       action: { type: 'navigate', href: `/projects/${project.slug}` },
       segments: [
-        line(`${project.name} — ${project.tagline}`, 'accent'),
+        line(`${project.name} - ${project.tagline}`, 'accent'),
         line(project.description),
         blank(),
         line(`tech: ${project.technologies.join(', ')}`, 'muted'),
@@ -180,7 +180,7 @@ registerCommand({
       blank(),
       ...EXPERIENCES.flatMap((job, index) => [
         line(
-          `${String(index + 1).padStart(2, '0')} ${job.company} — ${job.role} (${job.period})`,
+          `${String(index + 1).padStart(2, '0')} ${job.company} - ${job.role} (${job.period})`,
           'accent'
         ),
         line(`   ${job.keyMetric}`, 'muted'),

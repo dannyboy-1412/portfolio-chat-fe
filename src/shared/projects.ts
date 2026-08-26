@@ -18,7 +18,7 @@ export type Project = {
   links: ProjectLink
   origin: "work" | "personal"
   relatedExperienceId?: string
-  /** Draft content awaiting real write-up from Daniel — UI should flag this. */
+  /** Draft content awaiting real write-up from Daniel - UI should flag this. */
   placeholder?: boolean
 }
 
@@ -30,9 +30,9 @@ export const PROJECTS: Project[] = [
     description:
       "Platform for building AI-powered accounting automation agents.",
     problem:
-      "Accountants at Mesha's clients spent hours each month on manual closing summaries, unclear-transaction follow-ups, and invoice reconciliation — all repetitive, rules-plus-judgment work that AI could assist with under human review.",
+      "Accountants at Mesha's clients spent hours each month on manual closing summaries, unclear-transaction follow-ups, and invoice reconciliation - all repetitive, rules-plus-judgment work that AI could assist with under human review.",
     solution:
-      "Built three production agents end to end — Closing, Clarification, and Invoice Recon — plus an AI Agent Builder that let the team assemble new workflows with human-in-the-loop review at every step instead of hand-coding each one.",
+      "Built three production agents end to end - Closing, Clarification, and Invoice Recon - plus an AI Agent Builder that let the team assemble new workflows with human-in-the-loop review at every step instead of hand-coding each one.",
     architecture:
       "TypeScript/Express backend with a Next.js frontend, PostgreSQL and MongoDB for storage, and AWS for hosting. The Closing agent pulled P/L and Balance Sheet data from the Xero API and used structured LLM outputs to draft executive summaries emailed to clients. Invoice Recon matched Plaid/bank transactions against unpaid invoices using prompt-engineered matching against OpenAI and Anthropic models, with a review modal before reconciling.",
     decisions: [
@@ -54,7 +54,7 @@ export const PROJECTS: Project[] = [
       "95% match success rate on invoice recon",
     ],
     learnings:
-      "Shipping LLM agents into a real financial workflow taught the value of human review checkpoints and structured outputs over open-ended generation — reliability mattered more than raw model capability.",
+      "Shipping LLM agents into a real financial workflow taught the value of human review checkpoints and structured outputs over open-ended generation - reliability mattered more than raw model capability.",
     links: {},
     origin: "work",
     relatedExperienceId: "mesha",
@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
     name: "Document AI",
     tagline: "OCR-Coordinate Extraction Pipeline",
     description:
-      "In-house document extraction product — OCR-coordinate-driven table pipelines with automated validation.",
+      "In-house document extraction product - OCR-coordinate-driven table pipelines with automated validation.",
     problem:
       "The existing table extraction approach fed full documents to an LLM in one shot, which caused cell shifting and misalignment on dense, multi-page closing disclosure tables.",
     solution:
@@ -82,7 +82,7 @@ export const PROJECTS: Project[] = [
       "~98% true-positive accuracy on critical closing-disclosure tables",
     ],
     learnings:
-      "Production LLM extraction needed engineering around the model, not just a better prompt — validation layers and constrained inputs mattered as much as the model itself.",
+      "Production LLM extraction needed engineering around the model, not just a better prompt - validation layers and constrained inputs mattered as much as the model itself.",
     links: {},
     origin: "work",
     relatedExperienceId: "infrrd",
@@ -117,7 +117,7 @@ export const PROJECTS: Project[] = [
       "Multiple partnership offers from blockchain companies including Chainalysis",
     ],
     learnings:
-      "Owning a data pipeline end to end — from raw on-chain events to a finished product — meant translating domain logic (AMM math, tax rules) into code that had to be exactly right, not just directionally close.",
+      "Owning a data pipeline end to end - from raw on-chain events to a finished product - meant translating domain logic (AMM math, tax rules) into code that had to be exactly right, not just directionally close.",
     links: {},
     origin: "work",
     relatedExperienceId: "propellyr",
@@ -127,15 +127,15 @@ export const PROJECTS: Project[] = [
     name: "Portfolio",
     tagline: "Terminal + AI Portfolio",
     description:
-      "This site — a portfolio presented as an AI development environment, with a command-line terminal and a context-aware AI assistant.",
+      "This site - a portfolio presented as an AI development environment, with a command-line terminal and a context-aware AI assistant.",
     problem:
-      "A conventional portfolio page tells visitors about engineering work but doesn't demonstrate it — recruiters skim it and technical visitors have nothing to explore.",
+      "A conventional portfolio page tells visitors about engineering work but doesn't demonstrate it - recruiters skim it and technical visitors have nothing to explore.",
     solution:
       "Built a Next.js site with three interfaces over one shared content source: a normal scrollable portfolio, a terminal with an extensible command system, and a streaming AI assistant that can answer questions about Daniel and link back into the site.",
     architecture:
       "App Router pages for structure and SEO, a small terminal engine (tokenizer → parser → command registry) driving both an inline hero terminal and a full-screen overlay, and an OpenRouter-backed streaming chat API that accepts a context identifier so answers about a specific project or role can be grounded without building the prompt in the browser.",
     decisions: [
-      "Kept context resolution server-side — the client sends a contextType/contextId, not a constructed prompt",
+      "Kept context resolution server-side - the client sends a contextType/contextId, not a constructed prompt",
       "Reused the same profile and project data across the web UI, terminal commands, and the AI system prompt to avoid maintaining duplicate facts",
     ],
     learnings:
@@ -154,14 +154,14 @@ export const PROJECTS: Project[] = [
     description:
       "A crypto app concept that streams salary continuously through the pay period instead of a single lump-sum payment.",
     problem:
-      "Draft placeholder — full problem write-up to come.",
+      "Draft placeholder - full problem write-up to come.",
     solution:
-      "Draft placeholder — an on-chain app streaming pay continuously over the month rather than releasing it all at once on payday.",
-    architecture: "Draft placeholder — architecture details to be added.",
-    decisions: ["Draft placeholder — engineering decisions to be added."],
+      "Draft placeholder - an on-chain app streaming pay continuously over the month rather than releasing it all at once on payday.",
+    architecture: "Draft placeholder - architecture details to be added.",
+    decisions: ["Draft placeholder - engineering decisions to be added."],
     technologies: ["Solidity", "Node.js", "Ethereum"],
-    impact: ["Draft placeholder — results to be added."],
-    learnings: "Draft placeholder — to be added.",
+    impact: ["Draft placeholder - results to be added."],
+    learnings: "Draft placeholder - to be added.",
     links: {},
     origin: "personal",
     placeholder: true,

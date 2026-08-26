@@ -22,11 +22,11 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 
   return {
-    title: `${project.name} — ${project.tagline} | Daniel Rodrigues`,
+    title: `${project.name} - ${project.tagline} | Daniel Rodrigues`,
     description: project.description,
     alternates: { canonical: `/projects/${project.slug}` },
     openGraph: {
-      title: `${project.name} — ${project.tagline}`,
+      title: `${project.name} - ${project.tagline}`,
       description: project.description,
       type: 'article',
     },
@@ -60,7 +60,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </p>
         {project.placeholder && (
           <span className="mt-2 inline-block rounded-full border border-surface-700 bg-surface-900/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-surface-500">
-            Draft content — full write-up coming soon
+            Draft content - full write-up coming soon
           </span>
         )}
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-surface-50 sm:text-4xl">

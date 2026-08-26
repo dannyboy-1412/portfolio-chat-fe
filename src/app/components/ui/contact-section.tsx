@@ -14,7 +14,7 @@ export function ContactSection() {
           Get in touch
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-surface-400">
-          Open to backend and AI roles. The fastest way to reach me is email — or ask my
+          Open to backend and AI roles. The fastest way to reach me is email - or ask my
           assistant to pass along a message.
         </p>
 
