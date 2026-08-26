@@ -52,6 +52,20 @@ function SegmentView({
       </p>
     )
   }
+  if (segment.kind === 'command') {
+    return (
+      <div className="flex items-baseline gap-3 py-0.5">
+        <button
+          type="button"
+          onClick={() => onAction({ type: 'run', command: segment.name })}
+          className="w-28 shrink-0 text-left font-semibold text-glow transition-colors hover:underline hover:decoration-glow hover:underline-offset-4"
+        >
+          {segment.name}
+        </button>
+        <span className="text-surface-500">{segment.description}</span>
+      </div>
+    )
+  }
   return (
     <button
       type="button"

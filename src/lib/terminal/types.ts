@@ -8,12 +8,14 @@ export type TerminalAction =
   | { type: 'navigate'; href: string }
   | { type: 'open-chat'; context?: ChatContextRef | null; prompt?: string }
   | { type: 'run'; command: string }
+  | { type: 'exit' }
 
 export type TerminalSegmentTone = 'default' | 'muted' | 'accent' | 'error'
 
 export type TerminalSegment =
   | { kind: 'line'; text: string; tone?: TerminalSegmentTone }
   | { kind: 'link'; label: string; action: TerminalAction }
+  | { kind: 'command'; name: string; description: string }
   | { kind: 'blank' }
 
 export type CommandContext = {

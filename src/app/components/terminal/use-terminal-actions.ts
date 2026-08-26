@@ -57,6 +57,9 @@ export function useTerminalActions(closeOverlay?: () => void) {
         }
         case 'run':
           return
+        case 'exit':
+          closeOverlay?.()
+          return
         default:
           return
       }
