@@ -34,19 +34,19 @@ export const PROFILE = {
   role: "Software Engineer",
   tagline: "Backend · AI · Systems",
   pitch:
-    "I build software that turns complex problems into reliable systems — document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
+    "I build software that turns complex problems into reliable systems - document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
   location: "Victoria, Australia · Melbourne / Geelong",
   status: "Studying · Master of Applied AI @ Deakin",
   /** Configurable hero status indicator, e.g. "OPEN TO OPPORTUNITIES" or "CURRENTLY BUILDING". */
   statusIndicator: "OPEN TO OPPORTUNITIES",
   yearsExperience: "5+ years experience",
   education: [
-    "Master of Applied AI, Deakin University (2026–2028)",
-    "B.Tech Electrical & Electronics Engineering, VIT Vellore (2017–2021)",
+    "Master of Applied AI, Deakin University (2026-2028)",
+    "B.Tech Electrical & Electronics Engineering, VIT Vellore (2017-2021)",
   ],
   languages: ["English (native)", "Hindi", "Malayalam"],
   about:
-    "I'm a software engineer interested in building systems that combine strong engineering foundations with AI. My work has taken me across backend systems, AI applications and full-stack products — from blockchain data pipelines to agentic AI for accounting to document extraction at scale. I've built products from scratch at two startups and most recently worked on AI document extraction at INFRRD. Currently studying a Master of Applied AI at Deakin, and looking for backend + AI roles.",
+    "I'm a software engineer interested in building systems that combine strong engineering foundations with AI. My work has taken me across backend systems, AI applications and full-stack products - from blockchain data pipelines to agentic AI for accounting to document extraction at scale. I've built products from scratch at two startups and most recently worked on AI document extraction at INFRRD. Currently studying a Master of Applied AI at Deakin, and looking for backend + AI roles.",
   socials: {
     github: "https://github.com/dannyboy-1412",
     linkedin: "https://www.linkedin.com/in/daniel-rodrigues14",
@@ -61,9 +61,9 @@ export const EXPERIENCES: Experience[] = [
     id: "infrrd",
     company: "INFRRD",
     role: "Software Development Engineer-2",
-    period: "Apr 2025 — Apr 2026",
+    period: "Apr 2025 - Apr 2026",
     summary:
-      "Built document AI for an in-house extraction product — OCR-coordinate-driven table pipelines, post-processing validation, and a RabbitMQ-backed Python service wrapper.",
+      "Built document AI for an in-house extraction product - OCR-coordinate-driven table pipelines, post-processing validation, and a RabbitMQ-backed Python service wrapper.",
     highlights: [
       "Reworked core table extraction from full-document LLM calls to an OCR-coordinate pipeline that crops each table and feeds page-level context",
       "Added post-processing validation and correction, lifting no-touch processing and true-positive accuracy to ~98% on critical closing-disclosure tables",
@@ -90,9 +90,9 @@ export const EXPERIENCES: Experience[] = [
     id: "mesha",
     company: "Mesha",
     role: "Software Engineer",
-    period: "Aug 2024 — Feb 2025",
+    period: "Aug 2024 - Feb 2025",
     summary:
-      "Built AI agents for accounting — Closing, Clarification, and Invoice Recon end to end, plus an AI agent builder with human-in-the-loop review.",
+      "Built AI agents for accounting - Closing, Clarification, and Invoice Recon end to end, plus an AI agent builder with human-in-the-loop review.",
     highlights: [
       "Shipped a Closing agent that pulled Xero P/L and Balance Sheet data and emailed executive summaries to clients",
       "Built an Invoice Recon agent that matched bank transactions to unpaid invoices with LLMs",
@@ -111,7 +111,7 @@ export const EXPERIENCES: Experience[] = [
     problem:
       "Accountants spent hours each month on manual closing summaries, unclear-transaction follow-ups, and invoice reconciliation.",
     built:
-      "Three production agents — Closing, Clarification, and Invoice Recon — plus an AI Agent Builder for assembling new workflows with human review at each step.",
+      "Three production agents - Closing, Clarification, and Invoice Recon - plus an AI Agent Builder for assembling new workflows with human review at each step.",
     architecture:
       "TypeScript/Express backend with a Next.js frontend, PostgreSQL and MongoDB for storage, and AWS for hosting; agents used structured LLM outputs and human-in-the-loop review before any client-facing action.",
     impact: [
@@ -124,7 +124,7 @@ export const EXPERIENCES: Experience[] = [
     id: "propellyr",
     company: "Propellyr",
     role: "Software Development Engineer",
-    period: "Aug 2022 — Aug 2024",
+    period: "Aug 2022 - Aug 2024",
     summary:
       "Blockchain data platform that later pivoted into generative AI. Built real-time on-chain price pipelines, a crypto tax engine, and RAG / NL-to-SQL analysis tools.",
     highlights: [
@@ -152,9 +152,9 @@ export const EXPERIENCES: Experience[] = [
     id: "wipro",
     company: "Wipro Limited",
     role: "Project Engineer",
-    period: "Jun 2021 — Jul 2022",
+    period: "Jun 2021 - Jul 2022",
     summary:
-      "First role after graduation — data analysis on a large-scale big-data project using Python and pandas.",
+      "First role after graduation - data analysis on a large-scale big-data project using Python and pandas.",
     highlights: [
       "Ran data analysis on a large-scale big-data project using Python and pandas",
     ],
