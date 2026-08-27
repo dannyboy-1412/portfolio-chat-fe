@@ -174,25 +174,25 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: 'lp-earnings',
-    name: 'LP Earnings Engine',
-    tagline: 'Liquidity provider earnings research',
+    name: 'LP Earnings Research',
+    tagline: 'How other protocols pay liquidity providers',
     description:
-      'Research that turned Propellyr\u2019s smart contracts and raw transactions into a working model of what liquidity providers actually earn, powering the tax product.',
+      'Research across other crypto platforms on how their smart contracts and transactions determine what liquidity providers earn, plus Node.js and Solidity proofs of concept and recommendations for how Propellyr could use that data in the tax product.',
     problem:
-      'For tax purposes, Propellyr needed the earnings of liquidity providers and stakers on each crypto platform. Those earnings never appear as a simple transfer. They sit inside each protocol\u2019s smart contract mechanics, and every protocol computes them differently.',
+      'For tax purposes, Propellyr needed the earnings of liquidity providers and stakers on each crypto platform. Those earnings never appear as a simple transfer. They sit inside each protocol\u2019s smart contract mechanics, and every protocol computes them differently. Propellyr had no smart contracts of its own.',
     solution:
-      'Researched multiple crypto protocols, read their smart contracts and transactions, and worked out how each one computes provider earnings. Proved the model with a Node.js proof-of-concept that pulled the on-chain data of a real deposit and withdrawal, computed the earnings from token prices at both timestamps, and verified the result against the tokens the depositor actually received. That model directed the team that built the production tax engine.',
+      'Researched other crypto platforms, read their smart contracts and transactions, and worked out how each one computes provider earnings. Built Node.js and Solidity proofs of concept to check the math against real deposits and withdrawals, then wrote recommendations for how the tax product could use that contract data and those transactions.',
     architecture:
-      'A Node.js proof-of-concept fetches transaction data on-chain, reconstructs each deposit and withdrawal, and prices the tokens at both ends to compute earnings. Once verified against real withdrawal balances, the model was implemented as a Java/Spring Boot engine over ClickHouse by a team of experienced Java developers.',
+      'Proofs of concept in Node.js and Solidity, not a production engine. Solidity PoCs modelled how other platforms\u2019 contracts compute liquidity-provider earnings. Node.js scripts fetched real deposit and withdrawal transactions from those protocols, priced the tokens at both timestamps, and checked the result against what the depositor actually received. The research and PoCs were direction for the tax product team, who later built the production engine in Java and Spring Boot over ClickHouse.',
     decisions: [
-      'Verified calculated earnings against the tokens a depositor actually received on withdrawal, not just against the formula',
-      'One protocol at a time, researched from the contracts up, instead of assuming AMMs share one earnings model',
-      'Handed the verified model to the Java team to own the production tax engine in Spring Boot',
+      'Modelled other platforms\u2019 contracts in Solidity rather than inventing a Propellyr contract',
+      'Verified calculated earnings against the tokens a depositor actually received on withdrawal, not just the whitepaper formula',
+      'One protocol at a time from the contracts up, instead of assuming AMMs share one earnings model',
     ],
-    technologies: ['Node.js', 'ClickHouse', 'AWS', 'Java', 'Spring Boot'],
+    technologies: ['Solidity', 'Node.js'],
     impact: [
-      'Earnings model verified against real on-chain withdrawals before production use',
-      'Became the basis of the crypto tax engine behind multiple partnership offers, including Chainalysis',
+      'PoCs verified earnings against real on-chain withdrawals',
+      'Gave the tax product team a protocol-by-protocol model of how to compute LP earnings from other platforms\u2019 contract data',
     ],
     learnings:
       'The whitepaper version of a protocol and the deployed contract version rarely match. Reading transactions directly settled every disagreement.',

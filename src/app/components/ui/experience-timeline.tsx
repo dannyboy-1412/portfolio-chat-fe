@@ -1,58 +1,21 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import { ArrowUpRight, ChevronDown } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import { AskDanielButton } from '@/app/components/ui/ask-daniel-button'
 import { EXPERIENCES } from '@/shared/profile'
 import { getProjectsByExperienceId, type Project } from '@/shared/projects'
-import { PROJECT_ANCHOR_EVENT } from '@/lib/sourceLinks'
 import { cn } from '@/lib/utils'
-
-const PROJECT_HASH_PREFIX = '#project-'
-
-function readProjectHash(): string | null {
-  if (typeof window === 'undefined') return null
-  const hash = window.location.hash
-  if (!hash.startsWith(PROJECT_HASH_PREFIX)) return null
-  return hash.slice(PROJECT_HASH_PREFIX.length) || null
-}
-
-function findProjectOwner(slug: string) {
-  return EXPERIENCES.find((job) =>
-    getProjectsByExperienceId(job.id).some((project) => project.slug === slug)
-  )
-}
 
 export function ExperienceTimeline() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [expandedProjects, setExpandedProjects] = useState<ReadonlySet<string>>(
-    () => new Set()
-  )
   const sectionRef = useRef<HTMLElement>(null)
 
   const toggle = (id: string) => {
     setExpandedId((current) => (current === id ? null : id))
   }
-
-  const toggleProject = (slug: string) => {
-    setExpandedProjects((current) => {
-      const next = new Set(current)
-      if (next.has(slug)) {
-        next.delete(slug)
-      } else {
-        next.add(slug)
-      }
-      return next
-    })
-  }
-
-  const expandProject = useCallback((slug: string) => {
-    const owner = findProjectOwner(slug)
-    if (!owner) return
-    setExpandedId(owner.id)
-    setExpandedProjects((current) => new Set(current).add(slug))
-  }, [])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -70,31 +33,6 @@ export function ExperienceTimeline() {
     observer.observe(section)
     return () => observer.disconnect()
   }, [])
-
-  useEffect(() => {
-    const expandFromHash = () => {
-      const slug = readProjectHash()
-      if (slug) expandProject(slug)
-    }
-    const onAnchorEvent = (event: Event) => {
-      const slug = (event as CustomEvent<string>).detail
-      if (typeof slug === 'string') expandProject(slug)
-    }
-    const frame = requestAnimationFrame(expandFromHash)
-    window.addEventListener('hashchange', expandFromHash)
-    window.addEventListener(PROJECT_ANCHOR_EVENT, onAnchorEvent)
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener('hashchange', expandFromHash)
-      window.removeEventListener(PROJECT_ANCHOR_EVENT, onAnchorEvent)
-    }
-  }, [expandProject])
-
-  useEffect(() => {
-    const slug = readProjectHash()
-    if (!slug || !expandedProjects.has(slug)) return
-    document.getElementById(`project-${slug}`)?.scrollIntoView()
-  }, [expandedId, expandedProjects])
 
   return (
     <section
@@ -182,16 +120,11 @@ export function ExperienceTimeline() {
                         {projects.length > 0 && (
                           <div>
                             <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
-                              Projects here
+                              What I shipped
                             </p>
                             <div className="mt-4 border-t border-surface-800/60">
                               {projects.map((project) => (
-                                <ProjectSection
-                                  key={project.slug}
-                                  project={project}
-                                  isExpanded={expandedProjects.has(project.slug)}
-                                  onToggle={() => toggleProject(project.slug)}
-                                />
+                                <ProjectSummary key={project.slug} project={project} />
                               ))}
                             </div>
                           </div>
@@ -209,20 +142,9 @@ export function ExperienceTimeline() {
   )
 }
 
-function ProjectSection({
-  project,
-  isExpanded,
-  onToggle,
-}: {
-  project: Project
-  isExpanded: boolean
-  onToggle: () => void
-}) {
+function ProjectSummary({ project }: { project: Project }) {
   return (
-    <article
-      id={`project-${project.slug}`}
-      className="scroll-mt-24 border-b border-surface-800/60 py-6"
-    >
+    <article className="border-b border-surface-800/60 py-6">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h4 className="font-display text-xl tracking-tight text-surface-50 sm:text-2xl">
           {project.name}
@@ -236,54 +158,18 @@ function ProjectSection({
       </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
-        <button
-          type="button"
-          onClick={onToggle}
-          aria-expanded={isExpanded}
+        <Link
+          href={`/projects/${project.slug}`}
           className="inline-flex h-11 items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] text-surface-400 transition-colors hover:text-surface-100"
         >
-          {isExpanded ? 'Collapse' : 'Details'}
-          <ChevronDown
-            className={cn('h-3.5 w-3.5 transition-transform', isExpanded && 'rotate-180')}
-            aria-hidden
-          />
-        </button>
+          Details
+          <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+        </Link>
         <AskDanielButton
           context={{ type: 'project', id: project.slug }}
           label="Ask about this project"
         />
       </div>
-
-      {isExpanded && (
-        <div className="mt-6 space-y-6 border-t border-surface-800/60 pt-6">
-          <DetailRow label="Problem" body={project.problem} />
-          <DetailRow label="Solution" body={project.solution} />
-          <DetailRow label="Architecture" body={project.architecture} />
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.15em] text-surface-500">
-              Engineering decisions
-            </p>
-            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
-              {project.decisions.map((decision) => (
-                <li key={decision}>{decision}</li>
-              ))}
-            </ul>
-          </div>
-          <p className="font-mono text-xs tracking-wide text-surface-500">
-            {project.technologies.join(' · ')}
-          </p>
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.15em] text-surface-500">
-              Results
-            </p>
-            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
-              {project.impact.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
     </article>
   )
 }

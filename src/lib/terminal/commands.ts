@@ -152,30 +152,6 @@ registerCommand({
       ])
     }
 
-    if (project.origin !== 'personal') {
-      return {
-        kind: 'action',
-        action: { type: 'navigate', href: `/#project-${project.slug}` },
-        segments: [
-          line(`${project.name} - ${project.tagline}`, 'accent'),
-          line(project.description),
-          blank(),
-          line(`tech: ${project.technologies.join(', ')}`, 'muted'),
-          ...project.impact.map((item) => line(`+ ${item}`, 'muted')),
-          blank(),
-          line('Work projects live under Experience on the home page.', 'muted'),
-          link('Open in Experience section', {
-            type: 'navigate',
-            href: `/#project-${project.slug}`,
-          }),
-          link('Ask Daniel about this', {
-            type: 'open-chat',
-            context: { type: 'project', id: project.slug },
-          }),
-        ],
-      }
-    }
-
     return {
       kind: 'action',
       action: { type: 'navigate', href: `/projects/${project.slug}` },

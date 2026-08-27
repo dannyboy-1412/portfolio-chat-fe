@@ -1,4 +1,3 @@
-import { HeroActions } from '@/app/components/ui/hero-actions'
 import { PROFILE } from '@/shared/profile'
 
 export function Hero() {
@@ -16,12 +15,6 @@ export function Hero() {
         <h1 className="fade-up-delay-1 mt-6 max-w-3xl font-display text-5xl leading-[1.05] tracking-tight text-surface-50 sm:text-6xl lg:text-7xl">
           {PROFILE.headline}
         </h1>
-
-        <p className="fade-up-delay-2 mt-6 font-mono text-sm uppercase tracking-[0.2em] text-surface-500">
-          {PROFILE.role} — {PROFILE.tagline}
-        </p>
-
-        <HeroActions />
 
         <p className="fade-up-delay-2 mt-10 text-sm text-surface-500">
           {PROFILE.yearsExperience} · {PROFILE.location}
