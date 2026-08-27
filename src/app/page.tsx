@@ -1,6 +1,6 @@
 import { Hero } from '@/app/components/ui/hero'
-import { SelectedWork } from '@/app/components/ui/selected-work'
 import { ExperienceTimeline } from '@/app/components/ui/experience-timeline'
+import { ProjectsSection } from '@/app/components/ui/projects-section'
 import { SkillsGrid } from '@/app/components/ui/skills-grid'
 import { AboutSection } from '@/app/components/ui/about-section'
 import { AskSection } from '@/app/components/ui/ask-section'
@@ -13,8 +13,8 @@ export default function Home() {
     <main>
       <AnalyticsTracker event="portfolio_view" />
       <Hero />
-      <SelectedWork />
       <ExperienceTimeline />
+      <ProjectsSection />
       <SkillsGrid />
       <AboutSection />
       <AskSection />

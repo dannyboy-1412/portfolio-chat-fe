@@ -1,5 +1,9 @@
 import { EXPERIENCES, getExperienceById } from "@/shared/profile";
-import { getProjectBySlug, PROJECTS } from "@/shared/projects";
+import {
+  getProjectBySlug,
+  getProjectsByExperienceId,
+  PROJECTS,
+} from "@/shared/projects";
 
 export type ChatContextType = "project" | "experience";
 
@@ -37,12 +41,28 @@ export function resolveContextBlock(context: ChatContextInput): string | null {
   const experience = getExperienceById(context.id);
   if (!experience) return null;
 
+  const roleProjects = getProjectsByExperienceId(experience.id);
+  const projectLines =
+    roleProjects.length > 0
+      ? [
+          "Projects Daniel built in this role:",
+          ...roleProjects.map(
+            (project) => `- ${project.name} (${project.tagline}): ${project.description}`
+          ),
+        ]
+      : [
+          ...(experience.problem ? [`Problem: ${experience.problem}`] : []),
+          ...(experience.built ? [`What Daniel built: ${experience.built}`] : []),
+          ...(experience.architecture
+            ? [`Architecture: ${experience.architecture}`]
+            : []),
+        ];
+
   return [
     `The visitor is currently viewing Daniel's role at "${experience.company}" (${experience.role}, ${experience.period}), id "${experience.id}".`,
     `Summary: ${experience.summary}`,
-    `Problem: ${experience.problem}`,
-    `What Daniel built: ${experience.built}`,
-    `Architecture: ${experience.architecture}`,
+    `Highlights: ${experience.highlights.join("; ")}`,
+    ...projectLines,
     `Impact: ${experience.impact.join("; ")}`,
     "Prioritise answering about this role unless the visitor clearly asks about something else.",
   ].join("\n");

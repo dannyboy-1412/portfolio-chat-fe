@@ -6,7 +6,7 @@ import {
   PROFILE,
   SKILL_GROUPS,
 } from '@/shared/profile'
-import { getProjectBySlug, getProjectSuggestions, PROJECTS } from '@/shared/projects'
+import { getProjectBySlug, getProjectSuggestions, PERSONAL_PROJECTS, PROJECTS } from '@/shared/projects'
 import { registerCommand } from './registry'
 import type {
   CommandContext,
@@ -116,18 +116,18 @@ registerCommand({
   summary: 'Explore projects',
   handler: () => ({
     kind: 'action',
-    action: { type: 'scroll', targetId: 'work' },
+    action: { type: 'scroll', targetId: 'projects' },
     segments: [
-      line('Selected work:'),
+      line('Personal projects:'),
       blank(),
-      ...PROJECTS.flatMap((project) => [
+      ...PERSONAL_PROJECTS.flatMap((project) => [
         link(`~/projects/${project.slug}  - ${project.tagline}`, {
           type: 'navigate',
           href: `/projects/${project.slug}`,
         }),
       ]),
       blank(),
-      line('Use `project <slug>` for details on one, e.g. `project mesha`.', 'muted'),
+      line('Use `project <slug>` for details on one, e.g. `project portfolio`.', 'muted'),
     ],
   }),
 })
@@ -150,6 +150,30 @@ registerCommand({
         line(`No project found for "${slug}".`, 'error'),
         line(`Available: ${PROJECTS.map((p) => p.slug).join(', ')}`, 'muted'),
       ])
+    }
+
+    if (project.origin !== 'personal') {
+      return {
+        kind: 'action',
+        action: { type: 'navigate', href: `/#project-${project.slug}` },
+        segments: [
+          line(`${project.name} - ${project.tagline}`, 'accent'),
+          line(project.description),
+          blank(),
+          line(`tech: ${project.technologies.join(', ')}`, 'muted'),
+          ...project.impact.map((item) => line(`+ ${item}`, 'muted')),
+          blank(),
+          line('Work projects live under Experience on the home page.', 'muted'),
+          link('Open in Experience section', {
+            type: 'navigate',
+            href: `/#project-${project.slug}`,
+          }),
+          link('Ask Daniel about this', {
+            type: 'open-chat',
+            context: { type: 'project', id: project.slug },
+          }),
+        ],
+      }
     }
 
     return {

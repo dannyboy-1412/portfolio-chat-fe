@@ -2,23 +2,27 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { AskDanielButton } from '@/app/components/ui/ask-daniel-button'
-import { PROJECTS } from '@/shared/projects'
+import { PERSONAL_PROJECTS } from '@/shared/projects'
 
-export function SelectedWork() {
+export function ProjectsSection() {
   return (
-    <section id="work" className="scroll-mt-20 px-4 py-24 sm:px-6">
+    <section id="projects" className="scroll-mt-20 px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-5xl">
         <header>
           <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
-            Selected work
+            Projects
           </p>
           <h2 className="mt-3 font-display text-3xl tracking-tight text-surface-50 sm:text-4xl">
-            Things I&apos;ve built
+            What I build outside work
           </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-surface-400">
+            Personal projects I build on my own time. The work I shipped at each
+            company lives with its role under Experience.
+          </p>
         </header>
 
         <ol className="mt-14 border-t border-surface-800/70">
-          {PROJECTS.map((project, index) => (
+          {PERSONAL_PROJECTS.map((project, index) => (
             <li key={project.slug} className="border-b border-surface-800/70">
               <article className="group grid gap-y-6 py-12 sm:py-14 md:grid-cols-12 md:gap-x-8">
                 <div className="md:col-span-2">
@@ -41,11 +45,6 @@ export function SelectedWork() {
                         />
                       </Link>
                     </h3>
-                    {project.placeholder && (
-                      <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-surface-500">
-                        Draft
-                      </span>
-                    )}
                   </div>
 
                   <p className="mt-1 text-sm text-surface-400">{project.tagline}</p>

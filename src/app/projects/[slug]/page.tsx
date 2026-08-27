@@ -5,20 +5,20 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { AskDanielButton } from '@/app/components/ui/ask-daniel-button'
 import { AnalyticsTracker } from '@/app/components/ui/analytics-tracker'
-import { getProjectBySlug, PROJECTS } from '@/shared/projects'
+import { getProjectBySlug, PERSONAL_PROJECTS } from '@/shared/projects'
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>
 }
 
 export function generateStaticParams() {
-  return PROJECTS.map((project) => ({ slug: project.slug }))
+  return PERSONAL_PROJECTS.map((project) => ({ slug: project.slug }))
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params
   const project = getProjectBySlug(slug)
-  if (!project) {
+  if (!project || project.origin !== 'personal') {
     return { title: 'Project not found' }
   }
 
@@ -38,21 +38,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params
   const project = getProjectBySlug(slug)
 
-  if (!project) {
+  if (!project || project.origin !== 'personal') {
     notFound()
   }
 
-  const index = PROJECTS.findIndex((p) => p.slug === project.slug) + 1
+  const index = PERSONAL_PROJECTS.findIndex((p) => p.slug === project.slug) + 1
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-20">
       <AnalyticsTracker event="project_view" contextId={project.slug} />
       <Link
-        href="/#work"
+        href="/#projects"
         className="inline-flex h-11 items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] text-surface-500 transition-colors hover:text-surface-100"
       >
         <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
-        Back to work
+        Back to projects
       </Link>
 
       <header className="mt-10">
@@ -63,11 +63,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {project.name}
         </h1>
         <p className="mt-3 text-lg text-surface-400">{project.tagline}</p>
-        {project.placeholder && (
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-surface-500">
-            Draft content — full write-up coming soon
-          </p>
-        )}
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-surface-400">
           {project.description}
         </p>
@@ -133,7 +128,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Section title="Solution" body={project.solution} />
         <Section title="Architecture" body={project.architecture} />
         <ListSection title="Engineering decisions" items={project.decisions} />
-
         <div>
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-surface-500">
             Technology

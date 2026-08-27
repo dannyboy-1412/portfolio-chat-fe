@@ -9,12 +9,11 @@ export type Experience = {
   suggestedQuestion: string
   /** Short badge metric shown on the collapsed timeline entry. */
   keyMetric: string
-  problem: string
-  built: string
-  architecture: string
   impact: string[]
-  /** Slug of the matching entry in `PROJECTS`, if this role has one. */
-  projectSlug?: string
+  /** Role-level detail for roles without a per-project breakdown (e.g. Wipro). */
+  problem?: string
+  built?: string
+  architecture?: string
 }
 
 export type SkillGroup = {
@@ -32,6 +31,12 @@ export type Education = {
   period: string
   degree: string
   institution: string
+  /** Short description of what the degree covered. */
+  focus?: string
+  /** Mono metadata line, e.g. teams and societies. */
+  activities?: string
+  /** Concrete bullets on involvement beyond coursework. */
+  highlights?: string[]
 }
 
 export const PROFILE = {
@@ -58,6 +63,13 @@ export const PROFILE = {
       period: "2017 — 2021",
       degree: "B.Tech Electrical & Electronics Engineering",
       institution: "VIT Vellore",
+      focus:
+        "Studied electrical and electronics while building a strong foundation in software engineering, computer science, and problem solving.",
+      activities: "Activities and societies: VIT Football Team · Ojas Racing Club Management Team",
+      highlights: [
+        "Represented VIT on the university football team, where selection and retention depended on showing up and performing every week.",
+        "Sat on the management team of Ojas Racing Club, helping organise and coordinate the university's racing team.",
+      ],
     },
   ] satisfies Education[],
   languages: ["English (native)", "Hindi", "Malayalam"],
@@ -79,28 +91,22 @@ export const EXPERIENCES: Experience[] = [
     role: "Software Development Engineer-2",
     period: "Apr 2025 - Apr 2026",
     summary:
-      "Built document AI for an in-house extraction product - OCR-coordinate-driven table pipelines, post-processing validation, and a RabbitMQ-backed Python service wrapper.",
+      "Document AI for an in-house extraction product, plus DocIQ, an internal test-automation platform shipped from scope to v1 in two weeks.",
     highlights: [
       "Reworked core table extraction from full-document LLM calls to an OCR-coordinate pipeline that crops each table and feeds page-level context",
       "Added post-processing validation and correction, lifting no-touch processing and true-positive accuracy to ~98% on critical closing-disclosure tables",
       "Engineered the Python product wrapper that consumes and publishes extraction tasks over RabbitMQ",
+      "Built DocIQ, an internal platform that automated multi-team test workflows behind a dashboard",
       "As SDE-2, managed intern and trainee engineers and interviewed candidates",
     ],
     tech: ["Python", "FastAPI", "RabbitMQ", "Docker", "AWS", "TypeScript"],
     suggestedQuestion:
-      "Tell me about your work at INFRRD on document extraction and table OCR.",
+      "Tell me about your work at INFRRD on document extraction and DocIQ.",
     keyMetric: "86% → 97% field extraction accuracy",
-    problem:
-      "Full-document LLM calls for table extraction were prone to cell shifting and misalignment on dense, multi-page closing-disclosure tables.",
-    built:
-      "An OCR-coordinate-driven pipeline that crops each table individually and feeds page-level context to the model, plus a post-processing validation and correction layer.",
-    architecture:
-      "A Python product wrapper consumes and publishes extraction tasks over RabbitMQ, coordinating OCR coordinate detection, per-table LLM extraction, and validation before results return to the extraction product.",
     impact: [
       "86% → 97% field extraction accuracy",
       "~98% true-positive accuracy on critical closing-disclosure tables",
     ],
-    projectSlug: "document-ai",
   },
   {
     id: "mesha",
@@ -108,11 +114,13 @@ export const EXPERIENCES: Experience[] = [
     role: "Software Engineer",
     period: "Aug 2024 - Feb 2025",
     summary:
-      "Built AI agents for accounting - Closing, Clarification, and Invoice Recon end to end, plus an AI agent builder with human-in-the-loop review.",
+      "AI agents for accounting, anchored by two systems: Recon for invoice reconciliation and the Agent Builder for client-built workflows.",
     highlights: [
       "Shipped a Closing agent that pulled Xero P/L and Balance Sheet data and emailed executive summaries to clients",
-      "Built an Invoice Recon agent that matched bank transactions to unpaid invoices with LLMs",
-      "Designed an AI Agent Builder with human-in-the-loop review at each workflow step",
+      "Built a Clarification agent that chased unclear transactions and auto-generated reports over client email",
+      "Built Recon, an agent matching bank transactions to unpaid invoices with LLMs",
+      "Designed the AI Agent Builder with human-in-the-loop review at each workflow step",
+      "Automated bank-transaction extraction and Xero upload from the company's Chrome extension in one click",
     ],
     tech: [
       "TypeScript",
@@ -124,17 +132,10 @@ export const EXPERIENCES: Experience[] = [
     ],
     suggestedQuestion: "Tell me about your work at Mesha and the AI agents you built.",
     keyMetric: "80% reduction in reconciliation time",
-    problem:
-      "Accountants spent hours each month on manual closing summaries, unclear-transaction follow-ups, and invoice reconciliation.",
-    built:
-      "Three production agents - Closing, Clarification, and Invoice Recon - plus an AI Agent Builder for assembling new workflows with human review at each step.",
-    architecture:
-      "TypeScript/Express backend with a Next.js frontend, PostgreSQL and MongoDB for storage, and AWS for hosting; agents used structured LLM outputs and human-in-the-loop review before any client-facing action.",
     impact: [
       "80% reduction in reconciliation time",
       "95% match success rate on invoice recon",
     ],
-    projectSlug: "mesha",
   },
   {
     id: "propellyr",
@@ -142,27 +143,20 @@ export const EXPERIENCES: Experience[] = [
     role: "Software Development Engineer",
     period: "Aug 2022 - Aug 2024",
     summary:
-      "Blockchain data platform that later pivoted into generative AI. Built real-time on-chain price pipelines, a crypto tax engine, and RAG / NL-to-SQL analysis tools.",
+      "Two years across three projects at a blockchain data platform that later pivoted into generative AI: LP earnings research, an on-chain price pipeline, and an AI data analysis app.",
     highlights: [
+      "Researched multiple crypto protocols' smart contracts to model what liquidity providers actually earn, directing the tax engine build",
       "Architected a high-throughput Node.js pipeline for real-time OHLCV prices from on-chain liquidity pools",
-      "Built a crypto tax engine tracking staking and lending earnings",
-      "Shipped an AI data analysis app (CSV → DuckDB → NL queries → insights)",
+      "Shipped an AI data analysis app (CSV → DuckDB → NL queries → insights) plus a RAG extraction pipeline",
     ],
     tech: ["Python", "FastAPI", "Node.js", "DuckDB", "ClickHouse", "AWS"],
     suggestedQuestion:
       "What did you build at Propellyr, including the blockchain and AI work?",
     keyMetric: "40% reduction in pricing infra costs",
-    problem:
-      "Propellyr needed reliable, real-time token pricing without paying for expensive third-party feeds, and staking/lending earnings didn't show up as simple transfers for tax purposes.",
-    built:
-      "A Node.js pipeline computing OHLCV prices from on-chain liquidity pool data, a tax engine tracking staking/lending earnings, and later an AI data-analysis app plus a RAG pipeline for unstructured data extraction.",
-    architecture:
-      "Node.js ingestion via Infura/web3.js into ClickHouse for pricing; a Java/Spring Boot tax engine over the same store; a Python/FastAPI + Next.js app loading CSVs into DuckDB for natural-language queries.",
     impact: [
       "40% reduction in operational costs vs. external pricing services",
       "Multiple partnership offers from blockchain companies including Chainalysis",
     ],
-    projectSlug: "propellyr",
   },
   {
     id: "wipro",
@@ -189,20 +183,20 @@ export const EXPERIENCES: Experience[] = [
 
 export const SKILL_GROUPS: SkillGroup[] = [
   {
-    title: "Backend",
-    skills: ["Python", "Node.js", "FastAPI", "Express", "Go"],
+    title: "Languages",
+    skills: ["Python", "C#", "TypeScript"],
   },
   {
-    title: "AI",
-    skills: ["LLMs", "RAG", "LangChain", "AI Agents", "Document AI"],
+    title: "Backend",
+    skills: ["FastAPI", "Express", "Django", ".NET", "RAG"],
   },
   {
     title: "Frontend",
-    skills: ["React", "Next.js", "TypeScript"],
+    skills: ["React", "Next.js", "Tailwind CSS"],
   },
   {
     title: "Data",
-    skills: ["PostgreSQL", "MongoDB", "Redis", "DuckDB", "ClickHouse"],
+    skills: ["PostgreSQL", "MongoDB", "Redis", "DuckDB", "ClickHouse", "Pinecone"],
   },
   {
     title: "Infrastructure",
@@ -228,8 +222,8 @@ export const CHAT_SUGGESTIONS = [
 ] as const
 
 export const NAV_LINKS = [
-  { id: "work", label: "Work", href: "#work" },
   { id: "experience", label: "Experience", href: "#experience" },
+  { id: "projects", label: "Projects", href: "#projects" },
   { id: "about", label: "About", href: "#about" },
 ] as const
 
