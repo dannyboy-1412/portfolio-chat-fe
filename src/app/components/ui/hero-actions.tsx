@@ -1,38 +1,30 @@
 'use client'
 
-import { track } from '@vercel/analytics'
-import { Button } from '@/app/components/ui/button'
-import { useChat } from '@/app/components/ui/chat-provider'
+import { ArrowUpRight } from 'lucide-react'
+import { PROFILE } from '@/shared/profile'
 
 export function HeroActions() {
-  const { openChat } = useChat()
-
   const scrollToWork = () => {
     document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const startConversation = () => {
-    track('chat_started', { source: 'hero' })
-    openChat({ context: null })
-  }
-
   return (
-    <div className="fade-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-3">
-      <Button
+    <div className="fade-up-delay-2 mt-10 flex flex-wrap items-center gap-4">
+      <button
         type="button"
         onClick={scrollToWork}
-        className="h-11 rounded-lg bg-surface-100 px-5 text-sm font-medium text-surface-950 hover:bg-surface-200"
+        className="inline-flex h-11 items-center rounded-full bg-surface-100 px-6 text-sm font-medium text-surface-950 transition-colors hover:bg-cream"
       >
-        Explore my work
-      </Button>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={startConversation}
-        className="h-11 rounded-lg border-glow/40 bg-transparent px-5 text-sm font-medium text-glow hover:bg-glow/10"
+        View my work
+      </button>
+      <a
+        href={PROFILE.socials.resume}
+        download={PROFILE.socials.resumeDownloadName}
+        className="inline-flex h-11 items-center gap-1.5 rounded-full border border-surface-700 px-6 text-sm text-surface-200 transition-colors hover:border-surface-500 hover:text-surface-50"
       >
-        Start a conversation
-      </Button>
+        Resume
+        <ArrowUpRight className="h-4 w-4" aria-hidden />
+      </a>
     </div>
   )
 }

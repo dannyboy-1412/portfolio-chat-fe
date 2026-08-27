@@ -3,6 +3,16 @@ export type ProjectLink = {
   live?: string
 }
 
+export type ProjectMetric = {
+  value: string
+  label: string
+}
+
+export type ProjectVisual = {
+  src: string
+  alt: string
+}
+
 export type Project = {
   slug: string
   name: string
@@ -18,6 +28,10 @@ export type Project = {
   links: ProjectLink
   origin: "work" | "personal"
   relatedExperienceId?: string
+  /** Prominent headline metrics for editorial layouts; derived from `impact`. */
+  metrics?: ProjectMetric[]
+  /** Optional screenshot/diagram shown large on work sections. */
+  visual?: ProjectVisual
   /** Draft content awaiting real write-up from Daniel - UI should flag this. */
   placeholder?: boolean
 }
@@ -53,6 +67,10 @@ export const PROJECTS: Project[] = [
       "80% reduction in reconciliation time",
       "95% match success rate on invoice recon",
     ],
+    metrics: [
+      { value: "80%", label: "reduction in reconciliation time" },
+      { value: "95%", label: "reconciliation match rate" },
+    ],
     learnings:
       "Shipping LLM agents into a real financial workflow taught the value of human review checkpoints and structured outputs over open-ended generation - reliability mattered more than raw model capability.",
     links: {},
@@ -80,6 +98,10 @@ export const PROJECTS: Project[] = [
     impact: [
       "86% → 97% field extraction accuracy",
       "~98% true-positive accuracy on critical closing-disclosure tables",
+    ],
+    metrics: [
+      { value: "97%", label: "field extraction accuracy, up from 86%" },
+      { value: "~98%", label: "true-positive accuracy on critical tables" },
     ],
     learnings:
       "Production LLM extraction needed engineering around the model, not just a better prompt - validation layers and constrained inputs mattered as much as the model itself.",
@@ -116,6 +138,9 @@ export const PROJECTS: Project[] = [
       "40% reduction in operational costs vs. external pricing services",
       "Multiple partnership offers from blockchain companies including Chainalysis",
     ],
+    metrics: [
+      { value: "40%", label: "reduction in operational costs vs. external pricing" },
+    ],
     learnings:
       "Owning a data pipeline end to end - from raw on-chain events to a finished product - meant translating domain logic (AMM math, tax rules) into code that had to be exactly right, not just directionally close.",
     links: {},
@@ -142,6 +167,9 @@ export const PROJECTS: Project[] = [
       "Designing a small, extensible command parser and wiring contextual retrieval into a streaming chat API without over-engineering either one.",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "MongoDB", "OpenRouter"],
     impact: ["One shared content source powering the web UI, terminal, and AI"],
+    metrics: [
+      { value: "3", label: "interfaces - web, terminal, AI - over one shared content source" },
+    ],
     links: {
       github: "https://github.com/dannyboy-1412",
     },

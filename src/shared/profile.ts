@@ -28,11 +28,19 @@ export type InterestCategory = {
   items: string[]
 }
 
+export type Education = {
+  period: string
+  degree: string
+  institution: string
+}
+
 export const PROFILE = {
   name: "Daniel A Rodrigues",
   shortName: "Daniel",
   role: "Software Engineer",
-  tagline: "Backend · AI · Systems",
+  headline: "I build backend systems, AI products and data platforms.",
+  tagline: "Backend · AI · Data · Cloud",
+  aboutHeadline: "I like building systems where good engineering and AI meet.",
   pitch:
     "I build software that turns complex problems into reliable systems - document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
   location: "Victoria, Australia · Melbourne / Geelong",
@@ -41,9 +49,17 @@ export const PROFILE = {
   statusIndicator: "OPEN TO OPPORTUNITIES",
   yearsExperience: "5+ years experience",
   education: [
-    "Master of Applied AI, Deakin University (2026-2028)",
-    "B.Tech Electrical & Electronics Engineering, VIT Vellore (2017-2021)",
-  ],
+    {
+      period: "2026 — 2028",
+      degree: "Master of Applied AI",
+      institution: "Deakin University",
+    },
+    {
+      period: "2017 — 2021",
+      degree: "B.Tech Electrical & Electronics Engineering",
+      institution: "VIT Vellore",
+    },
+  ] satisfies Education[],
   languages: ["English (native)", "Hindi", "Malayalam"],
   about:
     "I'm a software engineer interested in building systems that combine strong engineering foundations with AI. My work has taken me across backend systems, AI applications and full-stack products - from blockchain data pipelines to agentic AI for accounting to document extraction at scale. I've built products from scratch at two startups and most recently worked on AI document extraction at INFRRD. Currently studying a Master of Applied AI at Deakin, and looking for backend + AI roles.",

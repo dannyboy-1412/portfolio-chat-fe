@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Menu, TerminalSquare, X } from 'lucide-react'
+import { ArrowUpRight, Menu, TerminalSquare, X } from 'lucide-react'
 import { track } from '@vercel/analytics'
-import { Button } from '@/app/components/ui/button'
 import { useChat } from '@/app/components/ui/chat-provider'
 import { useTerminal } from '@/app/components/terminal/terminal-provider'
-import { CONTACT_NAV_LINK, NAV_LINKS } from '@/shared/profile'
+import { CONTACT_NAV_LINK, NAV_LINKS, PROFILE } from '@/shared/profile'
 import { cn } from '@/lib/utils'
 
 const MOBILE_LINKS = [...NAV_LINKS, CONTACT_NAV_LINK]
@@ -77,63 +76,70 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full border-b transition-colors',
+        'sticky top-0 z-50 w-full transition-colors',
         scrolled
-          ? 'border-surface-800/80 bg-surface-950/80 backdrop-blur-md'
-          : 'border-transparent bg-transparent'
+          ? 'border-b border-surface-800/60 bg-surface-950/85 backdrop-blur-md'
+          : 'border-b border-transparent bg-transparent'
       )}
     >
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link
           href="/"
-          className="font-mono text-sm font-semibold tracking-tight text-surface-100"
+          className="text-xs font-medium uppercase tracking-[0.2em] text-surface-100 transition-colors hover:text-glow"
           onClick={closeMobile}
         >
-          DANIEL A<span className="text-glow">.</span>R
+          Daniel A. Rodrigues
         </Link>
 
-        <ul className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.map((link) => (
+        <ul className="hidden items-center gap-6 md:flex">
+          {MOBILE_LINKS.map((link) => (
             <li key={link.id}>
               <Link
                 href={sectionHref(link.href)}
                 onClick={(event) => scrollToSection(event, link.id)}
                 className={cn(
-                  'rounded-md px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors',
+                  'py-2 text-sm transition-colors',
                   activeId === link.id
-                    ? 'text-surface-100 underline decoration-glow decoration-2 underline-offset-8'
-                    : 'text-surface-400 hover:text-surface-200'
+                    ? 'text-surface-50 underline decoration-glow decoration-1 underline-offset-8'
+                    : 'text-surface-400 hover:text-surface-100'
                 )}
               >
                 {link.label}
               </Link>
             </li>
           ))}
+          <li>
+            <a
+              href={PROFILE.socials.resume}
+              download={PROFILE.socials.resumeDownloadName}
+              className="inline-flex items-center gap-1 py-2 text-sm text-surface-400 transition-colors hover:text-surface-100"
+            >
+              Resume
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            </a>
+          </li>
         </ul>
 
-        <div className="flex items-center gap-2">
-          <Button
+        <div className="flex items-center gap-1">
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={handleOpenTerminal}
-            className="hidden h-9 gap-1.5 rounded-lg border-surface-700 bg-transparent font-mono text-xs text-surface-300 hover:bg-surface-800 hover:text-surface-100 sm:inline-flex"
+            aria-label="Open terminal"
+            className="hidden h-11 w-11 items-center justify-center rounded-md text-surface-400 transition-colors hover:text-surface-100 sm:inline-flex"
           >
-            <TerminalSquare className="h-3.5 w-3.5" />
-            Terminal
-          </Button>
-          <Button
+            <TerminalSquare className="h-4 w-4" aria-hidden />
+          </button>
+          <button
             type="button"
-            size="sm"
             onClick={handleOpenChat}
-            className="hidden h-9 rounded-lg bg-glow px-3 font-mono text-xs text-surface-950 hover:bg-glow/90 sm:inline-flex"
+            className="hidden h-11 items-center px-3 text-sm text-surface-400 transition-colors hover:text-glow sm:inline-flex"
           >
-            Ask Daniel
-          </Button>
+            Ask
+          </button>
 
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-surface-300 hover:bg-surface-800 md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-surface-300 hover:text-surface-100 md:hidden"
             onClick={() => setMobileOpen((open) => !open)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
@@ -144,8 +150,8 @@ export function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-surface-800 bg-surface-950/95 px-4 py-4 backdrop-blur-md md:hidden">
-          <ul className="flex flex-col gap-1">
+        <div className="border-t border-surface-800/60 bg-surface-950/95 px-4 py-4 backdrop-blur-md md:hidden">
+          <ul className="flex flex-col">
             {MOBILE_LINKS.map((link) => (
               <li key={link.id}>
                 <Link
@@ -155,34 +161,43 @@ export function Navbar() {
                     closeMobile()
                   }}
                   className={cn(
-                    'flex min-h-11 items-center rounded-md px-3 font-mono text-sm',
+                    'flex min-h-11 items-center px-1 text-base',
                     activeId === link.id
-                      ? 'bg-surface-800 text-surface-100'
-                      : 'text-surface-400 hover:bg-surface-900 hover:text-surface-200'
+                      ? 'text-surface-50'
+                      : 'text-surface-400 hover:text-surface-100'
                   )}
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
+            <li>
+              <a
+                href={PROFILE.socials.resume}
+                download={PROFILE.socials.resumeDownloadName}
+                className="flex min-h-11 items-center gap-1.5 px-1 text-base text-surface-400 hover:text-surface-100"
+              >
+                Resume
+                <ArrowUpRight className="h-4 w-4" aria-hidden />
+              </a>
+            </li>
           </ul>
-          <div className="mt-3 flex flex-col gap-2 border-t border-surface-800 pt-3">
-            <Button
+          <div className="mt-3 flex gap-2 border-t border-surface-800/60 pt-3">
+            <button
               type="button"
-              variant="outline"
               onClick={handleOpenTerminal}
-              className="h-11 justify-start gap-2 rounded-lg border-surface-700 bg-transparent font-mono text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-100"
+              className="flex h-11 flex-1 items-center justify-center gap-2 rounded-md border border-surface-800 text-sm text-surface-300 transition-colors hover:text-surface-100"
             >
-              <TerminalSquare className="h-4 w-4" />
+              <TerminalSquare className="h-4 w-4" aria-hidden />
               Terminal
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
               onClick={handleOpenChat}
-              className="h-11 justify-start rounded-lg bg-glow font-mono text-sm text-surface-950 hover:bg-glow/90"
+              className="flex h-11 flex-1 items-center justify-center rounded-md border border-surface-800 text-sm text-surface-300 transition-colors hover:text-glow"
             >
-              Ask Daniel
-            </Button>
+              Ask the assistant
+            </button>
           </div>
         </div>
       )}

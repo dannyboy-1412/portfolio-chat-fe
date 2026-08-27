@@ -52,6 +52,7 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			},
   			glow: 'hsl(var(--glow))',
+  			cream: 'hsl(var(--cream))',
   			surface: {
   				'50': 'hsl(var(--surface-50))',
   				'100': 'hsl(var(--surface-100))',

@@ -4,91 +4,93 @@
 
 @layer base {
   :root {
-    --background: 200 10% 6%;
-    --foreground: 217 12% 92%;
-    --card: 206 13% 11%;
-    --card-foreground: 217 12% 92%;
-    --popover: 206 13% 11%;
-    --popover-foreground: 217 12% 92%;
-    --primary: 217 12% 92%;
-    --primary-foreground: 200 10% 6%;
-    --secondary: 206 13% 11%;
-    --secondary-foreground: 217 12% 92%;
-    --muted: 206 13% 11%;
-    --muted-foreground: 210 6% 57%;
-    --accent: 206 13% 11%;
-    --accent-foreground: 217 12% 92%;
+    --background: 164 45% 6%;
+    --foreground: 48 20% 92%;
+    --card: 162 30% 10%;
+    --card-foreground: 48 20% 92%;
+    --popover: 162 30% 10%;
+    --popover-foreground: 48 20% 92%;
+    --primary: 48 20% 92%;
+    --primary-foreground: 164 45% 6%;
+    --secondary: 162 30% 10%;
+    --secondary-foreground: 48 20% 92%;
+    --muted: 162 30% 10%;
+    --muted-foreground: 142 7% 70%;
+    --accent: 162 30% 10%;
+    --accent-foreground: 48 20% 92%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 207 11% 16%;
-    --input: 207 11% 16%;
-    --ring: 157 74% 64%;
-    --chart-1: 157 74% 64%;
+    --border: 160 18% 15%;
+    --input: 160 18% 15%;
+    --ring: 140 27% 65%;
+    --chart-1: 140 27% 65%;
     --chart-2: 200 60% 55%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --radius: 0.5rem;
-    /* PRD mint accent (#5EE7B2) — use sparingly for prompts, links, cursor, status, metrics */
-    --glow: 157 74% 64%;
-    /* PRD dark surface scale: 50/100 map to primary text (#E8EAED), 400/500 map to
-       secondary/muted text (#8B9299 / #5F666D), 700/800/900/950 map to border/surface/
-       secondary-bg/bg (#252A2E / #181C1F / #131619 / #0D0F10). */
-    --surface-50: 217 20% 96%;
-    --surface-100: 217 12% 92%;
-    --surface-200: 215 10% 85%;
-    --surface-300: 213 8% 74%;
-    --surface-400: 210 6% 57%;
-    --surface-500: 210 7% 40%;
-    --surface-600: 207 10% 26%;
-    --surface-700: 207 11% 16%;
-    --surface-800: 206 13% 11%;
-    --surface-900: 210 14% 9%;
-    --surface-950: 200 10% 6%;
-    --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    /* Sage accent (#8FBF9F) — metrics, links, status dot, focus ring. Use sparingly. */
+    --glow: 140 27% 65%;
+    /* Warm cream (#E8E4D8) — occasional warm highlight against the green. */
+    --cream: 45 26% 88%;
+    /* Dark green surface scale: 50/100 map to primary text (#F1F0E8), 400 maps to
+       secondary text (#AEB9B2), 900/950 map to surface/background (#0D241D / #071A15). */
+    --surface-50: 48 22% 95%;
+    --surface-100: 48 20% 92%;
+    --surface-200: 60 10% 84%;
+    --surface-300: 120 6% 74%;
+    --surface-400: 142 7% 70%;
+    --surface-500: 150 6% 48%;
+    --surface-600: 154 9% 32%;
+    --surface-700: 158 14% 20%;
+    --surface-800: 160 18% 14%;
+    --surface-900: 162 30% 10%;
+    --surface-950: 164 45% 6%;
+    --font-display: var(--font-instrument-serif), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   }
 
   .dark {
-    --background: 200 10% 6%;
-    --foreground: 217 12% 92%;
-    --card: 206 13% 11%;
-    --card-foreground: 217 12% 92%;
-    --popover: 206 13% 11%;
-    --popover-foreground: 217 12% 92%;
-    --primary: 217 12% 92%;
-    --primary-foreground: 200 10% 6%;
-    --secondary: 206 13% 11%;
-    --secondary-foreground: 217 12% 92%;
-    --muted: 206 13% 11%;
-    --muted-foreground: 210 6% 57%;
-    --accent: 206 13% 11%;
-    --accent-foreground: 217 12% 92%;
+    --background: 164 45% 6%;
+    --foreground: 48 20% 92%;
+    --card: 162 30% 10%;
+    --card-foreground: 48 20% 92%;
+    --popover: 162 30% 10%;
+    --popover-foreground: 48 20% 92%;
+    --primary: 48 20% 92%;
+    --primary-foreground: 164 45% 6%;
+    --secondary: 162 30% 10%;
+    --secondary-foreground: 48 20% 92%;
+    --muted: 162 30% 10%;
+    --muted-foreground: 142 7% 70%;
+    --accent: 162 30% 10%;
+    --accent-foreground: 48 20% 92%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 207 11% 16%;
-    --input: 207 11% 16%;
-    --ring: 157 74% 64%;
-    --chart-1: 157 74% 64%;
+    --border: 160 18% 15%;
+    --input: 160 18% 15%;
+    --ring: 140 27% 65%;
+    --chart-1: 140 27% 65%;
     --chart-2: 200 60% 55%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --glow: 157 74% 64%;
+    --glow: 140 27% 65%;
+    --cream: 45 26% 88%;
     --radius: 0.5rem;
-    --surface-50: 217 20% 96%;
-    --surface-100: 217 12% 92%;
-    --surface-200: 215 10% 85%;
-    --surface-300: 213 8% 74%;
-    --surface-400: 210 6% 57%;
-    --surface-500: 210 7% 40%;
-    --surface-600: 207 10% 26%;
-    --surface-700: 207 11% 16%;
-    --surface-800: 206 13% 11%;
-    --surface-900: 210 14% 9%;
-    --surface-950: 200 10% 6%;
-    --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --surface-50: 48 22% 95%;
+    --surface-100: 48 20% 92%;
+    --surface-200: 60 10% 84%;
+    --surface-300: 120 6% 74%;
+    --surface-400: 142 7% 70%;
+    --surface-500: 150 6% 48%;
+    --surface-600: 154 9% 32%;
+    --surface-700: 158 14% 20%;
+    --surface-800: 160 18% 14%;
+    --surface-900: 162 30% 10%;
+    --surface-950: 164 45% 6%;
+    --font-display: var(--font-instrument-serif), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   }
@@ -127,8 +129,8 @@
 @layer utilities {
   .ambient-glow {
     background: radial-gradient(
-      ellipse 60% 50% at 50% 45%,
-      hsl(var(--glow) / 0.14),
+      ellipse 60% 50% at 50% 0%,
+      hsl(var(--glow) / 0.06),
       transparent 70%
     );
   }
@@ -161,7 +163,7 @@
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;

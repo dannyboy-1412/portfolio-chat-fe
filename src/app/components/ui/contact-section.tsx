@@ -1,4 +1,4 @@
-import { Download, Github, Linkedin, Mail } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { TrackedAnchor } from '@/app/components/ui/tracked-anchor'
 import { PROFILE } from '@/shared/profile'
 
@@ -6,57 +6,66 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="scroll-mt-20 border-t border-surface-900 px-4 py-20 sm:px-6"
+      className="scroll-mt-20 border-t border-surface-800/70 px-4 py-28 sm:px-6 sm:py-32"
     >
-      <div className="mx-auto max-w-3xl text-center">
-        <p className="font-mono text-xs text-surface-500">$ contact</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-surface-50 sm:text-3xl">
-          Get in touch
+      <div className="mx-auto max-w-5xl">
+        <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
+          Contact
+        </p>
+        <h2 className="mt-4 font-display text-5xl leading-[1.05] tracking-tight text-surface-50 sm:text-6xl lg:text-7xl">
+          Let&apos;s build something.
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-surface-400">
-          Open to backend and AI roles. The fastest way to reach me is email - or ask my
-          assistant to pass along a message.
+        <p className="mt-6 max-w-md text-base leading-relaxed text-surface-400">
+          Have a project, opportunity or interesting problem? The fastest way to reach
+          me is email.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <TrackedAnchor
-            href={`mailto:${PROFILE.socials.email}`}
-            event="contact_clicked"
-            className="inline-flex h-11 items-center gap-2 rounded-lg bg-glow px-4 text-sm font-medium text-surface-950 transition-colors hover:bg-glow/90"
-          >
-            <Mail className="h-4 w-4" />
-            {PROFILE.socials.email}
-          </TrackedAnchor>
-          <TrackedAnchor
-            href={PROFILE.socials.github}
-            event="github_clicked"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-11 items-center gap-2 rounded-lg border border-surface-700 px-4 text-sm text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-100"
-          >
-            <Github className="h-4 w-4" />
-            GitHub
-          </TrackedAnchor>
-          <TrackedAnchor
-            href={PROFILE.socials.linkedin}
-            event="linkedin_clicked"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-11 items-center gap-2 rounded-lg border border-surface-700 px-4 text-sm text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-100"
-          >
-            <Linkedin className="h-4 w-4" />
-            LinkedIn
-          </TrackedAnchor>
-          <TrackedAnchor
-            href={PROFILE.socials.resume}
-            event="resume_clicked"
-            download={PROFILE.socials.resumeDownloadName}
-            className="inline-flex h-11 items-center gap-2 rounded-lg border border-surface-700 px-4 text-sm text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-100"
-          >
-            <Download className="h-4 w-4" />
-            Resume
-          </TrackedAnchor>
-        </div>
+        <ul className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-5">
+          <li>
+            <TrackedAnchor
+              href={`mailto:${PROFILE.socials.email}`}
+              event="contact_clicked"
+              className="text-lg text-surface-100 underline decoration-surface-700 underline-offset-8 transition-colors hover:text-glow hover:decoration-glow sm:text-xl"
+            >
+              {PROFILE.socials.email}
+            </TrackedAnchor>
+          </li>
+          <li>
+            <TrackedAnchor
+              href={PROFILE.socials.linkedin}
+              event="linkedin_clicked"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-1.5 text-lg text-surface-100 underline decoration-surface-700 underline-offset-8 transition-colors hover:text-glow hover:decoration-glow sm:text-xl"
+            >
+              LinkedIn
+              <ArrowUpRight className="h-4 w-4 text-surface-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+            </TrackedAnchor>
+          </li>
+          <li>
+            <TrackedAnchor
+              href={PROFILE.socials.github}
+              event="github_clicked"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-1.5 text-lg text-surface-100 underline decoration-surface-700 underline-offset-8 transition-colors hover:text-glow hover:decoration-glow sm:text-xl"
+            >
+              GitHub
+              <ArrowUpRight className="h-4 w-4 text-surface-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+            </TrackedAnchor>
+          </li>
+          <li>
+            <TrackedAnchor
+              href={PROFILE.socials.resume}
+              event="resume_clicked"
+              download={PROFILE.socials.resumeDownloadName}
+              className="group inline-flex items-center gap-1.5 text-lg text-surface-100 underline decoration-surface-700 underline-offset-8 transition-colors hover:text-glow hover:decoration-glow sm:text-xl"
+            >
+              Resume
+              <ArrowUpRight className="h-4 w-4 text-surface-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+            </TrackedAnchor>
+          </li>
+        </ul>
       </div>
     </section>
   )
