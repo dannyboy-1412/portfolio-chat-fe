@@ -8,6 +8,13 @@ export type SourceLink = {
 const SOURCE_LINK_REGEX = /\[\[LINK:(project|experience):([a-z0-9-]+)\]\]/gi;
 
 /**
+ * Event name used to tell the experience timeline to expand a project anchor.
+ * Work projects only render once their role's Details is open, so same-page
+ * links to `/#project-<slug>` dispatch this instead of relying on the hash.
+ */
+export const PROJECT_ANCHOR_EVENT = "portfolio:project-anchor";
+
+/**
  * Extracts `[[LINK:project:mesha]]` / `[[LINK:experience:infrrd]]` markers the
  * assistant appends to ground answers back in the portfolio, mirroring the
  * `[[CONTACT_CTA]]` convention in `contactCta.ts`.

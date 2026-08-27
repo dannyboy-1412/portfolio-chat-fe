@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { track } from '@vercel/analytics'
 import { useChat } from '@/app/components/ui/chat-provider'
+import { PROJECT_ANCHOR_EVENT } from '@/lib/sourceLinks'
 import type { TerminalAction } from '@/lib/terminal'
 
 function prefersReducedMotion(): boolean {
@@ -38,6 +39,11 @@ export function useTerminalActions(closeOverlay?: () => void) {
             window.open(action.href, '_blank', 'noopener,noreferrer')
           } else {
             router.push(action.href)
+            const anchorIndex = action.href.indexOf('#project-')
+            if (anchorIndex !== -1) {
+              const slug = action.href.slice(anchorIndex + '#project-'.length)
+              window.dispatchEvent(new CustomEvent(PROJECT_ANCHOR_EVENT, { detail: slug }))
+            }
           }
           return
         }

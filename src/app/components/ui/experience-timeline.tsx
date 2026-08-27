@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import { AskDanielButton } from '@/app/components/ui/ask-daniel-button'
 import { EXPERIENCES } from '@/shared/profile'
 import { getProjectsByExperienceId, type Project } from '@/shared/projects'
+import { PROJECT_ANCHOR_EVENT } from '@/lib/sourceLinks'
 import { cn } from '@/lib/utils'
 
 const PROJECT_HASH_PREFIX = '#project-'
@@ -17,10 +18,16 @@ function readProjectHash(): string | null {
   return hash.slice(PROJECT_HASH_PREFIX.length) || null
 }
 
+function findProjectOwner(slug: string) {
+  return EXPERIENCES.find((job) =>
+    getProjectsByExperienceId(job.id).some((project) => project.slug === slug)
+  )
+}
+
 export function ExperienceTimeline() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [expandedProjects, setExpandedProjects] = useState<ReadonlySet<string>>(
-    () => new Set([readProjectHash()].filter((slug): slug is string => Boolean(slug)))
+    () => new Set()
   )
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -40,6 +47,13 @@ export function ExperienceTimeline() {
     })
   }
 
+  const expandProject = useCallback((slug: string) => {
+    const owner = findProjectOwner(slug)
+    if (!owner) return
+    setExpandedId(owner.id)
+    setExpandedProjects((current) => new Set(current).add(slug))
+  }, [])
+
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -58,10 +72,29 @@ export function ExperienceTimeline() {
   }, [])
 
   useEffect(() => {
+    const expandFromHash = () => {
+      const slug = readProjectHash()
+      if (slug) expandProject(slug)
+    }
+    const onAnchorEvent = (event: Event) => {
+      const slug = (event as CustomEvent<string>).detail
+      if (typeof slug === 'string') expandProject(slug)
+    }
+    const frame = requestAnimationFrame(expandFromHash)
+    window.addEventListener('hashchange', expandFromHash)
+    window.addEventListener(PROJECT_ANCHOR_EVENT, onAnchorEvent)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('hashchange', expandFromHash)
+      window.removeEventListener(PROJECT_ANCHOR_EVENT, onAnchorEvent)
+    }
+  }, [expandProject])
+
+  useEffect(() => {
     const slug = readProjectHash()
-    if (!slug) return
+    if (!slug || !expandedProjects.has(slug)) return
     document.getElementById(`project-${slug}`)?.scrollIntoView()
-  }, [])
+  }, [expandedId, expandedProjects])
 
   return (
     <section
@@ -128,39 +161,41 @@ export function ExperienceTimeline() {
                         {job.architecture && (
                           <DetailRow label="Architecture" body={job.architecture} />
                         )}
-                        <div>
-                          <p className="font-mono text-xs uppercase tracking-[0.15em] text-surface-500">
-                            Impact
-                          </p>
-                          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
-                            {job.impact.map((item) => (
-                              <li key={item}>{item}</li>
-                            ))}
-                          </ul>
-                        </div>
+                        {projects.length === 0 && job.impact.length > 0 && (
+                          <div>
+                            <p className="font-mono text-xs uppercase tracking-[0.15em] text-surface-500">
+                              Impact
+                            </p>
+                            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
+                              {job.impact.map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
                           {job.highlights.map((highlight) => (
                             <li key={highlight}>{highlight}</li>
                           ))}
                         </ul>
-                      </div>
-                    )}
 
-                    {projects.length > 0 && (
-                      <div className="mt-10">
-                        <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
-                          Projects here
-                        </p>
-                        <div className="mt-4 border-t border-surface-800/60">
-                          {projects.map((project) => (
-                            <ProjectSection
-                              key={project.slug}
-                              project={project}
-                              isExpanded={expandedProjects.has(project.slug)}
-                              onToggle={() => toggleProject(project.slug)}
-                            />
-                          ))}
-                        </div>
+                        {projects.length > 0 && (
+                          <div>
+                            <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
+                              Projects here
+                            </p>
+                            <div className="mt-4 border-t border-surface-800/60">
+                              {projects.map((project) => (
+                                <ProjectSection
+                                  key={project.slug}
+                                  project={project}
+                                  isExpanded={expandedProjects.has(project.slug)}
+                                  onToggle={() => toggleProject(project.slug)}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
