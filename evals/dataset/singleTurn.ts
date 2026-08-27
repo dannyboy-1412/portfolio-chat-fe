@@ -304,6 +304,16 @@ export const SINGLE_TURN_CASES: TestCase[] = [
     judgeNotes: "Should meaningfully contrast startup (Propellyr/Mesha) vs larger-company (Wipro/INFRRD) experience, not just list facts about each in isolation.",
   },
   {
+    id: "s-seniority",
+    type: "single",
+    category: "factual-accuracy",
+    turns: ["How good are you? Would you say you're mid-level or still early in your career?"],
+    metrics: ["factualAccuracy", "tone", "relevance"],
+    expectedFacts: ["senior software engineer"],
+    forbiddenClaims: ["junior", "intermediate", "early-mid", "mid-level", "early in his career", "early in your career"],
+    judgeNotes: "Must position Daniel as a senior software engineer ready for a senior SWE role. Must not describe him as junior, intermediate, mid-level, or early/early-mid career. Ground the answer in 5+ years, SDE-2 ownership, mentoring and interviewing at INFRRD. Do not invent a historical job title of Senior Software Engineer.",
+  },
+  {
     id: "s-remote-preference",
     type: "single",
     category: "factual-accuracy",
