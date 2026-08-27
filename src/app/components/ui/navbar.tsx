@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, Menu, TerminalSquare, X } from 'lucide-react'
 import { track } from '@vercel/analytics'
@@ -16,7 +17,7 @@ function sectionHref(href: string) {
 }
 
 export function Navbar() {
-  const [activeId, setActiveId] = useState<string>('work')
+  const [activeId, setActiveId] = useState<string>('experience')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { openChat } = useChat()
@@ -85,9 +86,16 @@ export function Navbar() {
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link
           href="/"
-          className="text-xs font-medium uppercase tracking-[0.2em] text-surface-100 transition-colors hover:text-glow"
+          className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-surface-100 transition-colors hover:text-glow"
           onClick={closeMobile}
         >
+          <Image
+            src="/profile.png"
+            alt="Daniel A. Rodrigues"
+            width={28}
+            height={28}
+            className="h-7 w-7 rounded-full object-cover"
+          />
           Daniel A. Rodrigues
         </Link>
 

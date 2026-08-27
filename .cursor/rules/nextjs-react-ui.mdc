@@ -12,8 +12,8 @@ alwaysApply: false
 - Use `'use client'` when the file needs state, effects, or browser APIs (see `@src/app/components/app-shell.tsx`, `@src/app/components/ui/navbar.tsx`, `@src/app/components/ui/chat-panel.tsx`).
 - Put new UI under `src/app/components/ui/` (or `src/app/components/terminal/` for terminal-specific UI) unless introducing a clearer feature folder by request.
 - Global shell lives in `@src/app/layout.tsx` → `@src/app/components/app-shell.tsx`: `ChatProvider` + `TerminalProvider` wrap every route, plus `ThemeBackground`, `Navbar`, and `LazyOverlays` (chat/terminal chunks load only after first open). Add new global overlays there, not in `page.tsx`. Do not reintroduce a global footer with duplicate contact/social links — those live in `ContactSection`.
-- Home page (`@src/app/page.tsx`) composition: `Hero` → `SelectedWork` (`#work`) → `ExperienceTimeline` (`#experience`) → `SkillsGrid` (`#skills`) → `AboutSection` (`#about`) → `AskSection` (`#ask`) → `OutsideWork` → `ContactSection` (`#contact`).
-- Project detail pages: `@src/app/projects/[slug]/page.tsx`, server-rendered from `@src/shared/projects.ts` with `generateStaticParams` + `generateMetadata`.
+- Home page (`@src/app/page.tsx`) composition: `Hero` → `ExperienceTimeline` (`#experience`, with per-role expandable project mini-sections) → `ProjectsSection` (`#projects`, personal projects only) → `SkillsGrid` (`#skills`) → `AboutSection` (`#about`) → `AskSection` (`#ask`) → `OutsideWork` → `ContactSection` (`#contact`).
+- Project detail pages: `@src/app/projects/[slug]/page.tsx`, server-rendered from `@src/shared/projects.ts` with `generateStaticParams` + `generateMetadata`, scoped to `PERSONAL_PROJECTS` only. Work projects (`origin: 'work'`) render inline inside `ExperienceTimeline` under their role via `getProjectsByExperienceId`, each addressable at `/#project-<slug>`.
 - Backend Route Handlers live under `src/app/api/v1/` (not in the UI tree); keep secrets and LLM/DB work out of client components.
 
 ## Styling
@@ -46,7 +46,7 @@ Canonical UI: `@src/app/components/ui/chat-panel.tsx` (fixed slide-over panel, f
 - Ctrl/Cmd+K clears the thread via `@src/hooks/refreshChatKeyHandler.ts`; the panel header also has an explicit clear button
 - Autoscroll the message container (`scrollTop`), not the whole page (`scrollIntoView`)
 - Contextual suggested prompts: general → `CHAT_SUGGESTIONS`, project → `getProjectSuggestions()`, experience → `getExperienceSuggestions()` (both in `@src/shared/`)
-- Assistant replies may end with `[[LINK:project:<slug>]]` / `[[LINK:experience:<id>]]` markers (see `@src/lib/sourceLinks.ts`, mirrors `@src/lib/contactCta.ts`); render as clickable chips, never show the raw marker
+- Assistant replies may end with `[[LINK:project:<slug>]]` / `[[LINK:experience:<id>]]` markers (see `@src/lib/sourceLinks.ts`, mirrors `@src/lib/contactCta.ts`); render as clickable chips, never show the raw marker. Chip hrefs: personal projects link to `/projects/<slug>`, work projects link to `/#project-<slug>` (the inline experience anchor), experience ids link to `/#experience`.
 - Do not call Telegram (or other side-effect notify APIs) after stream completion
 
 ## Terminal
@@ -59,7 +59,7 @@ Canonical UI: `@src/app/components/ui/chat-panel.tsx` (fixed slide-over panel, f
 ## Profile content
 
 - Client-facing copy, experience, skills, interests, nav links: `@src/shared/profile.ts`
-- Project case studies: `@src/shared/projects.ts` (`PROJECTS`, `getProjectBySlug`); personal (non-work) projects may be flagged `placeholder: true` for draft content
+- Project case studies: `@src/shared/projects.ts` (`PROJECTS`, `PERSONAL_PROJECTS`, `getProjectBySlug`, `getProjectsByExperienceId`); `origin: 'work'` projects need `relatedExperienceId` so they render under the right role in the experience timeline
 - Project images live at `public/images/projects/<slug>.png` (or `.webp`, 16:9 ≈1600×900) and are wired through the optional `visual` field in `projects.ts` — never hotlink external images
 - LLM background facts: `@src/server/ai/systemPrompt.ts` (the bot is Daniel's assistant; speak about him in the third person) — interpolates dates/roles/tech/impact from `profile.ts`/`projects.ts` via `@src/server/ai/context.ts` rather than duplicating them
 - When updating jobs/education/location/projects, update `profile.ts`/`projects.ts` first; `systemPrompt.ts` picks up shared facts automatically, but review its hand-written narrative bullets too

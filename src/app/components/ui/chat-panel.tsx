@@ -334,15 +334,29 @@ function SourceLinks({ links, spaced }: { links: SourceLink[]; spaced: boolean }
         {links.length > 1 ? 'Related work' : 'Source'}
       </p>
       <div className="flex flex-wrap gap-1.5">
-        {links.map((link) => (
-          <Link
-            key={`${link.type}-${link.id}`}
-            href={link.type === 'project' ? `/projects/${link.id}` : `/#experience`}
-            className="inline-flex h-8 items-center rounded-lg border border-surface-700 bg-surface-950/60 px-2.5 text-xs text-glow transition-colors hover:bg-surface-800"
-          >
-            {link.type}/{link.id}
-          </Link>
-        ))}
+        {links.map((link) => {
+          const project =
+            link.type === 'project' ? getProjectBySlug(link.id) : undefined
+          const href =
+            link.type === 'project'
+              ? project && project.origin !== 'personal'
+                ? `/#project-${link.id}`
+                : `/projects/${link.id}`
+              : '/#experience'
+          const label =
+            link.type === 'project'
+              ? (project?.name ?? `project/${link.id}`)
+              : (getExperienceById(link.id)?.company ?? `experience/${link.id}`)
+          return (
+            <Link
+              key={`${link.type}-${link.id}`}
+              href={href}
+              className="inline-flex h-8 items-center rounded-lg border border-surface-700 bg-surface-950/60 px-2.5 text-xs text-glow transition-colors hover:bg-surface-800"
+            >
+              {label}
+            </Link>
+          )
+        })}
       </div>
     </div>
   )

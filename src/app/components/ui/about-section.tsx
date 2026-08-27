@@ -36,6 +36,23 @@ export function AboutSection() {
                 <div className="sm:col-span-9">
                   <p className="text-base font-medium text-surface-100">{entry.degree}</p>
                   <p className="mt-0.5 text-sm text-surface-400">{entry.institution}</p>
+                  {entry.focus && (
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-surface-400">
+                      {entry.focus}
+                    </p>
+                  )}
+                  {entry.activities && (
+                    <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.15em] text-surface-500">
+                      {entry.activities}
+                    </p>
+                  )}
+                  {entry.highlights && entry.highlights.length > 0 && (
+                    <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
+                      {entry.highlights.map((highlight) => (
+                        <li key={highlight}>{highlight}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </li>
             ))}

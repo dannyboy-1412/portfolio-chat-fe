@@ -26,178 +26,307 @@ export type Project = {
   impact: string[]
   learnings: string
   links: ProjectLink
-  origin: "work" | "personal"
+  origin: 'work' | 'personal'
   relatedExperienceId?: string
   /** Prominent headline metrics for editorial layouts; derived from `impact`. */
   metrics?: ProjectMetric[]
-  /** Optional screenshot/diagram shown large on work sections. */
+  /** Optional screenshot/diagram shown large on project pages. */
   visual?: ProjectVisual
-  /** Draft content awaiting real write-up from Daniel - UI should flag this. */
-  placeholder?: boolean
 }
 
 export const PROJECTS: Project[] = [
   {
-    slug: "mesha",
-    name: "Mesha",
-    tagline: "AI Agent Builder",
+    slug: 'dociq',
+    name: 'DocIQ',
+    tagline: 'One-click test automation for internal teams',
     description:
-      "Platform for building AI-powered accounting automation agents.",
+      'An internal platform that put INFRRD\u2019s manual, script-by-script product testing behind a dashboard, built from scope to v1 in two weeks.',
     problem:
-      "Accountants at Mesha's clients spent hours each month on manual closing summaries, unclear-transaction follow-ups, and invoice reconciliation - all repetitive, rules-plus-judgment work that AI could assist with under human review.",
+      'Teams testing the extraction product ran the whole flow by hand. QA\u2019s BugBuster run was typical: pick a batch of files, push them through the product\u2019s APIs, wait for every document to finish processing, then run the next script to compare the output data against a ground-truth file and produce an accuracy report. Each step sat idle until someone came back and kicked off the next one, so a single run ate hours of babysitting across teams.',
     solution:
-      "Built three production agents end to end - Closing, Clarification, and Invoice Recon - plus an AI Agent Builder that let the team assemble new workflows with human-in-the-loop review at every step instead of hand-coding each one.",
+      'Scoped, designed and shipped DocIQ, an internal platform where a user clicks a button on a dashboard and the entire run completes unattended: file selection, uploads through the product\u2019s APIs, processing, comparison against ground truth, and the final report.',
     architecture:
-      "TypeScript/Express backend with a Next.js frontend, PostgreSQL and MongoDB for storage, and AWS for hosting. The Closing agent pulled P/L and Balance Sheet data from the Xero API and used structured LLM outputs to draft executive summaries emailed to clients. Invoice Recon matched Plaid/bank transactions against unpaid invoices using prompt-engineered matching against OpenAI and Anthropic models, with a review modal before reconciling.",
+      'A React dashboard drives a Python/FastAPI backend that orchestrates each run. The backend stages the selected files, uploads them through the extraction product\u2019s APIs, polls processing status, then runs the comparison and report generation steps in sequence and stores the results for the team to review.',
     decisions: [
-      "Human-in-the-loop review at each agent step rather than fully autonomous actions, since the output touched client finances",
-      "Structured LLM outputs for the Closing summaries to keep generation reliable and easy to template",
-      "A general-purpose Agent Builder so new workflows could reuse the same building blocks instead of one-off services",
+      'Automated the existing scripts\u2019 behaviour end to end instead of rewriting the checks themselves, so teams trusted the results from day one',
+      'A dashboard over a CLI so QA and non-engineering teams could run it without setup',
+      'Scoped v1 tightly to one full flow and shipped it in two weeks, using agentic coding practices to keep the pace without dropping review',
+    ],
+    technologies: ['Python', 'FastAPI', 'React', 'TypeScript'],
+    impact: [
+      'Replaced multi-step manual script runs with a single button on a dashboard',
+      'Adopted by QA and other internal teams for repeated accuracy testing',
+      'Scoped, designed and shipped v1 in two weeks using agentic coding practices',
+    ],
+    metrics: [{ value: '2 weeks', label: 'from scope to v1 in production' }],
+    learnings:
+      'The two-week deadline only worked because the v1 scope was ruthless: automate the flow people already ran, not the flow you could imagine them wanting.',
+    links: {},
+    origin: 'work',
+    relatedExperienceId: 'infrrd',
+  },
+  {
+    slug: 'document-ai',
+    name: 'Document AI',
+    tagline: 'OCR-Coordinate Extraction Pipeline',
+    description:
+      'A rework of INFRRD\u2019s in-house extraction product, replacing full-document LLM calls with an OCR-coordinate pipeline and a validation layer.',
+    problem:
+      'The existing table extraction approach fed full documents to an LLM in one shot, which caused cell shifting and misalignment on dense, multi-page closing disclosure tables.',
+    solution:
+      'Reworked the pipeline to use OCR coordinates to crop each table individually and feed only the relevant page-level context to the model, then added a post-processing validation and correction layer to catch residual model errors.',
+    architecture:
+      'A Python-based product wrapper consumes and publishes extraction tasks over RabbitMQ, coordinating OCR coordinate detection, per-table LLM extraction, and validation before results are returned to the extraction product.',
+    decisions: [
+      'Cropped, coordinate-driven inputs instead of full-document prompts to cut hallucination and misalignment',
+      'A dedicated validation/correction pass rather than trusting raw model output on critical fields',
+      'RabbitMQ-backed request/response flow to keep the service decoupled and resilient',
+    ],
+    technologies: ['Python', 'FastAPI', 'RabbitMQ', 'Docker', 'AWS', 'OCR'],
+    impact: [
+      '86% → 97% field extraction accuracy',
+      '~98% true-positive accuracy on critical closing-disclosure tables',
+    ],
+    metrics: [
+      { value: '97%', label: 'field extraction accuracy, up from 86%' },
+      { value: '~98%', label: 'true-positive accuracy on critical tables' },
+    ],
+    learnings:
+      'Production LLM extraction needed engineering around the model, not just a better prompt. Validation layers and constrained inputs mattered as much as the model itself.',
+    links: {},
+    origin: 'work',
+    relatedExperienceId: 'infrrd',
+  },
+  {
+    slug: 'recon',
+    name: 'Recon',
+    tagline: 'AI invoice reconciliation',
+    description:
+      'A Mesha agent that matches bank transactions to unpaid invoices, cutting reconciliation time by 80% for client accountants.',
+    problem:
+      'Accountants reconciled invoices against bank activity by hand every month: pull the transactions, pull the unpaid invoices, and eyeball which payment settles which invoice.',
+    solution:
+      'Built the Invoice Recon agent end to end. It pulls bank transactions from Plaid connections or file uploads, fetches unpaid invoices from the Stripe-synced store, matches them with LLMs, and shows the user a preview modal before anything is reconciled.',
+    architecture:
+      'TypeScript/Express services on AWS sit behind a Next.js frontend. Bank transactions come from Plaid or parsed statement uploads; invoices come from the MongoDB store synced from Stripe. A matching service combines both datasets in a prompt against OpenAI and Anthropic models, and the proposed matches return through a REST endpoint to a review modal before reconciliation.',
+    decisions: [
+      'A human reviews matches in a preview modal before reconciling, since the output touched client finances',
+      'Combined extracted transactions and invoice data in one structured prompt instead of chaining separate classification steps',
+      'Accepted both Plaid connections and file uploads so clients without linked bank accounts could still reconcile',
     ],
     technologies: [
-      "TypeScript",
-      "Express",
-      "Next.js",
-      "PostgreSQL",
-      "MongoDB",
-      "AWS",
-      "OpenAI",
+      'TypeScript',
+      'Express',
+      'Next.js',
+      'MongoDB',
+      'PostgreSQL',
+      'AWS',
+      'OpenAI',
     ],
     impact: [
-      "80% reduction in reconciliation time",
-      "95% match success rate on invoice recon",
+      '80% reduction in reconciliation time',
+      '95% match success rate on invoice recon',
     ],
     metrics: [
-      { value: "80%", label: "reduction in reconciliation time" },
-      { value: "95%", label: "reconciliation match rate" },
+      { value: '80%', label: 'reduction in reconciliation time' },
+      { value: '95%', label: 'reconciliation match rate' },
     ],
     learnings:
-      "Shipping LLM agents into a real financial workflow taught the value of human review checkpoints and structured outputs over open-ended generation - reliability mattered more than raw model capability.",
+      'Matching accuracy was only half the job. The preview modal before reconciliation is what made accountants trust the agent with client books.',
     links: {},
-    origin: "work",
-    relatedExperienceId: "mesha",
+    origin: 'work',
+    relatedExperienceId: 'mesha',
   },
   {
-    slug: "document-ai",
-    name: "Document AI",
-    tagline: "OCR-Coordinate Extraction Pipeline",
+    slug: 'agent-builder',
+    name: 'Agent Builder',
+    tagline: 'Custom AI workflows with human review',
     description:
-      "In-house document extraction product - OCR-coordinate-driven table pipelines with automated validation.",
+      'A platform for assembling AI agent workflows from existing services, with human-in-the-loop review at every step.',
     problem:
-      "The existing table extraction approach fed full documents to an LLM in one shot, which caused cell shifting and misalignment on dense, multi-page closing disclosure tables.",
+      'Every new client requirement at Mesha meant new bespoke endpoints, so the four-person engineering team became the bottleneck for work that followed patterns the product already had.',
     solution:
-      "Reworked the pipeline to use OCR coordinates to crop each table individually and feed only the relevant page-level context to the model, then added a post-processing validation and correction layer to catch residual model errors.",
+      'Designed an AI Agent Builder that lets clients assemble custom workflows from the company\u2019s existing backend services on a plug-and-play basis. Every step in a workflow has human-in-the-loop review, so agents never act on client finances unchecked.',
     architecture:
-      "A Python-based product wrapper consumes and publishes extraction tasks over RabbitMQ, coordinating OCR coordinate detection, per-table LLM extraction, and validation before results are returned to the extraction product.",
+      'Workflows are composed from existing service building blocks in a Next.js frontend and executed by the TypeScript/Express backend on AWS, with PostgreSQL and MongoDB for storage. Each workflow step pauses for human review before the next action runs.',
     decisions: [
-      "Cropped, coordinate-driven inputs instead of full-document prompts to cut hallucination and misalignment",
-      "A dedicated validation/correction pass rather than trusting raw model output on critical fields",
-      "RabbitMQ-backed request/response flow to keep the service decoupled and resilient",
-    ],
-    technologies: ["Python", "FastAPI", "RabbitMQ", "Docker", "AWS", "OCR"],
-    impact: [
-      "86% → 97% field extraction accuracy",
-      "~98% true-positive accuracy on critical closing-disclosure tables",
-    ],
-    metrics: [
-      { value: "97%", label: "field extraction accuracy, up from 86%" },
-      { value: "~98%", label: "true-positive accuracy on critical tables" },
-    ],
-    learnings:
-      "Production LLM extraction needed engineering around the model, not just a better prompt - validation layers and constrained inputs mattered as much as the model itself.",
-    links: {},
-    origin: "work",
-    relatedExperienceId: "infrrd",
-  },
-  {
-    slug: "propellyr",
-    name: "Propellyr",
-    tagline: "Blockchain Data & AI Analytics",
-    description:
-      "Real-time on-chain price pipelines, a crypto tax engine, and AI-powered natural-language data analysis.",
-    problem:
-      "Propellyr needed reliable, real-time token pricing without paying for expensive third-party feeds, and its crypto tax product needed to track staking and lending earnings that don't show up as simple transfers.",
-    solution:
-      "Built a high-throughput Node.js pipeline that computed OHLCV prices directly from on-chain liquidity pool data using the AMM formula, a tax engine that tracked staking/lending earnings end to end, and later an AI data-analysis app that let users query CSV data in natural language via DuckDB plus a RAG pipeline for unstructured data extraction.",
-    architecture:
-      "Node.js ingestion service pulling on-chain data via Infura/web3.js into ClickHouse for the pricing pipeline; a Java/Spring Boot tax engine over the same ClickHouse store; and a Python/FastAPI + Next.js app that loaded uploaded CSVs into DuckDB, generated SQL from natural-language queries, and summarised results.",
-    decisions: [
-      "Built an in-house on-chain pricing engine instead of relying on a paid external price feed",
-      "Used DuckDB for embedded, file-based analytics rather than standing up a full data warehouse for CSV uploads",
-      "Split the tax engine into its own Java/Spring Boot service so an experienced Java team could own the critical calculation logic",
+      'Composed new workflows from existing backend services instead of writing one-off integrations per client',
+      'Human review at each step rather than autonomy at the end, so a bad output is caught before it compounds',
+      'Building blocks shared across workflows so the second and third agent cost a fraction of the first',
     ],
     technologies: [
-      "Node.js",
-      "Python",
-      "FastAPI",
-      "DuckDB",
-      "ClickHouse",
-      "AWS",
+      'TypeScript',
+      'Express',
+      'Next.js',
+      'PostgreSQL',
+      'MongoDB',
+      'AWS',
     ],
     impact: [
-      "40% reduction in operational costs vs. external pricing services",
-      "Multiple partnership offers from blockchain companies including Chainalysis",
-    ],
-    metrics: [
-      { value: "40%", label: "reduction in operational costs vs. external pricing" },
+      'Clients could build custom agent workflows without waiting on new API development',
+      'Cut development time for new client-specific workflows',
     ],
     learnings:
-      "Owning a data pipeline end to end - from raw on-chain events to a finished product - meant translating domain logic (AMM math, tax rules) into code that had to be exactly right, not just directionally close.",
+      'Reliability came from structure, not model capability. Review checkpoints and reusable steps beat open-ended generation every time money was on the line.',
     links: {},
-    origin: "work",
-    relatedExperienceId: "propellyr",
+    origin: 'work',
+    relatedExperienceId: 'mesha',
   },
   {
-    slug: "portfolio",
-    name: "Portfolio",
-    tagline: "Terminal + AI Portfolio",
+    slug: 'lp-earnings',
+    name: 'LP Earnings Engine',
+    tagline: 'Liquidity provider earnings research',
     description:
-      "This site - a portfolio presented as an AI development environment, with a command-line terminal and a context-aware AI assistant.",
+      'Research that turned Propellyr\u2019s smart contracts and raw transactions into a working model of what liquidity providers actually earn, powering the tax product.',
     problem:
-      "A conventional portfolio page tells visitors about engineering work but doesn't demonstrate it - recruiters skim it and technical visitors have nothing to explore.",
+      'For tax purposes, Propellyr needed the earnings of liquidity providers and stakers on each crypto platform. Those earnings never appear as a simple transfer. They sit inside each protocol\u2019s smart contract mechanics, and every protocol computes them differently.',
     solution:
-      "Built a Next.js site with three interfaces over one shared content source: a normal scrollable portfolio, a terminal with an extensible command system, and a streaming AI assistant that can answer questions about Daniel and link back into the site.",
+      'Researched multiple crypto protocols, read their smart contracts and transactions, and worked out how each one computes provider earnings. Proved the model with a Node.js proof-of-concept that pulled the on-chain data of a real deposit and withdrawal, computed the earnings from token prices at both timestamps, and verified the result against the tokens the depositor actually received. That model directed the team that built the production tax engine.',
     architecture:
-      "App Router pages for structure and SEO, a small terminal engine (tokenizer → parser → command registry) driving both an inline hero terminal and a full-screen overlay, and an OpenRouter-backed streaming chat API that accepts a context identifier so answers about a specific project or role can be grounded without building the prompt in the browser.",
+      'A Node.js proof-of-concept fetches transaction data on-chain, reconstructs each deposit and withdrawal, and prices the tokens at both ends to compute earnings. Once verified against real withdrawal balances, the model was implemented as a Java/Spring Boot engine over ClickHouse by a team of experienced Java developers.',
     decisions: [
-      "Kept context resolution server-side - the client sends a contextType/contextId, not a constructed prompt",
-      "Reused the same profile and project data across the web UI, terminal commands, and the AI system prompt to avoid maintaining duplicate facts",
+      'Verified calculated earnings against the tokens a depositor actually received on withdrawal, not just against the formula',
+      'One protocol at a time, researched from the contracts up, instead of assuming AMMs share one earnings model',
+      'Handed the verified model to the Java team to own the production tax engine in Spring Boot',
+    ],
+    technologies: ['Node.js', 'ClickHouse', 'AWS', 'Java', 'Spring Boot'],
+    impact: [
+      'Earnings model verified against real on-chain withdrawals before production use',
+      'Became the basis of the crypto tax engine behind multiple partnership offers, including Chainalysis',
     ],
     learnings:
-      "Designing a small, extensible command parser and wiring contextual retrieval into a streaming chat API without over-engineering either one.",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "MongoDB", "OpenRouter"],
-    impact: ["One shared content source powering the web UI, terminal, and AI"],
+      'The whitepaper version of a protocol and the deployed contract version rarely match. Reading transactions directly settled every disagreement.',
+    links: {},
+    origin: 'work',
+    relatedExperienceId: 'propellyr',
+  },
+  {
+    slug: 'onchain-ohlcv',
+    name: 'On-Chain OHLCV Pricer',
+    tagline: 'Token prices straight from the blockchain',
+    description:
+      'A real-time pipeline that computes OHLCV token prices from on-chain liquidity pools, replacing a paid external price feed.',
+    problem:
+      'Propellyr\u2019s tax calculator depended on a third-party pricing service that was expensive, rate-limited, and a single point of failure for the core product.',
+    solution:
+      'Researched AMMs and liquidity pools, then built a Node.js pipeline that fetches on-chain pool data through Infura and web3.js and computes token prices with the AMM formula (x*y=k), mostly from Uniswap pools. Prices came straight from the blockchain, so no external price API was involved at all.',
+    architecture:
+      'A high-throughput Node.js ingestion service pulls liquidity pool state via Infura and web3.js, applies the AMM formula to derive per-block prices, aggregates them into OHLCV candles, and stores everything in ClickHouse on AWS for the tax calculator to query.',
+    decisions: [
+      'Computed prices from pool reserves with the AMM formula instead of paying an external feed',
+      'ClickHouse for candle storage, since the workload is append-heavy time-series data',
+      'Built for real-time delivery, since the tax product priced transactions at execution time',
+    ],
+    technologies: ['Node.js', 'ClickHouse', 'AWS', 'web3.js', 'Infura'],
+    impact: [
+      '40% reduction in operational costs versus the external pricing service',
+      'Removed the third-party dependency from the core tax product',
+    ],
     metrics: [
-      { value: "3", label: "interfaces - web, terminal, AI - over one shared content source" },
+      { value: '40%', label: 'reduction in operational costs vs. external pricing' },
+    ],
+    learnings:
+      'A price is a derived value, and deriving it from first principles on-chain turned a vendor bill into infrastructure we owned.',
+    links: {},
+    origin: 'work',
+    relatedExperienceId: 'propellyr',
+  },
+  {
+    slug: 'ai-data-analysis',
+    name: 'AI Data Analysis',
+    tagline: 'Natural-language analysis over uploaded data',
+    description:
+      'An app that lets users upload a CSV and query it in plain English, plus a RAG pipeline for extracting data from unstructured files.',
+    problem:
+      'After Propellyr pivoted into generative AI, the bet was that analysis should not require SQL or a data team. Users had CSVs and documents and questions, and nothing in between.',
+    solution:
+      'Built an AI data analysis application where users upload a CSV and ask questions in natural language. The app generates SQL against DuckDB, then feeds the results back to the model to draw conclusions and generate Python code for visualisations. Also built a RAG pipeline that extracts requested data points from unstructured files based on a user\u2019s query.',
+    architecture:
+      'A Python/FastAPI backend and Next.js frontend on AWS. Uploaded CSVs are processed into DuckDB tables; natural-language queries are turned into SQL by the model, executed, and the results are summarised with generated Python for charts. For unstructured data, a processing service extracts text, chunks it, and stores embeddings in a vector database; the RAG extractor expands an input metric into embedded queries, searches the store, and answers from the extracted data.',
+    decisions: [
+      'DuckDB for embedded, file-based analytics instead of standing up a data warehouse per upload',
+      'Generated Python for charts so visualisations were code, not hand-configured dashboards',
+      'A metric-to-queries expansion step in the RAG extractor, since one embedded query rarely covers a full data point',
+    ],
+    technologies: ['Python', 'FastAPI', 'Next.js', 'DuckDB', 'AWS'],
+    impact: [
+      'Contributed to successful fundraising after the pivot',
+      'Established the company\u2019s technical foundation in generative AI',
+    ],
+    learnings:
+      'Letting the model write both the SQL and the chart code worked better than expected. The guardrails that mattered were the schema context going in and the result summary coming out.',
+    links: {},
+    origin: 'work',
+    relatedExperienceId: 'propellyr',
+  },
+  {
+    slug: 'portfolio',
+    name: 'Portfolio',
+    tagline: 'Terminal + AI Portfolio',
+    description:
+      'This site. A portfolio with three interfaces over one shared content source: a scrollable web UI, a command-line terminal, and a context-aware AI assistant.',
+    problem:
+      'A conventional portfolio page tells visitors about engineering work but doesn\u2019t demonstrate it. Recruiters skim it and technical visitors have nothing to explore.',
+    solution:
+      'Built a Next.js site with three interfaces over one shared content source: a normal scrollable portfolio, a terminal with an extensible command system, and a streaming AI assistant that can answer questions about Daniel and link back into the site.',
+    architecture:
+      'App Router pages for structure and SEO, a small terminal engine (tokenizer, parser, command registry) behind a full-screen overlay, and an OpenRouter-backed streaming chat API that accepts a context identifier so answers about a specific project or role are grounded without building the prompt in the browser.',
+    decisions: [
+      'Kept context resolution server-side. The client sends a contextType/contextId, not a constructed prompt',
+      'Reused the same profile and project data across the web UI, terminal commands, and the AI system prompt to avoid maintaining duplicate facts',
+    ],
+    learnings:
+      'Designing a small, extensible command parser and wiring contextual retrieval into a streaming chat API without over-engineering either one.',
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'MongoDB', 'OpenRouter'],
+    impact: ['One shared content source powering the web UI, terminal, and AI'],
+    metrics: [
+      { value: '3', label: 'interfaces over one shared content source: web, terminal, AI' },
     ],
     links: {
-      github: "https://github.com/dannyboy-1412",
+      github: 'https://github.com/dannyboy-1412',
     },
-    origin: "personal",
+    origin: 'personal',
   },
   {
-    slug: "salary-stream",
-    name: "StreamPay",
-    tagline: "Continuous Salary Streaming",
+    slug: 'salary-stream',
+    name: 'StreamPay',
+    tagline: 'Continuous salary streaming',
     description:
-      "A crypto app concept that streams salary continuously through the pay period instead of a single lump-sum payment.",
+      'A crypto app that streams salary continuously through the pay period instead of a single lump-sum transfer on payday.',
     problem:
-      "Draft placeholder - full problem write-up to come.",
+      'Salary arrives as one lump sum at the end of the month, even though the work it pays for happened continuously. Employees wait weeks to touch money they have already earned.',
     solution:
-      "Draft placeholder - an on-chain app streaming pay continuously over the month rather than releasing it all at once on payday.",
-    architecture: "Draft placeholder - architecture details to be added.",
-    decisions: ["Draft placeholder - engineering decisions to be added."],
-    technologies: ["Solidity", "Node.js", "Ethereum"],
-    impact: ["Draft placeholder - results to be added."],
-    learnings: "Draft placeholder - to be added.",
+      'Built on Superfluid\u2019s Super Tokens, which extend ERC-20 with constant flow agreements. An employer paying 4000 USDC a month opens a stream, and the balance accrues to the employee every second instead of arriving in one transfer. The employee can withdraw at any point; there is no payday to wait for.',
+    architecture:
+      'A Solidity contract creates and manages Superfluid money streams between employer and employee accounts on an EVM testnet, with a Node.js backend for account and stream management.',
+    decisions: [
+      'Superfluid\u2019s constant flow agreements over a custom vesting contract, since the streaming primitive is audited and settles on every block',
+      'USDC as the streamed token so salary amounts stay dollar-denominated',
+    ],
+    technologies: ['Solidity', 'Superfluid', 'Node.js', 'Ethereum', 'USDC'],
+    impact: [
+      'A working stream where a 4000 USDC monthly salary accrues per second and is withdrawable any time',
+    ],
+    learnings:
+      'Superfluid\u2019s constant flow agreement replaces payday with a balance that never stops moving. The whole concept of "waiting for your salary" disappears once the stream is open.',
     links: {},
-    origin: "personal",
-    placeholder: true,
+    origin: 'personal',
   },
 ]
 
+export const PERSONAL_PROJECTS: Project[] = PROJECTS.filter(
+  (project) => project.origin === 'personal'
+)
+
 export function getProjectBySlug(slug: string): Project | undefined {
   return PROJECTS.find((project) => project.slug === slug)
+}
+
+export function getProjectsByExperienceId(experienceId: string): Project[] {
+  return PROJECTS.filter(
+    (project) =>
+      project.origin === 'work' && project.relatedExperienceId === experienceId
+  )
 }
 
 export function getProjectSuggestions(project: Project): string[] {

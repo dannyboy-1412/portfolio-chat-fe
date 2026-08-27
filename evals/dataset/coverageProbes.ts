@@ -49,8 +49,8 @@ export const COVERAGE_PROBE_CASES: TestCase[] = [
     category: "coverage",
     turns: ["Do you have any personal projects or open-source work I can look at on GitHub?"],
     metrics: ["completeness", "relevance"],
-    expectedFacts: ["GitHub", "Portfolio", "crypto"],
-    judgeNotes: "Background now covers GitHub personal projects: this Portfolio site and a crypto salary-streaming project.",
+    expectedFacts: ["GitHub", "Portfolio", "StreamPay", "Superfluid"],
+    judgeNotes: "Background covers GitHub personal projects: this Portfolio site and StreamPay, a crypto salary-streaming app built on Superfluid (4000 USDC/month streamed continuously instead of one lump sum).",
   },
   {
     id: "cov-certifications",

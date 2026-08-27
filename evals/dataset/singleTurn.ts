@@ -33,7 +33,7 @@ export const SINGLE_TURN_CASES: TestCase[] = [
     category: "factual-accuracy",
     turns: ["What tech stack did you use at Mesha?"],
     metrics: ["factualAccuracy", "completeness"],
-    expectedFacts: ["TypeScript", "Express", "Next", "PostgreSQL", "MongoDB", "Redis", "AWS"],
+    expectedFacts: ["TypeScript", "Express", "Next", "PostgreSQL", "MongoDB", "AWS"],
   },
   {
     id: "s-propellyr-pivot",
@@ -318,6 +318,15 @@ export const SINGLE_TURN_CASES: TestCase[] = [
     turns: ["Walk me through how you improved table extraction accuracy at INFRRD."],
     metrics: ["completeness", "factualAccuracy"],
     expectedFacts: ["OCR-coordinate", "crop", "98%", "no-touch"],
+  },
+  {
+    id: "s-dociq",
+    type: "single",
+    category: "completeness",
+    turns: ["What is DocIQ and what did you build there?"],
+    metrics: ["completeness", "factualAccuracy"],
+    expectedFacts: ["INFRRD", "internal", "dashboard", "two weeks", "agentic"],
+    judgeNotes: "DocIQ is the internal test-automation platform Daniel built at INFRRD: multi-step manual script runs (e.g. QA's BugBuster flow) put behind a dashboard, scoped and shipped v1 in 2 weeks using agentic coding practices. Python/FastAPI backend, React dashboard, used by QA and other internal teams.",
   },
   {
     id: "s-invoice-recon",

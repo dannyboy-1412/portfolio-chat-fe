@@ -51,10 +51,18 @@ describe("executeCommand", () => {
   });
 
   it("project <slug> navigates to the matching project route", () => {
-    const result = executeCommand("project mesha");
+    const result = executeCommand("project portfolio");
     expect(result).toMatchObject({
       kind: "action",
-      action: { type: "navigate", href: "/projects/mesha" },
+      action: { type: "navigate", href: "/projects/portfolio" },
+    });
+  });
+
+  it("project <work slug> links into the experience section anchor", () => {
+    const result = executeCommand("project dociq");
+    expect(result).toMatchObject({
+      kind: "action",
+      action: { type: "navigate", href: "/#project-dociq" },
     });
   });
 
@@ -92,10 +100,10 @@ describe("executeCommand", () => {
   });
 
   it("start-chat --context=<project slug> resolves to a project context", () => {
-    const result = executeCommand("start-chat --context=mesha");
+    const result = executeCommand("start-chat --context=portfolio");
     expect(result).toMatchObject({
       kind: "action",
-      action: { type: "open-chat", context: { type: "project", id: "mesha" } },
+      action: { type: "open-chat", context: { type: "project", id: "portfolio" } },
     });
   });
 
