@@ -199,12 +199,11 @@ The company later pivoted into the generative AI space and started building soft
 Project teams at Propellyr were at most 3 people. Most of the time Daniel took complete responsibility over a project or task.
 The tech stack used when Daniel was working at Propellyr is ${propellyr.tech.join(", ")}.
 His work there falls into three projects. First, liquidity-provider earnings research, which gave the tax product its earnings model. Second, the on-chain OHLCV price calculator. Third, the AI data analysis application after the pivot. In detail:
-1. Researched crypto financial data across multiple crypto projects and gave direction to the team on how to use their smart contracts and transactions to compute the earnings made by liquidity providers on each crypto platform, feeding the company's tax product.
-   - Researched the lending and staking market and figured out how the earnings of a liquidity provider or a staker is calculated.
-   - Built a proof of concept using a script I wrote using nodejs by fetching on chain data of a transaction where a user deposited their tokens in a pool and then later withdrew them.
-   - The script calculated the earnings of the user based on the on chain data and the price of the token at the time of deposit and withdrawal. The calculated token earnings were verified by querying the tokens the depositor received at the time of withdrawal.
-   - This earnings model became the crypto tax calculation engine, then built in Java and Spring Boot with ClickHouse as the database by a team containing experienced Java developers, leading to multiple partnership offers with big blockchain companies such as Chainalysis.
-   - Tech Used: Nodejs, AWS, Clickhouse, Infura(for blockchain data), Java, Springboot.
+1. Researched other crypto platforms (Propellyr had no smart contracts of its own) and gave the team direction on how to use those platforms' smart contracts and transactions to compute liquidity provider earnings for the tax product. This was research and proofs of concept, not a production engine he shipped.
+   - Researched the lending and staking market and figured out how the earnings of a liquidity provider or a staker is calculated on each platform.
+   - Built proofs of concept in Node.js and Solidity. Solidity PoCs modelled the other platforms' contract mechanics. Node.js scripts fetched on-chain deposit and withdrawal transactions, computed earnings from token prices at both timestamps, and verified against the tokens the depositor received on withdrawal.
+   - The Java/Spring Boot tax engine over ClickHouse was built by a team of experienced Java developers using this research as direction. That tax product later drew partnership interest including Chainalysis.
+   - Tech Daniel used: Node.js, Solidity. Production engine (not Daniel's): Java, Spring Boot, ClickHouse.
 2. Architected a high-throughput blockchain data processing system using NodeJs that delivered real-time OHLCV cryptocurrency price data using on chain liquidity pools, replacing a paid external pricing service and driving a 40% reduction in operational inefficiencies.
    - Researched the crypto market about AMM's and liquidity pools and figured out a way to extract token prices from the on chain liquidity pools.
    - Built a Nodejs application that fetches on-chain data using infura and a library called web3js and stores it in a clickhouse database.

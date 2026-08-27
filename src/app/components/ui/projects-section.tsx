@@ -2,7 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { AskDanielButton } from '@/app/components/ui/ask-daniel-button'
-import { PERSONAL_PROJECTS } from '@/shared/projects'
+import { PERSONAL_PROJECTS, type Project } from '@/shared/projects'
+
+const TECH_PREVIEW_LIMIT = 4
 
 export function ProjectsSection() {
   return (
@@ -21,82 +23,85 @@ export function ProjectsSection() {
           </p>
         </header>
 
-        <ol className="mt-14 border-t border-surface-800/70">
+        <ul className="mt-14 grid grid-cols-1 sm:grid-cols-2">
           {PERSONAL_PROJECTS.map((project, index) => (
-            <li key={project.slug} className="border-b border-surface-800/70">
-              <article className="group grid gap-y-6 py-12 sm:py-14 md:grid-cols-12 md:gap-x-8">
-                <div className="md:col-span-2">
-                  <span className="font-mono text-sm text-surface-500">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                </div>
-
-                <div className="md:col-span-10">
-                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <h3>
-                      <Link
-                        href={`/projects/${project.slug}`}
-                        className="inline-flex items-baseline gap-2 font-display text-3xl tracking-tight text-surface-50 transition-colors hover:text-glow sm:text-4xl"
-                      >
-                        {project.name}
-                        <ArrowUpRight
-                          className="h-5 w-5 self-center text-surface-500 transition-all group-hover:translate-x-0.5 group-hover:text-glow"
-                          aria-hidden
-                        />
-                      </Link>
-                    </h3>
-                  </div>
-
-                  <p className="mt-1 text-sm text-surface-400">{project.tagline}</p>
-                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-surface-400">
-                    {project.description}
-                  </p>
-
-                  {project.metrics && project.metrics.length > 0 && (
-                    <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-6">
-                      {project.metrics.map((metric) => (
-                        <div key={metric.label}>
-                          <dd className="font-display text-3xl tracking-tight text-glow sm:text-4xl">
-                            {metric.value}
-                          </dd>
-                          <dt className="mt-1 max-w-56 text-xs leading-relaxed text-surface-400">
-                            {metric.label}
-                          </dt>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-
-                  <p className="mt-8 font-mono text-xs tracking-wide text-surface-500">
-                    {project.technologies.join(' · ')}
-                  </p>
-
-                  <div className="mt-6">
-                    <AskDanielButton
-                      context={{ type: 'project', id: project.slug }}
-                      label="Ask about this project"
-                    />
-                  </div>
-                </div>
-
-                {project.visual && (
-                  <div className="md:col-span-12">
-                    <div className="mt-2 overflow-hidden rounded-lg border border-surface-800/60">
-                      <Image
-                        src={project.visual.src}
-                        alt={project.visual.alt}
-                        width={1600}
-                        height={900}
-                        className="h-auto w-full"
-                      />
-                    </div>
-                  </div>
-                )}
-              </article>
+            <li
+              key={project.slug}
+              className="flex flex-col border-t border-surface-800/70 py-8 sm:[&:nth-child(odd)]:pr-10 sm:[&:nth-child(even)]:border-l sm:[&:nth-child(even)]:border-surface-800/70 sm:[&:nth-child(even)]:pl-10"
+            >
+              <ProjectEntry project={project} index={index} />
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
   )
+}
+
+function ProjectEntry({
+  project,
+  index,
+}: {
+  project: Project
+  index: number
+}) {
+  return (
+    <article className="group flex h-full flex-col">
+      <span className="font-mono text-sm text-surface-500">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+
+      {project.visual && (
+        <div className="mt-4 overflow-hidden rounded-lg border border-surface-800/60">
+          <Image
+            src={project.visual.src}
+            alt={project.visual.alt}
+            width={1600}
+            height={900}
+            sizes="(min-width: 640px) 50vw, 100vw"
+            className="aspect-[16/9] w-full object-cover"
+          />
+        </div>
+      )}
+
+      <h3 className="mt-4">
+        <Link
+          href={`/projects/${project.slug}`}
+          className="inline-flex items-baseline gap-2 font-display text-2xl tracking-tight text-surface-50 transition-colors hover:text-glow"
+        >
+          {project.name}
+          <ArrowUpRight
+            className="h-4 w-4 self-center text-surface-500 transition-all group-hover:translate-x-0.5 group-hover:text-glow"
+            aria-hidden
+          />
+        </Link>
+      </h3>
+
+      <p className="mt-1 font-mono text-xs uppercase tracking-[0.15em] text-surface-500">
+        {project.tagline}
+      </p>
+      <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-surface-400">
+        {project.description}
+      </p>
+
+      <div className="mt-auto pt-6">
+        <p className="font-mono text-xs tracking-wide text-surface-500">
+          {formatTechPreview(project.technologies)}
+        </p>
+        <div className="mt-3">
+          <AskDanielButton
+            context={{ type: 'project', id: project.slug }}
+            label="Ask about this project"
+          />
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function formatTechPreview(technologies: string[]): string {
+  const visible = technologies.slice(0, TECH_PREVIEW_LIMIT)
+  const overflow = technologies.length - visible.length
+  const list = visible.join(' · ')
+  return overflow > 0 ? `${list} · +${overflow}` : list
 }

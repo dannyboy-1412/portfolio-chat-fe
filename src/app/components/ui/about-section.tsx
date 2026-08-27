@@ -1,6 +1,18 @@
+'use client'
+
+import { ArrowRight } from 'lucide-react'
+import { track } from '@vercel/analytics'
 import { PROFILE } from '@/shared/profile'
+import { useChat } from '@/app/components/ui/chat-provider'
 
 export function AboutSection() {
+  const { openChat } = useChat()
+
+  const handleAskClick = () => {
+    track('chat_started', { source: 'about-section' })
+    openChat({ context: null })
+  }
+
   return (
     <section
       id="about"
@@ -20,48 +32,26 @@ export function AboutSection() {
           {PROFILE.about}
         </p>
 
-        <div className="mt-14 border-t border-surface-800/70">
-          <p className="pt-7 font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
-            Education
-          </p>
-          <ul>
-            {PROFILE.education.map((entry) => (
-              <li
-                key={entry.degree}
-                className="grid gap-y-1 border-b border-surface-800/70 py-6 sm:grid-cols-12 sm:gap-x-8"
-              >
-                <span className="font-mono text-xs uppercase tracking-[0.15em] text-surface-500 sm:col-span-3">
-                  {entry.period}
-                </span>
-                <div className="sm:col-span-9">
-                  <p className="text-base font-medium text-surface-100">{entry.degree}</p>
-                  <p className="mt-0.5 text-sm text-surface-400">{entry.institution}</p>
-                  {entry.focus && (
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-surface-400">
-                      {entry.focus}
-                    </p>
-                  )}
-                  {entry.activities && (
-                    <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.15em] text-surface-500">
-                      {entry.activities}
-                    </p>
-                  )}
-                  {entry.highlights && entry.highlights.length > 0 && (
-                    <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-surface-400">
-                      {entry.highlights.map((highlight) => (
-                        <li key={highlight}>{highlight}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         <p className="mt-6 text-sm text-surface-500">
           Speaks {PROFILE.languages.join(', ')}.
         </p>
+
+        <div className="mt-14 border-t border-surface-800/70 pt-10">
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
+            Curious about my work?
+          </p>
+          <p className="mt-4 max-w-xl font-display text-3xl leading-snug tracking-tight text-surface-50 sm:text-4xl">
+            Ask my assistant about projects, experience or technical decisions.
+          </p>
+          <button
+            type="button"
+            onClick={handleAskClick}
+            className="mt-8 inline-flex h-11 items-center gap-2 rounded-full border border-surface-700 px-6 text-sm text-surface-100 transition-colors hover:border-glow/60 hover:text-glow"
+          >
+            Ask about my work
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
       </div>
     </section>
   )

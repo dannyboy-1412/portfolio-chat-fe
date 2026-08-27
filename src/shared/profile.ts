@@ -43,15 +43,15 @@ export const PROFILE = {
   name: "Daniel A Rodrigues",
   shortName: "Daniel",
   role: "Software Engineer",
-  headline: "I build backend systems, AI products and data platforms.",
-  tagline: "Backend · AI · Data · Cloud",
+  headline: "I build useful software.",
+  tagline: "Backend and AI",
   aboutHeadline: "I like building systems where good engineering and AI meet.",
   pitch:
     "I build software that turns complex problems into reliable systems - document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
   location: "Victoria, Australia · Melbourne / Geelong",
   status: "Studying · Master of Applied AI @ Deakin",
-  /** Configurable hero status indicator, e.g. "OPEN TO OPPORTUNITIES" or "CURRENTLY BUILDING". */
-  statusIndicator: "OPEN TO OPPORTUNITIES",
+  /** Configurable hero status indicator, e.g. "FULL-TIME ON MACHINE LEARNING" or "OPEN TO WORK". */
+  statusIndicator: "Full-time on machine learning",
   yearsExperience: "5+ years experience",
   education: [
     {
@@ -145,7 +145,7 @@ export const EXPERIENCES: Experience[] = [
     summary:
       "Two years across three projects at a blockchain data platform that later pivoted into generative AI: LP earnings research, an on-chain price pipeline, and an AI data analysis app.",
     highlights: [
-      "Researched multiple crypto protocols' smart contracts to model what liquidity providers actually earn, directing the tax engine build",
+      "Researched other crypto platforms' smart contracts and transactions to work out LP earnings, then proved the math with Node.js and Solidity PoCs that directed the tax product",
       "Architected a high-throughput Node.js pipeline for real-time OHLCV prices from on-chain liquidity pools",
       "Shipped an AI data analysis app (CSV → DuckDB → NL queries → insights) plus a RAG extraction pipeline",
     ],

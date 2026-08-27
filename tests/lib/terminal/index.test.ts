@@ -58,11 +58,11 @@ describe("executeCommand", () => {
     });
   });
 
-  it("project <work slug> links into the experience section anchor", () => {
+  it("project <work slug> navigates to the matching project route", () => {
     const result = executeCommand("project dociq");
     expect(result).toMatchObject({
       kind: "action",
-      action: { type: "navigate", href: "/#project-dociq" },
+      action: { type: "navigate", href: "/projects/dociq" },
     });
   });
 

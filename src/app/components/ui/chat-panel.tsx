@@ -16,7 +16,7 @@ import {
 } from '@/shared/profile'
 import { getProjectBySlug, getProjectSuggestions } from '@/shared/projects'
 import { extractContactCta, isContactIntent } from '@/lib/contactCta'
-import { extractSourceLinks, PROJECT_ANCHOR_EVENT, type SourceLink } from '@/lib/sourceLinks'
+import { extractSourceLinks, type SourceLink } from '@/lib/sourceLinks'
 import { cn } from '@/lib/utils'
 
 const markdownComponents = {
@@ -337,13 +337,8 @@ function SourceLinks({ links, spaced }: { links: SourceLink[]; spaced: boolean }
         {links.map((link) => {
           const project =
             link.type === 'project' ? getProjectBySlug(link.id) : undefined
-          const isWorkProject = Boolean(project && project.origin !== 'personal')
           const href =
-            link.type === 'project'
-              ? isWorkProject
-                ? `/#project-${link.id}`
-                : `/projects/${link.id}`
-              : '/#experience'
+            link.type === 'project' ? `/projects/${link.id}` : '/#experience'
           const label =
             link.type === 'project'
               ? (project?.name ?? `project/${link.id}`)
@@ -352,14 +347,6 @@ function SourceLinks({ links, spaced }: { links: SourceLink[]; spaced: boolean }
             <Link
               key={`${link.type}-${link.id}`}
               href={href}
-              onClick={
-                isWorkProject
-                  ? () =>
-                      window.dispatchEvent(
-                        new CustomEvent(PROJECT_ANCHOR_EVENT, { detail: link.id })
-                      )
-                  : undefined
-              }
               className="inline-flex h-8 items-center rounded-lg border border-surface-700 bg-surface-950/60 px-2.5 text-xs text-glow transition-colors hover:bg-surface-800"
             >
               {label}
