@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, JetBrains_Mono } from "next/font/google";
+import { Geist, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import { Analytics } from '@vercel/analytics/next';
 import { AppShell } from "./components/app-shell";
 import { getSiteUrl } from "@/lib/siteUrl";
@@ -9,6 +9,12 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -66,7 +72,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" data-scroll-behavior="smooth">
       <body
-        className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${geistSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <script
           type="application/ld+json"

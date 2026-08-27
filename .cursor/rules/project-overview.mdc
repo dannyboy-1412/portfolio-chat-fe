@@ -10,22 +10,23 @@ Interactive portfolio for Daniel A Rodrigues, presented as one system with three
 ## Stack
 
 - Next.js 16 App Router, React 19, TypeScript (strict)
-- Tailwind + shadcn/ui (`new-york`, themeable `surface-*` CSS variables, dark `color-scheme`, mint `glow` accent)
-- Fonts: Geist (body/display) + JetBrains Mono (`--font-mono`, terminal/chat/commands/metrics)
+- Tailwind + shadcn/ui (`new-york`, themeable `surface-*` CSS variables, dark `color-scheme`, sage `glow` accent)
+- Fonts: Geist (body) + Instrument Serif (`--font-display`, headings) + JetBrains Mono (`--font-mono`, tech labels/metadata/terminal/chat)
 - Backend: Route Handlers under `src/app/api/v1` + `src/server/` (MongoDB, OpenRouter)
 - HTTP (client): native `fetch` + ReadableStream for chat SSE
 - Path alias: `@/` → `src/`
-- Skill logos: path data in `@src/shared/skillIcons.ts` (do not import the `simple-icons` package barrel — it is a multi-MB module)
+- Skill logos: path data in `@src/shared/skillIcons.ts` (do not import the `simple-icons` package barrel — it is a multi-MB module); skills currently render as grouped typography without icons
 - Terminal engine: `@src/lib/terminal/` (tokenizer → parser → command registry → handlers), pure and unit-tested
 
 ## Layout
 
 - App shell: `@src/app/layout.tsx` renders `@src/app/components/app-shell.tsx`, which wraps every route (home + `/projects/[slug]`) in `ChatProvider` + `TerminalProvider`, plus `ThemeBackground`, `Navbar`, and `@src/app/components/ui/lazy-overlays.tsx` (loads `FullscreenTerminal` / `ChatPanel` only after first open). `@src/app/page.tsx` renders only the homepage sections. Contact (email/GitHub/LinkedIn/resume) lives in `ContactSection` (`#contact`), not a global footer.
-- Home page composition: `Hero` (status indicator + CTAs + hero terminal strip) → `SelectedWork` (`#work`) → `ExperienceTimeline` (`#experience`) → `SkillsGrid` (`#skills`) → `AboutSection` (`#about`) → `OutsideWork` → `ContactSection` (`#contact`)
-- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `hero-actions`, `chat-panel`, `chat-provider`, `ask-daniel-button`, `theme-background`, `selected-work`, `experience-timeline`, `skills-grid`, `about-section`, `outside-work`, `contact-section`, `tracked-anchor`, `lazy-overlays`, `analytics-tracker`, `scroll`
-- Terminal UI: `@src/app/components/terminal/` — `terminal.tsx` (shared core used by both variants), `hero-terminal.tsx`, `fullscreen-terminal.tsx` (default export, lazy-loaded), `terminal-provider.tsx` (`useTerminal`), `use-terminal-actions.ts` (executes scroll/navigate/open-chat side effects)
+- Home page composition: `Hero` (status line + serif headline + CTAs) → `SelectedWork` (`#work`) → `ExperienceTimeline` (`#experience`) → `SkillsGrid` (`#skills`) → `AboutSection` (`#about`) → `AskSection` (`#ask`, quiet chat entry) → `OutsideWork` → `ContactSection` (`#contact`)
+- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `hero-actions`, `chat-panel`, `chat-provider`, `ask-daniel-button`, `ask-section`, `theme-background`, `selected-work`, `experience-timeline`, `skills-grid`, `about-section`, `outside-work`, `contact-section`, `tracked-anchor`, `lazy-overlays`, `analytics-tracker`, `scroll`
+- Terminal UI: `@src/app/components/terminal/` — `terminal.tsx` (shared core), `fullscreen-terminal.tsx` (default export, lazy-loaded overlay opened via `useTerminal().open()`), `terminal-provider.tsx` (`useTerminal`), `use-terminal-actions.ts` (executes scroll/navigate/open-chat side effects). There is no inline hero terminal; the terminal opens from the navbar.
 - Project routes: `@src/app/projects/[slug]/page.tsx` — server-rendered, `generateStaticParams` + per-page metadata from `projects.ts`
-- Content (client-safe): `@src/shared/profile.ts` (profile, experience, skills, interests, nav links) and `@src/shared/projects.ts` (`PROJECTS`, `Project` type)
+- Content (client-safe): `@src/shared/profile.ts` (profile, experience, skills, interests, education as `{ period, degree, institution }[]`, nav links) and `@src/shared/projects.ts` (`PROJECTS`, `Project` type with optional `metrics` and `visual` for editorial layouts)
+- Project visuals: when a project gets a screenshot/diagram, save it as `public/images/projects/<slug>.png` (or `.webp`; 16:9, ~1600×900, optimized) and set `visual: { src: "/images/projects/<slug>.png", alt: "..." }` on that project in `projects.ts` — `SelectedWork` and `@src/app/projects/[slug]/page.tsx` render it automatically via `next/image`, no component changes needed
 - API routes: `@src/app/api/v1/`
 - Server logic: `@src/server/` (`db/`, `chat/`, `ai/` including `systemPrompt.ts` and `context.ts`)
 - Client API helpers: `@src/shared/` (`api.ts`, `endpoints.ts`, `config.ts`)
@@ -35,8 +36,9 @@ Interactive portfolio for Daniel A Rodrigues, presented as one system with three
 ## Theming
 
 - Single dark look via `html.dark` and tokens in `@src/app/globals.css`
-- Colors: use `surface-*` and `glow` (mint accent) / semantic tokens — never hardcode `zinc-*` or raw hex
-- Mono text (terminal, commands, metrics, code) uses `font-mono` → `--font-mono` (JetBrains Mono)
+- Colors: use `surface-*` and `glow` (sage accent) / semantic tokens — never hardcode `zinc-*` or raw hex
+- Editorial style: whitespace and hairline `border-surface-800/70` dividers instead of cards; headings use `font-display` (Instrument Serif); mono reserved for tech labels, metadata, terminal/chat
+- Mono text (terminal, commands, tech lists, metadata) uses `font-mono` → `--font-mono` (JetBrains Mono)
 - Ambient page background: `@src/app/components/ui/theme-background.tsx`
 - Do not reintroduce album/music theme switching unless explicitly requested
 

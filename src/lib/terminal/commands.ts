@@ -102,7 +102,9 @@ registerCommand({
     segments: [
       line(PROFILE.pitch),
       blank(),
-      ...PROFILE.education.map((item) => line(item, 'muted')),
+      ...PROFILE.education.map((entry) =>
+        line(`${entry.degree}, ${entry.institution} (${entry.period})`, 'muted')
+      ),
       blank(),
       link('View About section', { type: 'scroll', targetId: 'about' }),
     ],

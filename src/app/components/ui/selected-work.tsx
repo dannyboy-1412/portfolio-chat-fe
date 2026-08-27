@@ -1,82 +1,102 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { AskDanielButton } from '@/app/components/ui/ask-daniel-button'
 import { PROJECTS } from '@/shared/projects'
 
 export function SelectedWork() {
   return (
-    <section
-      id="work"
-      className="scroll-mt-20 border-t border-surface-900 px-4 py-20 sm:px-6"
-    >
+    <section id="work" className="scroll-mt-20 px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-2xl font-semibold tracking-tight text-surface-50 sm:text-3xl">
-          Selected Work
-        </h2>
-        <p className="mt-2 text-sm text-surface-400">
-          Projects that show how I think about engineering problems, not just the tech list.
-        </p>
+        <header>
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
+            Selected work
+          </p>
+          <h2 className="mt-3 font-display text-3xl tracking-tight text-surface-50 sm:text-4xl">
+            Things I&apos;ve built
+          </h2>
+        </header>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          {PROJECTS.map((project) => (
-            <article
-              key={project.slug}
-              className="flex flex-col rounded-2xl border border-surface-800/80 bg-surface-900/40 p-5 sm:p-6"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-mono text-xs text-surface-500">
-                  ~/projects/{project.slug}
-                </p>
-                {project.placeholder && (
-                  <span className="rounded-full border border-surface-700 bg-surface-950/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-surface-500">
-                    Draft
+        <ol className="mt-14 border-t border-surface-800/70">
+          {PROJECTS.map((project, index) => (
+            <li key={project.slug} className="border-b border-surface-800/70">
+              <article className="group grid gap-y-6 py-12 sm:py-14 md:grid-cols-12 md:gap-x-8">
+                <div className="md:col-span-2">
+                  <span className="font-mono text-sm text-surface-500">
+                    {String(index + 1).padStart(2, '0')}
                   </span>
+                </div>
+
+                <div className="md:col-span-10">
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    <h3>
+                      <Link
+                        href={`/projects/${project.slug}`}
+                        className="inline-flex items-baseline gap-2 font-display text-3xl tracking-tight text-surface-50 transition-colors hover:text-glow sm:text-4xl"
+                      >
+                        {project.name}
+                        <ArrowUpRight
+                          className="h-5 w-5 self-center text-surface-500 transition-all group-hover:translate-x-0.5 group-hover:text-glow"
+                          aria-hidden
+                        />
+                      </Link>
+                    </h3>
+                    {project.placeholder && (
+                      <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-surface-500">
+                        Draft
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="mt-1 text-sm text-surface-400">{project.tagline}</p>
+                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-surface-400">
+                    {project.description}
+                  </p>
+
+                  {project.metrics && project.metrics.length > 0 && (
+                    <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-6">
+                      {project.metrics.map((metric) => (
+                        <div key={metric.label}>
+                          <dd className="font-display text-3xl tracking-tight text-glow sm:text-4xl">
+                            {metric.value}
+                          </dd>
+                          <dt className="mt-1 max-w-56 text-xs leading-relaxed text-surface-400">
+                            {metric.label}
+                          </dt>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+
+                  <p className="mt-8 font-mono text-xs tracking-wide text-surface-500">
+                    {project.technologies.join(' · ')}
+                  </p>
+
+                  <div className="mt-6">
+                    <AskDanielButton
+                      context={{ type: 'project', id: project.slug }}
+                      label="Ask about this project"
+                    />
+                  </div>
+                </div>
+
+                {project.visual && (
+                  <div className="md:col-span-12">
+                    <div className="mt-2 overflow-hidden rounded-lg border border-surface-800/60">
+                      <Image
+                        src={project.visual.src}
+                        alt={project.visual.alt}
+                        width={1600}
+                        height={900}
+                        className="h-auto w-full"
+                      />
+                    </div>
+                  </div>
                 )}
-              </div>
-              <p className="mt-2 font-mono text-xs uppercase tracking-wide text-glow">
-                {project.tagline}
-              </p>
-              <h3 className="mt-1 text-lg font-medium text-surface-100">{project.name}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-surface-400">
-                {project.description}
-              </p>
-
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {project.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-md border border-surface-800 bg-surface-950/60 px-2 py-0.5 text-xs text-surface-400"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <ul className="mt-4 space-y-1">
-                {project.impact.map((item) => (
-                  <li key={item} className="flex items-start gap-1.5 text-sm text-surface-300">
-                    <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-glow" aria-hidden />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                <Link
-                  href={`/projects/${project.slug}`}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-surface-800 px-3 text-xs text-surface-100 transition-colors hover:bg-surface-700"
-                >
-                  Explore
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-                <AskDanielButton
-                  context={{ type: 'project', id: project.slug }}
-                  label="Ask Daniel"
-                />
-              </div>
-            </article>
+              </article>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   )

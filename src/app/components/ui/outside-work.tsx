@@ -4,27 +4,30 @@ export function OutsideWork() {
   return (
     <section
       id="outside-work"
-      className="scroll-mt-20 border-t border-surface-900 px-4 py-20 sm:px-6"
+      className="scroll-mt-20 px-4 py-24 sm:px-6"
     >
-      <div className="mx-auto max-w-3xl">
-        <p className="font-mono text-xs text-surface-500">~/outside-the-ide</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-surface-50 sm:text-3xl">
-          Outside the IDE
-        </h2>
+      <div className="mx-auto max-w-5xl">
+        <header>
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-surface-500">
+            Outside the IDE
+          </p>
+          <h2 className="mt-3 font-display text-3xl tracking-tight text-surface-50 sm:text-4xl">
+            When I&apos;m not building
+          </h2>
+        </header>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <dl className="mt-14 grid gap-x-8 gap-y-10 border-t border-surface-800/70 pt-10 sm:grid-cols-2">
           {INTERESTS.map((category) => (
-            <div
-              key={category.id}
-              className="rounded-2xl border border-surface-800/80 bg-surface-900/40 p-5"
-            >
-              <p className="font-mono text-xs uppercase tracking-wide text-glow">
+            <div key={category.id}>
+              <dt className="font-mono text-xs uppercase tracking-[0.2em] text-surface-500">
                 {category.label}
-              </p>
-              <p className="mt-2 text-sm text-surface-300">{category.items.join(' · ')}</p>
+              </dt>
+              <dd className="mt-2 text-lg leading-relaxed text-surface-200">
+                {category.items.join(' · ')}
+              </dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
     </section>
   )
