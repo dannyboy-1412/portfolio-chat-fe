@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Daniel Rodrigues | Software Engineer & AI Engineer",
   description:
-    "Software engineer specialising in backend systems, AI applications and modern web development. Explore an interactive portfolio with a terminal and AI assistant.",
+    "Software engineer specialising in backend systems, AI applications and modern web development. Explore an interactive portfolio with a terminal assistant.",
   alternates: {
     canonical: "/",
   },

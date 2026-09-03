@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { ArrowUpRight, Menu, TerminalSquare, X } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import { useChat } from '@/app/components/ui/chat-provider'
-import { useTerminal } from '@/app/components/terminal/terminal-provider'
 import { CONTACT_NAV_LINK, NAV_LINKS, PROFILE } from '@/shared/profile'
 import { cn } from '@/lib/utils'
 
@@ -21,7 +20,6 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { openChat } = useChat()
-  const { open: openTerminal } = useTerminal()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -64,11 +62,6 @@ export function Navbar() {
   }
 
   const handleOpenTerminal = () => {
-    closeMobile()
-    openTerminal()
-  }
-
-  const handleOpenChat = () => {
     closeMobile()
     track('chat_started', { source: 'navbar' })
     openChat({ context: null })
@@ -137,13 +130,6 @@ export function Navbar() {
           >
             <TerminalSquare className="h-4 w-4" aria-hidden />
           </button>
-          <button
-            type="button"
-            onClick={handleOpenChat}
-            className="hidden h-11 items-center px-3 text-sm text-surface-400 transition-colors hover:text-glow sm:inline-flex"
-          >
-            Ask
-          </button>
 
           <button
             type="button"
@@ -198,13 +184,6 @@ export function Navbar() {
             >
               <TerminalSquare className="h-4 w-4" aria-hidden />
               Terminal
-            </button>
-            <button
-              type="button"
-              onClick={handleOpenChat}
-              className="flex h-11 flex-1 items-center justify-center rounded-md border border-surface-800 text-sm text-surface-300 transition-colors hover:text-glow"
-            >
-              Ask the assistant
             </button>
           </div>
         </div>
