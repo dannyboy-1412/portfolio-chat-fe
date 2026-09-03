@@ -262,25 +262,26 @@ export const PROJECTS: Project[] = [
   {
     slug: 'portfolio',
     name: 'Portfolio',
-    tagline: 'Terminal + AI Portfolio',
+    tagline: 'Terminal assistant portfolio',
     description:
-      'This site. A portfolio with three interfaces over one shared content source: a scrollable web UI, a command-line terminal, and a context-aware AI assistant.',
+      'This site. A scrollable portfolio and a terminal that is the AI assistant, both reading one shared content source.',
     problem:
       'A conventional portfolio page tells visitors about engineering work but doesn\u2019t demonstrate it. Recruiters skim it and technical visitors have nothing to explore.',
     solution:
-      'Built a Next.js site with three interfaces over one shared content source: a normal scrollable portfolio, a terminal with an extensible command system, and a streaming AI assistant that can answer questions about Daniel and link back into the site.',
+      'Built a Next.js site with two interfaces over one shared content source: a scrollable editorial portfolio, and a centered terminal modal where visitors talk to a streaming assistant about Daniel and follow links back into the site.',
     architecture:
-      'App Router pages for structure and SEO, a small terminal engine (tokenizer, parser, command registry) behind a full-screen overlay, and an OpenRouter-backed streaming chat API that accepts a context identifier so answers about a specific project or role are grounded without building the prompt in the browser.',
+      'App Router pages for structure and SEO, a ChatProvider-owned terminal overlay that streams OpenRouter replies as a REPL transcript, and a completions API that accepts a context identifier so answers about a specific project or role are grounded without building the prompt in the browser.',
     decisions: [
       'Kept context resolution server-side. The client sends a contextType/contextId, not a constructed prompt',
-      'Reused the same profile and project data across the web UI, terminal commands, and the AI system prompt to avoid maintaining duplicate facts',
+      'Reused the same profile and project data across the web UI and the AI system prompt to avoid maintaining duplicate facts',
+      'Made the terminal the chat interface instead of running a command language beside a separate sidebar assistant',
     ],
     learnings:
-      'Designing a small, extensible command parser and wiring contextual retrieval into a streaming chat API without over-engineering either one.',
+      'One overlay is easier to explain than a command palette that hands off to a second chat panel.',
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'MongoDB', 'OpenRouter'],
-    impact: ['One shared content source powering the web UI, terminal, and AI'],
+    impact: ['One shared content source powering the web UI and the terminal assistant'],
     metrics: [
-      { value: '3', label: 'interfaces over one shared content source: web, terminal, AI' },
+      { value: '2', label: 'interfaces over one shared content source: web and terminal assistant' },
     ],
     links: {
       github: 'https://github.com/dannyboy-1412',

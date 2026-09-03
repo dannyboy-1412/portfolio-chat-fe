@@ -5,40 +5,39 @@ alwaysApply: true
 
 # Portfolio site
 
-- Interactive portfolio for Daniel A Rodrigues, presented as one system with three interfaces over a single shared content source: a scrollable web UI, a command-line terminal, and a contextual AI assistant. The assistant is Daniel's assistant (it speaks about him, not as him) and can be opened generally or scoped to a specific project/role. Current features: streaming chat (OpenRouter via Route Handlers) with optional project/experience context, MongoDB-backed threaded messages with TTL, a terminal command system, project detail routes for all projects, resume download, experience timeline, skills, and about.
+- Interactive portfolio for Daniel A Rodrigues, presented as one system with two interfaces over a single shared content source: a scrollable web UI and a contextual AI assistant that lives in a centered terminal modal. The assistant is Daniel's assistant (it speaks about him, not as him) and can be opened generally or scoped to a specific project/role. Current features: streaming chat (OpenRouter via Route Handlers) with optional project/experience context, MongoDB-backed threaded messages with TTL, project detail routes for all projects, resume download, experience timeline, skills, and about.
 
 ## Stack
 
 - Next.js 16 App Router, React 19, TypeScript (strict)
 - Tailwind + shadcn/ui (`new-york`, themeable `surface-*` CSS variables, dark `color-scheme`, sage `glow` accent)
-- Fonts: Geist (body) + Instrument Serif (`--font-display`, headings) + JetBrains Mono (`--font-mono`, tech labels/metadata/terminal/chat)
+- Fonts: Geist (body) + Instrument Serif (`--font-display`, headings) + JetBrains Mono (`--font-mono`, tech labels/metadata/terminal)
 - Backend: Route Handlers under `src/app/api/v1` + `src/server/` (MongoDB, OpenRouter)
 - HTTP (client): native `fetch` + ReadableStream for chat SSE
 - Path alias: `@/` → `src/`
 - Skill logos: path data in `@src/shared/skillIcons.ts` (do not import the `simple-icons` package barrel — it is a multi-MB module); skills currently render as grouped typography without icons
-- Terminal engine: `@src/lib/terminal/` (tokenizer → parser → command registry → handlers), pure and unit-tested
 
 ## Layout
 
-- App shell: `@src/app/layout.tsx` renders `@src/app/components/app-shell.tsx`, which wraps every route (home + `/projects/[slug]`) in `ChatProvider` + `TerminalProvider`, plus `ThemeBackground`, `Navbar`, and `@src/app/components/ui/lazy-overlays.tsx` (loads `FullscreenTerminal` / `ChatPanel` only after first open). `@src/app/page.tsx` renders only the homepage sections. Contact (email/GitHub/LinkedIn/resume) lives in `ContactSection` (`#contact`), not a global footer.
+- App shell: `@src/app/layout.tsx` renders `@src/app/components/app-shell.tsx`, which wraps every route (home + `/projects/[slug]`) in `ChatProvider`, plus `ThemeBackground`, `Navbar`, and `@src/app/components/ui/lazy-overlays.tsx` (loads the terminal overlay only after first open). `@src/app/page.tsx` renders only the homepage sections. Contact (email/GitHub/LinkedIn/resume) lives in `ContactSection` (`#contact`), not a global footer.
 - Home page composition: `Hero` (status line + serif headline) → `ExperienceTimeline` (`#experience`; each role's Details expands to highlights plus compact work-project summaries that link to `/projects/<slug>`) → `ProjectsSection` (`#projects`, personal projects only — compact two-column grid of equal-height entries with a clamped description, capped tech list, and no inline metrics; metrics and the full case study live on `/projects/<slug>`) → `SkillsGrid` (`#skills`) → `AboutSection` (`#about`, bio plus quiet chat entry) → `OutsideWork` → `ContactSection` (`#contact`)
-- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `chat-panel`, `chat-provider`, `ask-daniel-button`, `theme-background`, `projects-section`, `experience-timeline`, `skills-grid`, `about-section`, `outside-work`, `contact-section`, `tracked-anchor`, `lazy-overlays`, `analytics-tracker`, `scroll`
-- Terminal UI: `@src/app/components/terminal/` — `terminal.tsx` (shared core), `fullscreen-terminal.tsx` (default export, lazy-loaded overlay opened via `useTerminal().open()`), `terminal-provider.tsx` (`useTerminal`), `use-terminal-actions.ts` (executes scroll/navigate/open-chat side effects). There is no inline hero terminal; the terminal opens from the navbar.
+- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `chat-provider`, `ask-daniel-button`, `theme-background`, `projects-section`, `experience-timeline`, `skills-grid`, `about-section`, `outside-work`, `contact-section`, `tracked-anchor`, `lazy-overlays`, `analytics-tracker`, `scroll`
+- Terminal UI: `@src/app/components/terminal/fullscreen-terminal.tsx` (default export, lazy-loaded centered modal). Opened via `useChat().openChat()` from the navbar TerminalSquare control, Ask Daniel buttons, and the about-section CTA. The transcript is the chat thread (`Message[]`); there is no command registry. Do not re-add an inline hero terminal or a sidebar chat panel.
 - Project routes: `@src/app/projects/[slug]/page.tsx` — server-rendered, `generateStaticParams` + per-page metadata for every project in `PROJECTS`. Work projects still list under the owning role in `ExperienceTimeline` (`relatedExperienceId`); Details navigates to `/projects/<slug>`. Personal projects are listed in `ProjectsSection` and use the same detail route.
 - Content (client-safe): `@src/shared/profile.ts` (profile, experience, skills, interests, education as `{ period, degree, institution, focus?, activities?, highlights? }[]`, nav links) and `@src/shared/projects.ts` (`PROJECTS` for all projects, `PERSONAL_PROJECTS`, `getProjectsByExperienceId`, `Project` type with `origin: "work" | "personal"` plus optional `metrics` and `visual` for editorial layouts)
 - Project visuals: when a personal project gets a screenshot/diagram, save it as `public/images/projects/<slug>.png` (or `.webp`; 16:9, ~1600×900, optimized) and set `visual: { src: "/images/projects/<slug>.png", alt: "..." }` on that project in `projects.ts` — `ProjectsSection` renders it as a 16:9 thumbnail in the grid; `@src/app/projects/[slug]/page.tsx` renders it large. No component changes needed.
 - API routes: `@src/app/api/v1/`
 - Server logic: `@src/server/` (`db/`, `chat/`, `ai/` including `systemPrompt.ts` and `context.ts`)
 - Client API helpers: `@src/shared/` (`api.ts`, `endpoints.ts`, `config.ts`)
-- Chat state: `@src/hooks/useChatThread.ts` exposed through `ChatProvider` (context-aware: open/close, retry, contextType/contextId)
+- Chat state: `@src/hooks/useChatThread.ts` exposed through `ChatProvider` (context-aware: open/close, retry, contextType/contextId). Overlay open state lives here; there is no separate terminal provider.
 - Utils: `@src/lib/utils.ts` (`cn`), `@src/lib/sourceLinks.ts` (AI navigation link markers), `@src/lib/contactCta.ts` (contact CTA marker)
 
 ## Theming
 
 - Single dark look via `html.dark` and tokens in `@src/app/globals.css`
 - Colors: use `surface-*` and `glow` (sage accent) / semantic tokens — never hardcode `zinc-*` or raw hex
-- Editorial style: whitespace and hairline `border-surface-800/70` dividers instead of cards; headings use `font-display` (Instrument Serif); mono reserved for tech labels, metadata, terminal/chat
-- Mono text (terminal, commands, tech lists, metadata) uses `font-mono` → `--font-mono` (JetBrains Mono)
+- Editorial style: whitespace and hairline `border-surface-800/70` dividers instead of cards; headings use `font-display` (Instrument Serif); mono reserved for tech labels, metadata, terminal
+- Mono text (terminal, tech lists, metadata) uses `font-mono` → `--font-mono` (JetBrains Mono)
 - Ambient page background: `@src/app/components/ui/theme-background.tsx`
 - Do not reintroduce album/music theme switching unless explicitly requested
 
@@ -47,7 +46,6 @@ alwaysApply: true
 - Extend `@src/shared/` for browser→API calls; do not invent parallel fetch wrappers
 - Put server-only backend logic under `@src/server/` and Route Handlers under `@src/app/api/`
 - Keep portfolio content in `@src/shared/profile.ts` / `@src/shared/projects.ts` in sync with facts in `@src/server/ai/systemPrompt.ts` when bio/experience/project changes — `systemPrompt.ts` interpolates dates/roles/tech/impact from those shared modules rather than duplicating them
-- New commands go in `@src/lib/terminal/commands.ts` via `registerCommand`; read from `@src/shared/` data, never fetch or hit the DB directly
 - Preserve the dark portfolio UX; style with `surface-*` / `glow` tokens rather than one-off color classes
 - LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
 - Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
