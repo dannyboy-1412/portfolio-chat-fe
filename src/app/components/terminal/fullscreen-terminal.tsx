@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Mail, RotateCcw } from 'lucide-react'
 import Markdown from 'react-markdown'
@@ -52,8 +52,6 @@ const markdownComponents = {
 export default function FullscreenTerminal() {
   const {
     messages,
-    inputMessage,
-    setInputMessage,
     isLoading,
     isStreaming,
     error,
@@ -66,6 +64,7 @@ export default function FullscreenTerminal() {
     closeChat,
     context,
   } = useChat()
+  const [inputMessage, setInputMessage] = useState('')
 
   useEffect(() => {
     if (!isOpen) return
@@ -99,8 +98,16 @@ export default function FullscreenTerminal() {
     if (event.nativeEvent.isComposing) return
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      void sendMessage()
+      const text = inputMessage.trim()
+      if (!text) return
+      setInputMessage('')
+      void sendMessage(text)
     }
+  }
+
+  const handleClear = () => {
+    setInputMessage('')
+    clearChat()
   }
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -134,7 +141,7 @@ export default function FullscreenTerminal() {
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                onClick={clearChat}
+                onClick={handleClear}
                 aria-label="Clear conversation"
                 title="Clear conversation (Ctrl/Cmd+K)"
                 className="flex h-11 items-center rounded-md px-3 font-mono text-xs text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-100"
@@ -213,9 +220,7 @@ export default function FullscreenTerminal() {
               <span className="shrink-0 pt-1.5 text-glow">daniel@portfolio:~$</span>
               <textarea
                 id="assistant-terminal-input"
-                ref={(node) => {
-                  inputRef.current = node
-                }}
+                ref={inputRef}
                 value={inputMessage}
                 onChange={(event) => setInputMessage(event.target.value)}
                 onKeyDown={onKeyDown}
@@ -228,7 +233,6 @@ export default function FullscreenTerminal() {
                 spellCheck={false}
                 className="max-h-32 min-h-[2.25rem] min-w-0 flex-1 resize-none border-0 bg-transparent py-1.5 text-sm text-surface-100 placeholder:text-surface-600 focus:outline-none disabled:opacity-50"
               />
-              <span className="terminal-cursor mt-2 h-4 w-2 shrink-0 bg-glow" aria-hidden />
             </div>
           </ScrollArea>
 
@@ -252,7 +256,7 @@ export default function FullscreenTerminal() {
   )
 }
 
-function TranscriptTurn({
+const TranscriptTurn = memo(function TranscriptTurn({
   role,
   content,
   forceCta = false,
@@ -297,7 +301,7 @@ function TranscriptTurn({
       {showCta ? <ContactCta /> : null}
     </div>
   )
-}
+})
 
 function SourceLinks({
   links,

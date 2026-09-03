@@ -20,15 +20,13 @@ export type OpenChatOptions = {
 
 export type UseChatThreadResult = {
   messages: Message[]
-  inputMessage: string
-  setInputMessage: (value: string) => void
   isLoading: boolean
   isStreaming: boolean
   error: string | null
-  sendMessage: (content?: string) => Promise<void>
+  sendMessage: (content: string) => Promise<void>
   retry: () => Promise<void>
   clearChat: () => void
-  inputRef: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
+  inputRef: React.RefObject<HTMLTextAreaElement | null>
   scrollContainerRef: React.RefObject<HTMLDivElement | null>
   isOpen: boolean
   openChat: (options?: OpenChatOptions) => void
@@ -38,14 +36,13 @@ export type UseChatThreadResult = {
 
 export function useChatThread(): UseChatThreadResult {
   const [messages, setMessages] = useState<Message[]>([])
-  const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [parentId, setParentId] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [context, setContext] = useState<ChatContext | null>(null)
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const parentIdRef = useRef<string | null>(null)
   const isLoadingRef = useRef(false)
@@ -73,7 +70,6 @@ export function useChatThread(): UseChatThreadResult {
 
   const clearChat = useCallback(() => {
     setMessages([])
-    setInputMessage('')
     setParentId(null)
     setError(null)
     setContext(null)
@@ -186,8 +182,8 @@ export function useChatThread(): UseChatThreadResult {
   )
 
   const sendMessage = useCallback(
-    async (content?: string) => {
-      const text = (content ?? inputMessage).trim()
+    async (content: string) => {
+      const text = content.trim()
       if (!text || isLoadingRef.current) {
         return
       }
@@ -206,11 +202,10 @@ export function useChatThread(): UseChatThreadResult {
       }
 
       setMessages((prev) => [...prev, newMessage])
-      setInputMessage('')
 
       await runSend(text, userMessageId)
     },
-    [inputMessage, runSend]
+    [runSend]
   )
 
   const retry = useCallback(async () => {
@@ -250,8 +245,6 @@ export function useChatThread(): UseChatThreadResult {
 
   return {
     messages,
-    inputMessage,
-    setInputMessage,
     isLoading,
     isStreaming,
     error,
