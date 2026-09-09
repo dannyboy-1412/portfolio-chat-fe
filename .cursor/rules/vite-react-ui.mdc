@@ -1,0 +1,31 @@
+---
+description: Vite React UI conventions for the portfolio
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Vite / React UI
+
+## App structure
+
+- Vite SPA. Routes live in `@src/App.tsx` (`/` and `/projects/:slug`). No App Router. No `'use client'`.
+- Put new UI under `src/components/ui/` unless introducing a clearer feature folder by request.
+- Global shell: `@src/components/app-shell.tsx` (`ThemeBackground`, `Navbar`). Do not reintroduce a global footer with duplicate contact/social links.
+- Home (`@src/pages/home.tsx`): `Hero` → `ExperienceTimeline` (`#experience`; Details expands to highlights plus work-project summaries that link to `/projects/<slug>`) → `ProjectsSection` (`#projects`, personal only) → `SkillsGrid` → `AboutSection` → `OutsideWork` → `ContactSection`.
+- Project pages: `@src/pages/project-detail.tsx`. Lookup `getProjectBySlug`. Unknown slug is an in-app not-found view. Back link: personal → `/#projects`, work → `/#experience`.
+- Public assets: `publicUrl()` from `@src/lib/publicUrl.ts`. Navbar photo, resume, and `project.visual.src` all go through it.
+- Routing: React Router `Link` and `useLocation`. Navbar hash scrolling must treat home as `pathname === '/'` (basename already stripped).
+
+## Styling
+
+- Tailwind + `cn()` from `@src/lib/utils.ts`.
+- `surface-*` / `glow` tokens. Never `zinc-*` or raw hex.
+- Editorial layout: typography and hairlines, not card wrappers.
+- `html.dark` plus tokens in `@src/styles/globals.css`. Ambient background: `@src/components/ui/theme-background.tsx`.
+- Headings: `font-display`. Tech/metadata: `font-mono`.
+- Interactive targets at least 44px tall.
+
+## State
+
+- Prefer local `useState` / `useRef` / `useEffect`. Do not add a global store for chat.
+- Do not re-add a terminal overlay, Ask Daniel buttons, or `ChatProvider`.

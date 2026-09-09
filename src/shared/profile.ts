@@ -47,7 +47,7 @@ export const PROFILE = {
   tagline: "Backend and AI",
   aboutHeadline: "I like building systems where good engineering and AI meet.",
   pitch:
-    "I build software that turns complex problems into reliable systems - document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI. Ask my assistant anything about the work.",
+    "I build software that turns complex problems into reliable systems - document AI, accounting agents, and on-chain data. Open to full-stack, backend, and AI roles; currently exploring ML and AI.",
   location: "Victoria, Australia · Melbourne / Geelong",
   status: "Studying · Master of Applied AI @ Deakin",
   /** Configurable hero status indicator, e.g. "FULL-TIME ON MACHINE LEARNING" or "OPEN TO WORK". */

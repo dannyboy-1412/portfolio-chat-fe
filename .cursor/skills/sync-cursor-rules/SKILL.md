@@ -42,11 +42,10 @@ Rules sync:
 | Change area | Update |
 |-------------|--------|
 | Product purpose, stack, folders, guardrails | `.cursor/rules/project-overview.mdc` |
-| App Router UI, chat UX, profile content, resume | `.cursor/rules/nextjs-react-ui.mdc` |
-| Browser API helpers, endpoints, streaming parse | `.cursor/rules/shared-api-client.mdc` |
-| Route Handlers, OpenRouter, Mongo, env | `.cursor/rules/v2-migration.mdc` |
+| Vite React UI, profile content, resume | `.cursor/rules/vite-react-ui.mdc` |
 | Meta policy for shipping + rules | `.cursor/rules/keep-rules-in-sync.mdc` |
 | Vitest layout and test conventions | `.cursor/rules/vitest-tests.mdc` |
+| pstack routing, which skills to load | `.cursor/rules/pstack.mdc` |
 
 ## Edit standards
 

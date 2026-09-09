@@ -1,5 +1,9 @@
+const DEFAULT_SITE_URL = "https://dannyboy-1412.github.io/portfolio-fe"
+
 export function getSiteUrl(): string {
-  return process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000";
+  const fromEnv = import.meta.env.VITE_SITE_URL
+  if (typeof fromEnv === "string" && fromEnv.length > 0) {
+    return fromEnv.replace(/\/$/, "")
+  }
+  return DEFAULT_SITE_URL
 }

@@ -1,54 +1,45 @@
 ---
-description: Core product context and stack for the portfolio site
+description: Portfolio product, stack, layout, and guardrails for the Vite site
 alwaysApply: true
 ---
 
 # Portfolio site
 
-- Interactive portfolio for Daniel A Rodrigues, presented as one system with two interfaces over a single shared content source: a scrollable web UI and a contextual AI assistant that lives in a centered terminal modal. The assistant is Daniel's assistant (it speaks about him, not as him) and can be opened generally or scoped to a specific project/role. Current features: streaming chat (OpenRouter via Route Handlers) with optional project/experience context, MongoDB-backed threaded messages with TTL, project detail routes for all projects, resume download, experience timeline, skills, and about.
+Interactive portfolio for Daniel A Rodrigues. One shared content source in TypeScript. The live site is a static Vite SPA: home plus `/projects/:slug`. There is no assistant overlay and no API.
 
 ## Stack
 
-- Next.js 16 App Router, React 19, TypeScript (strict)
-- Tailwind + shadcn/ui (`new-york`, themeable `surface-*` CSS variables, dark `color-scheme`, sage `glow` accent)
-- Fonts: Geist (body) + Instrument Serif (`--font-display`, headings) + JetBrains Mono (`--font-mono`, tech labels/metadata/terminal)
-- Backend: Route Handlers under `src/app/api/v1` + `src/server/` (MongoDB, OpenRouter)
-- HTTP (client): native `fetch` + ReadableStream for chat SSE
+- Vite, React 19, React Router, TypeScript (strict)
+- Tailwind (`surface-*` CSS variables, dark `color-scheme`, sage `glow` accent)
+- Fonts: Geist (body) + Instrument Serif (`--font-display`) + JetBrains Mono (`--font-mono`)
 - Path alias: `@/` → `src/`
-- Skill logos: path data in `@src/shared/skillIcons.ts` (do not import the `simple-icons` package barrel — it is a multi-MB module); skills currently render as grouped typography without icons
+- GitHub Pages project site. Vite `base` is `/` in `vite` (dev) and `/portfolio-fe/` in `vite build` / `vite preview`. Override with `VITE_BASE`. Public files go through `publicUrl()` in `@src/lib/publicUrl.ts`.
 
 ## Layout
 
-- App shell: `@src/app/layout.tsx` renders `@src/app/components/app-shell.tsx`, which wraps every route (home + `/projects/[slug]`) in `ChatProvider`, plus `ThemeBackground`, `Navbar`, and `@src/app/components/ui/lazy-overlays.tsx` (loads the terminal overlay only after first open). `@src/app/page.tsx` renders only the homepage sections. Contact (email/GitHub/LinkedIn/resume) lives in `ContactSection` (`#contact`), not a global footer.
-- Home page composition: `Hero` (status line + serif headline) → `ExperienceTimeline` (`#experience`; each role's Details expands to highlights plus compact work-project summaries that link to `/projects/<slug>`) → `ProjectsSection` (`#projects`, personal projects only — compact two-column grid of equal-height entries with a clamped description, capped tech list, and no inline metrics; metrics and the full case study live on `/projects/<slug>`) → `SkillsGrid` (`#skills`) → `AboutSection` (`#about`, bio plus quiet chat entry) → `OutsideWork` → `ContactSection` (`#contact`)
-- UI: `@src/app/components/ui/` — shadcn primitives plus `navbar`, `hero`, `chat-provider`, `ask-daniel-button`, `theme-background`, `projects-section`, `experience-timeline`, `skills-grid`, `about-section`, `outside-work`, `contact-section`, `tracked-anchor`, `lazy-overlays`, `analytics-tracker`, `scroll`
-- Terminal UI: `@src/app/components/terminal/fullscreen-terminal.tsx` (default export, lazy-loaded centered modal). Opened via `useChat().openChat()` from the navbar TerminalSquare control, Ask Daniel buttons, and the about-section CTA. The transcript is the chat thread (`Message[]`); there is no command registry. Do not re-add an inline hero terminal or a sidebar chat panel.
-- Project routes: `@src/app/projects/[slug]/page.tsx` — server-rendered, `generateStaticParams` + per-page metadata for every project in `PROJECTS`. Work projects still list under the owning role in `ExperienceTimeline` (`relatedExperienceId`); Details navigates to `/projects/<slug>`. Personal projects are listed in `ProjectsSection` and use the same detail route.
-- Content (client-safe): `@src/shared/profile.ts` (profile, experience, skills, interests, education as `{ period, degree, institution, focus?, activities?, highlights? }[]`, nav links) and `@src/shared/projects.ts` (`PROJECTS` for all projects, `PERSONAL_PROJECTS`, `getProjectsByExperienceId`, `Project` type with `origin: "work" | "personal"` plus optional `metrics` and `visual` for editorial layouts)
-- Project visuals: when a personal project gets a screenshot/diagram, save it as `public/images/projects/<slug>.png` (or `.webp`; 16:9, ~1600×900, optimized) and set `visual: { src: "/images/projects/<slug>.png", alt: "..." }` on that project in `projects.ts` — `ProjectsSection` renders it as a 16:9 thumbnail in the grid; `@src/app/projects/[slug]/page.tsx` renders it large. No component changes needed.
-- API routes: `@src/app/api/v1/`
-- Server logic: `@src/server/` (`db/`, `chat/`, `ai/` including `systemPrompt.ts` and `context.ts`)
-- Client API helpers: `@src/shared/` (`api.ts`, `endpoints.ts`, `config.ts`)
-- Chat state: `@src/hooks/useChatThread.ts` exposed through `ChatProvider` (context-aware: open/close, retry, contextType/contextId). Overlay open state lives here; there is no separate terminal provider.
-- Utils: `@src/lib/utils.ts` (`cn`), `@src/lib/sourceLinks.ts` (AI navigation link markers), `@src/lib/contactCta.ts` (contact CTA marker)
+- Entry: `index.html` → `@src/main.tsx` → `BrowserRouter` (`basename={import.meta.env.BASE_URL}`) → `@src/App.tsx`
+- Shell: `@src/components/app-shell.tsx` wraps every route with `ThemeBackground` and `Navbar`
+- Home (`@src/pages/home.tsx`): `Hero` → `ExperienceTimeline` (`#experience`) → `ProjectsSection` (`#projects`, personal only) → `SkillsGrid` → `AboutSection` → `OutsideWork` → `ContactSection`
+- Project routes: `@src/pages/project-detail.tsx` at `/projects/:slug` from `PROJECTS`. Work projects still list under the owning role in `ExperienceTimeline`. `npm run build` copies `index.html` to `dist/projects/<slug>/index.html` and `dist/404.html`
+- Contact (email/GitHub/LinkedIn/resume) lives in `ContactSection` (`#contact`), not a global footer
+- UI: `@src/components/ui/`
+
+## Content
+
+- `@src/shared/profile.ts` (profile, experience, skills, interests, education, nav)
+- `@src/shared/projects.ts` (`PROJECTS`, `PERSONAL_PROJECTS`, `getProjectBySlug`, `getProjectsByExperienceId`, `origin: "work" | "personal"`)
+- Archived for a later assistant: `@src/server/ai/systemPrompt.ts`, `@src/server/ai/context.ts`, `@src/lib/contactCta.ts`. The Vite client must not import the prompt modules
+- Resume is `public/resume.pdf`. Prefix with `publicUrl()`
 
 ## Theming
 
-- Single dark look via `html.dark` and tokens in `@src/app/globals.css`
-- Colors: use `surface-*` and `glow` (sage accent) / semantic tokens — never hardcode `zinc-*` or raw hex
-- Editorial style: whitespace and hairline `border-surface-800/70` dividers instead of cards; headings use `font-display` (Instrument Serif); mono reserved for tech labels, metadata, terminal
-- Mono text (terminal, tech lists, metadata) uses `font-mono` → `--font-mono` (JetBrains Mono)
-- Ambient page background: `@src/app/components/ui/theme-background.tsx`
-- Do not reintroduce album/music theme switching unless explicitly requested
+- Single dark look via `html.dark` and tokens in `@src/styles/globals.css`
+- Use `surface-*` and `glow`. Never hardcode `zinc-*` or raw hex
+- Editorial style: hairline dividers, `font-display` headings, mono for tech/metadata
 
 ## Guardrails
 
-- Extend `@src/shared/` for browser→API calls; do not invent parallel fetch wrappers
-- Put server-only backend logic under `@src/server/` and Route Handlers under `@src/app/api/`
-- Keep portfolio content in `@src/shared/profile.ts` / `@src/shared/projects.ts` in sync with facts in `@src/server/ai/systemPrompt.ts` when bio/experience/project changes — `systemPrompt.ts` interpolates dates/roles/tech/impact from those shared modules rather than duplicating them
-- Preserve the dark portfolio UX; style with `surface-*` / `glow` tokens rather than one-off color classes
-- LLM calls go through OpenRouter (see `@v2-migration.mdc`); never put API keys in client code
-- Do not reintroduce Telegram notify or title-generation endpoints unless explicitly requested
-- New unit tests go under `tests/` (mirror `src/` paths; see `vitest-tests.mdc`); CI runs lint, typecheck, unit tests, and build on PRs and `main` (see `.github/workflows/ci.yml`); keep PR descriptions short using `.github/PULL_REQUEST_TEMPLATE.md`
-- LLM answer quality evals live under `evals/` and run with `npm run eval` (manual, paid OpenRouter calls — never CI). See `vitest-tests.mdc`.
-- After large features/redesigns, update `.cursor/rules/` in the same PR (`keep-rules-in-sync.mdc`; workflow skill `.cursor/skills/sync-cursor-rules/`)
+- Do not add Route Handlers, Mongo, OpenRouter, or a chat overlay unless explicitly requested
+- Skill logos live in `@src/shared/skillIcons.ts` if icons come back. Never `import { … } from 'simple-icons'`
+- Unit tests go under `tests/` mirroring `src/`
+- After a large feature or layout change, update `.cursor/rules/` in the same PR (`sync-cursor-rules`)

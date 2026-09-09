@@ -262,26 +262,26 @@ export const PROJECTS: Project[] = [
   {
     slug: 'portfolio',
     name: 'Portfolio',
-    tagline: 'Terminal assistant portfolio',
+    tagline: 'Editorial personal site',
     description:
-      'This site. A scrollable portfolio and a terminal that is the AI assistant, both reading one shared content source.',
+      'This site. A scrollable portfolio that reads experience, projects, and bio from one shared content source.',
     problem:
       'A conventional portfolio page tells visitors about engineering work but doesn\u2019t demonstrate it. Recruiters skim it and technical visitors have nothing to explore.',
     solution:
-      'Built a Next.js site with two interfaces over one shared content source: a scrollable editorial portfolio, and a centered terminal modal where visitors talk to a streaming assistant about Daniel and follow links back into the site.',
+      'Built a static Vite site with an editorial layout over one shared content module: roles, case studies, and bio live in TypeScript and render on the home page and on per-project routes.',
     architecture:
-      'App Router pages for structure and SEO, a ChatProvider-owned terminal overlay that streams OpenRouter replies as a REPL transcript, and a completions API that accepts a context identifier so answers about a specific project or role are grounded without building the prompt in the browser.',
+      'A React SPA with React Router. Home is a single scroll of sections. Each project in the shared list gets a `/projects/:slug` page. The build copies `index.html` for every slug so GitHub Pages can serve those URLs without a server.',
     decisions: [
-      'Kept context resolution server-side. The client sends a contextType/contextId, not a constructed prompt',
-      'Reused the same profile and project data across the web UI and the AI system prompt to avoid maintaining duplicate facts',
-      'Made the terminal the chat interface instead of running a command language beside a separate sidebar assistant',
+      'Kept profile and project facts in shared TypeScript modules so the UI and a later assistant prompt read the same source',
+      'Shipped as static files on GitHub Pages instead of a Node host, since the live site has no API',
+      'Used React Router with a repo base path so project URLs stay `/projects/:slug` under GitHub project pages',
     ],
     learnings:
-      'One overlay is easier to explain than a command palette that hands off to a second chat panel.',
-    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'MongoDB', 'OpenRouter'],
-    impact: ['One shared content source powering the web UI and the terminal assistant'],
+      'A static site with known slugs is enough. The HTML copies at build time are the whole routing trick GitHub Pages needs.',
+    technologies: ['Vite', 'React', 'TypeScript', 'Tailwind CSS', 'React Router'],
+    impact: ['One shared content source powering the home page and every project case study'],
     metrics: [
-      { value: '2', label: 'interfaces over one shared content source: web and terminal assistant' },
+      { value: '1', label: 'shared content source for the home page and project routes' },
     ],
     links: {
       github: 'https://github.com/dannyboy-1412',
