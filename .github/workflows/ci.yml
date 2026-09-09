@@ -39,8 +39,3 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # Build does not call OpenRouter/Mongo; placeholders keep env reads safe if needed
-          OPENROUTER_API_KEY: ci-placeholder
-          MONGO_CONNECTION_STRING: mongodb://127.0.0.1:27017
-          MONGO_DATABASE: portfolio_ci

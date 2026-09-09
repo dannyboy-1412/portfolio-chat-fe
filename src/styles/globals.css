@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 164 45% 6%;
+    --foreground: 48 20% 92%;
+    --card: 162 30% 10%;
+    --card-foreground: 48 20% 92%;
+    --popover: 162 30% 10%;
+    --popover-foreground: 48 20% 92%;
+    --primary: 48 20% 92%;
+    --primary-foreground: 164 45% 6%;
+    --secondary: 162 30% 10%;
+    --secondary-foreground: 48 20% 92%;
+    --muted: 162 30% 10%;
+    --muted-foreground: 142 7% 70%;
+    --accent: 162 30% 10%;
+    --accent-foreground: 48 20% 92%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 18% 15%;
+    --input: 160 18% 15%;
+    --ring: 140 27% 65%;
+    --chart-1: 140 27% 65%;
+    --chart-2: 200 60% 55%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
+    --glow: 140 27% 65%;
+    --cream: 45 26% 88%;
+    --surface-50: 48 22% 95%;
+    --surface-100: 48 20% 92%;
+    --surface-200: 60 10% 84%;
+    --surface-300: 120 6% 74%;
+    --surface-400: 142 7% 70%;
+    --surface-500: 150 6% 48%;
+    --surface-600: 154 9% 32%;
+    --surface-700: 158 14% 20%;
+    --surface-800: 160 18% 14%;
+    --surface-900: 162 30% 10%;
+    --surface-950: 164 45% 6%;
+    --font-geist-sans: Geist, ui-sans-serif, system-ui, sans-serif;
+    --font-instrument-serif: "Instrument Serif", ui-serif, Georgia, serif;
+    --font-jetbrains-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-display: var(--font-instrument-serif), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  }
+
+  .dark {
+    --background: 164 45% 6%;
+    --foreground: 48 20% 92%;
+    --card: 162 30% 10%;
+    --card-foreground: 48 20% 92%;
+    --popover: 162 30% 10%;
+    --popover-foreground: 48 20% 92%;
+    --primary: 48 20% 92%;
+    --primary-foreground: 164 45% 6%;
+    --secondary: 162 30% 10%;
+    --secondary-foreground: 48 20% 92%;
+    --muted: 162 30% 10%;
+    --muted-foreground: 142 7% 70%;
+    --accent: 162 30% 10%;
+    --accent-foreground: 48 20% 92%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 18% 15%;
+    --input: 160 18% 15%;
+    --ring: 140 27% 65%;
+    --chart-1: 140 27% 65%;
+    --chart-2: 200 60% 55%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --glow: 140 27% 65%;
+    --cream: 45 26% 88%;
+    --radius: 0.5rem;
+    --surface-50: 48 22% 95%;
+    --surface-100: 48 20% 92%;
+    --surface-200: 60 10% 84%;
+    --surface-300: 120 6% 74%;
+    --surface-400: 142 7% 70%;
+    --surface-500: 150 6% 48%;
+    --surface-600: 154 9% 32%;
+    --surface-700: 158 14% 20%;
+    --surface-800: 160 18% 14%;
+    --surface-900: 162 30% 10%;
+    --surface-950: 164 45% 6%;
+    --font-geist-sans: Geist, ui-sans-serif, system-ui, sans-serif;
+    --font-instrument-serif: "Instrument Serif", ui-serif, Georgia, serif;
+    --font-jetbrains-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-display: var(--font-instrument-serif), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--glow));
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@layer utilities {
+  .ambient-glow {
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 0%,
+      hsl(var(--glow) / 0.06),
+      transparent 70%
+    );
+  }
+
+  .fade-up {
+    animation: fade-up 0.6s ease-out both;
+  }
+
+  .fade-up-delay-1 {
+    animation: fade-up 0.6s ease-out 0.1s both;
+  }
+
+  .fade-up-delay-2 {
+    animation: fade-up 0.6s ease-out 0.2s both;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .fade-up-delay-1,
+  .fade-up-delay-2 {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dannyboy-1412.github.io/portfolio-fe/sitemap.xml

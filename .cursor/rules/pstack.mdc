@@ -1,0 +1,47 @@
+---
+description: Route portfolio-fe work through project pstack skills
+alwaysApply: true
+---
+
+# pstack on this project
+
+This repo is Daniel A Rodrigues's static portfolio. One shared content source drives the scrollable site and the project case studies. Skills live in `.cursor/skills/`. Agents live in `.cursor/agents/`. Read a skill before you follow it.
+
+## Always
+
+- Apply `unslop` to every reply and any prose you write.
+- Name the data shape first (`principle-model-the-domain`). Project origin is `"work" | "personal"`, not an optional bag.
+- Smallest change that solves it (`principle-laziness-protocol`).
+- Prove UI in the running app, not only that it compiles (`principle-prove-it-works`). Home and `/projects/:slug` share content modules. Check the surfaces that read what you changed. Asset URLs must use `publicUrl()` because GitHub Pages serves under `/portfolio-fe/`.
+- TypeScript edits follow `typescript-best-practices`.
+- No narrating comments. Keep a comment only for a non-obvious why the code cannot show (`no-comments`).
+- Editorial feel beats implementation convenience (`principle-experience-first`): `surface-*` / `glow` tokens, serif headings, no card wrappers, no `zinc-*` or raw hex.
+
+## Invariants from this repo
+
+- Portfolio facts live in `@src/shared/profile.ts` and `@src/shared/projects.ts`. Update those first when bio, jobs, or projects change.
+- `@src/server/ai/systemPrompt.ts` interpolates those modules. Keep it compiling. Do not import it from the Vite client.
+- There is no chat overlay, no command registry, and no API client.
+- Browser public files go through `@src/lib/publicUrl.ts`. Do not hardcode `/resume.pdf` or `/profile.png`.
+- Unit tests go under `tests/` mirroring `src/`. Never hit live APIs.
+- After a large feature, layout change, or contract change, update `.cursor/rules/` in the same PR (`sync-cursor-rules`).
+
+## Task routing
+
+- Non-trivial feature, bug, refactor, or prototype: read `poteto-mode` and copy the matching playbook steps in verbatim.
+- Types or calls that cross a function boundary: `architect` first.
+- "How does X work": `how`.
+- "Why is this this way": `why`.
+- Small-looking change: `blast-radius` before editing. Experience timeline and project routes share `projects.ts`.
+- Bug with a cheap local test: `tdd`.
+- Docs, commits, PR descriptions: `technical-writing`. Keep PR bodies short using `.github/PULL_REQUEST_TEMPLATE.md`.
+- No playbook fits, or the user is stepping away: `figure-it-out`.
+- `.cursor/skills/verify-*` is missing: `create-verification-skill` (browser drive of the Vite app).
+
+## Do not load
+
+`make-bot-ui`, `automate-me`, `setup-pstack`, and `bro` are not part of this project.
+
+## Do not reintroduce
+
+Telegram notify, title-generation endpoints, album/music theme switching, a global footer with duplicate contact links, an inline hero terminal, a sidebar chat panel, a terminal command registry, `import { … } from 'simple-icons'`, the FastAPI `mira_project` backend, Next.js App Router, or a live OpenRouter/Mongo chat stack unless explicitly requested.
