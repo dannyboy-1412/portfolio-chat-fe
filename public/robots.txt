@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dannyboy-1412.github.io/portfolio-fe/sitemap.xml
+Sitemap: https://dannyboy-1412.github.io/portfolio-chat-fe/sitemap.xml

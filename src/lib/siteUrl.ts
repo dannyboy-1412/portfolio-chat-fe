@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://dannyboy-1412.github.io/portfolio-fe"
+const DEFAULT_SITE_URL = "https://dannyboy-1412.github.io/portfolio-chat-fe"
 
 export function getSiteUrl(): string {
   const fromEnv = import.meta.env.VITE_SITE_URL
