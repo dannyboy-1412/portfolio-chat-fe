@@ -5,14 +5,12 @@ import react from "@vitejs/plugin-react"
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
-export default defineConfig(({ command, isPreview }) => ({
-  base:
-    process.env.VITE_BASE ??
-    (command === "build" || isPreview ? "/portfolio-fe/" : "/"),
+export default defineConfig({
+  base: process.env.VITE_BASE ?? "/",
   plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(rootDir, "./src"),
     },
   },
-}))
+})
