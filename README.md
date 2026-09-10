@@ -16,4 +16,4 @@ npm run preview
 
 `npm run build` writes `dist/` with `404.html` and `dist/projects/<slug>/index.html` so GitHub Pages can serve project URLs.
 
-Pushes to `main` deploy `dist/` through `.github/workflows/pages.yml`. Set Pages source to GitHub Actions. The live project URL is `https://dannyboy-1412.github.io/portfolio-chat-fe/`. For a custom domain, change the workflow `VITE_BASE` to `/` and `VITE_SITE_URL` to that domain.
+Pushes to `main` deploy `dist/` through `.github/workflows/pages.yml`. Set Pages source to GitHub Actions. The live site URL is `https://dannyboy-1412.github.io/`. Vite `base` is `/`. For a custom domain, set `VITE_SITE_URL` to that domain.

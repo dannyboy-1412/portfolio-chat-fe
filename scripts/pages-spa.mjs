@@ -24,7 +24,7 @@ for (const slug of slugs) {
 }
 
 const siteUrl = (
-  process.env.VITE_SITE_URL ?? "https://dannyboy-1412.github.io/portfolio-chat-fe"
+  process.env.VITE_SITE_URL ?? "https://dannyboy-1412.github.io"
 ).replace(/\/$/, "")
 const lastmod = new Date().toISOString().slice(0, 10)
 const urls = [
