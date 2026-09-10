@@ -274,7 +274,7 @@ export const PROJECTS: Project[] = [
     decisions: [
       'Kept profile and project facts in shared TypeScript modules so the UI and a later assistant prompt read the same source',
       'Shipped as static files on GitHub Pages instead of a Node host, since the live site has no API',
-      'Used React Router with a repo base path so project URLs stay `/projects/:slug` under GitHub project pages',
+      'Used React Router at site root so `/projects/:slug` works on a custom domain or a GitHub user site',
     ],
     learnings:
       'A static site with known slugs is enough. The HTML copies at build time are the whole routing trick GitHub Pages needs.',

@@ -7,7 +7,7 @@ npm install
 npm run dev
 ```
 
-Dev server: [http://localhost:5173/](http://localhost:5173/). Production builds still use the GitHub Pages project base `/portfolio-fe/` (`VITE_BASE` overrides it).
+Dev server: [http://localhost:5173/](http://localhost:5173/). Build and preview also use `/`. Set `VITE_BASE=/portfolio-fe/` if you still publish under the GitHub project URL.
 
 ```bash
 npm run build

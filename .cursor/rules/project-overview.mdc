@@ -13,7 +13,7 @@ Interactive portfolio for Daniel A Rodrigues. One shared content source in TypeS
 - Tailwind (`surface-*` CSS variables, dark `color-scheme`, sage `glow` accent)
 - Fonts: Geist (body) + Instrument Serif (`--font-display`) + JetBrains Mono (`--font-mono`)
 - Path alias: `@/` → `src/`
-- GitHub Pages project site. Vite `base` is `/` in `vite` (dev) and `/portfolio-fe/` in `vite build` / `vite preview`. Override with `VITE_BASE`. Public files go through `publicUrl()` in `@src/lib/publicUrl.ts`.
+- GitHub Pages. Vite `base` defaults to `/` (custom domain or user site). Override with `VITE_BASE` (for example `/portfolio-fe/` on a project URL). Public files go through `publicUrl()` in `@src/lib/publicUrl.ts`.
 
 ## Layout
 

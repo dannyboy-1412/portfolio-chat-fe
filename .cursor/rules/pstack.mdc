@@ -12,7 +12,7 @@ This repo is Daniel A Rodrigues's static portfolio. One shared content source dr
 - Apply `unslop` to every reply and any prose you write.
 - Name the data shape first (`principle-model-the-domain`). Project origin is `"work" | "personal"`, not an optional bag.
 - Smallest change that solves it (`principle-laziness-protocol`).
-- Prove UI in the running app, not only that it compiles (`principle-prove-it-works`). Home and `/projects/:slug` share content modules. Check the surfaces that read what you changed. Asset URLs must use `publicUrl()` because GitHub Pages serves under `/portfolio-fe/`.
+- Prove UI in the running app, not only that it compiles (`principle-prove-it-works`). Home and `/projects/:slug` share content modules. Check the surfaces that read what you changed. Asset URLs must use `publicUrl()` so they follow Vite `base`.
 - TypeScript edits follow `typescript-best-practices`.
 - No narrating comments. Keep a comment only for a non-obvious why the code cannot show (`no-comments`).
 - Editorial feel beats implementation convenience (`principle-experience-first`): `surface-*` / `glow` tokens, serif headings, no card wrappers, no `zinc-*` or raw hex.
